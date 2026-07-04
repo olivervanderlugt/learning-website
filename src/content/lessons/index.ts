@@ -8,6 +8,10 @@ import { mathLinalgLesson } from './math-linalg'
 import { mathCalculusLesson } from './math-calculus'
 import { progVariablesLesson } from './prog-variables'
 import { mathProbLesson } from './math-prob'
+import { physForcesLesson } from './phys-forces'
+import { physElectricityLesson } from './phys-electricity'
+import { roboSensingLesson } from './robo-sensing'
+import { roboControlLesson } from './robo-control'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -19,4 +23,8 @@ export const lessons: Record<string, Lesson> = {
   'math-calculus': mathCalculusLesson,
   'prog-variables': progVariablesLesson,
   'math-prob': mathProbLesson,
+  'phys-forces': physForcesLesson,
+  'phys-electricity': physElectricityLesson,
+  'robo-sensing': roboSensingLesson,
+  'robo-control': roboControlLesson,
 }

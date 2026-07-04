@@ -203,6 +203,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: [],
     x: 360,
     y: -380,
+    hasLesson: true,
   },
   {
     id: 'phys-energy',
@@ -229,6 +230,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['phys-forces'],
     x: 360,
     y: -180,
+    hasLesson: true,
   },
 
   // ---- Operating Systems (col 1, y 50-250) ----
@@ -408,6 +410,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['cpu', 'phys-electricity'],
     x: 720,
     y: -280,
+    hasLesson: true,
   },
   {
     id: 'robo-control',
@@ -421,6 +424,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['robo-sensing', 'phys-forces'],
     x: 720,
     y: -180,
+    hasLesson: true,
   },
   {
     id: 'robo-embedded',

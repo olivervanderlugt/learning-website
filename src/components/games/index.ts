@@ -6,6 +6,10 @@ import CpuSim from './CpuSim'
 import VectorPlayground from './VectorPlayground'
 import SlopeExplorer from './SlopeExplorer'
 import ProbabilitySim from './ProbabilitySim'
+import ForceSim from './ForceSim'
+import OhmsLawSim from './OhmsLawSim'
+import AdcSim from './AdcSim'
+import PidSim from './PidSim'
 
 export interface GameProps {
   onComplete: (score: number) => void
@@ -20,4 +24,8 @@ export const games: Record<string, ComponentType<GameProps>> = {
   'vector-playground': VectorPlayground,
   'slope-explorer': SlopeExplorer,
   'probability-sim': ProbabilitySim,
+  'force-sim': ForceSim,
+  'ohms-law-sim': OhmsLawSim,
+  'adc-sim': AdcSim,
+  'pid-sim': PidSim,
 }
