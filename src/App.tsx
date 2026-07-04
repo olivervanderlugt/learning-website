@@ -1,5 +1,6 @@
 import SkillTreeView from './components/SkillTreeView'
 import LessonPlayer from './components/LessonPlayer'
+import SettingsPanel from './components/SettingsPanel'
 import { useStore } from './store'
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <div className="rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-semibold text-amber-300">
             ⚡ {xp} XP
           </div>
+          <SettingsPanel />
         </div>
       </header>
 
