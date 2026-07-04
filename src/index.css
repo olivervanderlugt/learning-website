@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-cs: #22d3ee; /* cyan */
+  --color-math: #a78bfa; /* violet */
+  --color-physics: #fbbf24; /* amber */
+  --color-engineering: #34d399; /* emerald */
+  --color-robotics: #fb7185; /* rose */
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-slate-950 text-slate-100 antialiased;
+}
