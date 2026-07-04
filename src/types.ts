@@ -1,6 +1,13 @@
 // ---------- Knowledge graph ----------
 
-export type Subject = 'cs' | 'physics' | 'engineering' | 'math' | 'robotics'
+export type Subject =
+  | 'cs'
+  | 'physics'
+  | 'engineering'
+  | 'math'
+  | 'robotics'
+  | 'history'
+  | 'chemistry'
 
 /** Curated external material shown in the node detail panel ("Go deeper"). */
 export interface Resource {

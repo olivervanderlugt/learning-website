@@ -27,6 +27,8 @@ const subjectHex: Record<Subject, string> = {
   physics: '#fbbf24',
   engineering: '#34d399',
   robotics: '#fb7185',
+  history: '#e879f9',
+  chemistry: '#2dd4bf',
 }
 
 const NODE_W = 192

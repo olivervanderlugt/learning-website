@@ -41,6 +41,20 @@ export const subjectStyles: Record<
     badge: 'bg-robotics/15 text-robotics',
     glow: 'shadow-[0_0_18px_rgba(251,113,133,0.35)]',
   },
+  history: {
+    border: 'border-fuchsia-400',
+    text: 'text-fuchsia-300',
+    dot: 'bg-fuchsia-400',
+    badge: 'bg-fuchsia-500/15 text-fuchsia-300',
+    glow: 'shadow-[0_0_18px_rgba(232,121,249,0.35)]',
+  },
+  chemistry: {
+    border: 'border-teal-400',
+    text: 'text-teal-300',
+    dot: 'bg-teal-400',
+    badge: 'bg-teal-500/15 text-teal-300',
+    glow: 'shadow-[0_0_18px_rgba(45,212,191,0.35)]',
+  },
 }
 
 export const subjectNames: Record<Subject, string> = {
@@ -49,6 +63,8 @@ export const subjectNames: Record<Subject, string> = {
   physics: 'Physics',
   engineering: 'Engineering',
   robotics: 'Robotics',
+  history: 'History',
+  chemistry: 'Chemistry',
 }
 
 export type SkillNodeData = {

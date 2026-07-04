@@ -13,6 +13,8 @@ export const domains: Domain[] = [
   { id: 'ai-ml', title: 'AI & Machine Learning', prereqDomainIds: ['math', 'algorithms'] },
   { id: 'security', title: 'Security & Crypto', prereqDomainIds: ['networks'] },
   { id: 'robotics-bridge', title: 'Robotics Bridge', prereqDomainIds: ['how-computers-work', 'physics'] },
+  { id: 'history', title: 'History of Science & Technology', prereqDomainIds: [] },
+  { id: 'chemistry', title: 'Chemistry', prereqDomainIds: [] },
 ]
 
 // Layout: three depth columns (x = 0 / 360 / 720), domain blocks stacked
@@ -118,6 +120,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['prog-variables'],
     x: 0,
     y: 780,
+    hasLesson: true,
   },
   {
     id: 'prog-data',
@@ -131,6 +134,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['prog-functions'],
     x: 0,
     y: 880,
+    hasLesson: true,
   },
 
   // ---- Math for CS & Robotics (col 0, y 1010-1210) ----
@@ -146,6 +150,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: [],
     x: 0,
     y: 1110,
+    hasLesson: true,
   },
   {
     id: 'math-linalg',
@@ -217,6 +222,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['phys-forces'],
     x: 360,
     y: -280,
+    hasLesson: true,
   },
   {
     id: 'phys-electricity',
@@ -438,6 +444,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['robo-sensing'],
     x: 720,
     y: -80,
+    hasLesson: true,
   },
   {
     id: 'robo-kinematics',
@@ -465,6 +472,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['robo-embedded', 'prog-data'],
     x: 720,
     y: 120,
+    hasLesson: true,
   },
 
   // ---- Theory of Computation (col 2, y 480-680) ----
@@ -589,6 +597,88 @@ export const nodes: KnowledgeNode[] = [
     x: 720,
     y: 1540,
   },
+
+  // ---- History of Science & Technology (col 3, y 50-250) — coming soon ----
+  {
+    id: 'hist-scientific-revolution',
+    title: 'The Scientific Revolution',
+    subject: 'history',
+    domainId: 'history',
+    description:
+      'How, in a few centuries, humanity invented the method of careful observation, experiment and mathematics that underlies all modern science.',
+    whyItMatters:
+      'Knowing HOW knowledge is built — and how it was wrong before — makes you a sharper builder and a harder person to fool.',
+    prereqIds: [],
+    x: 1080,
+    y: 50,
+  },
+  {
+    id: 'hist-computing',
+    title: 'The History of Computing',
+    subject: 'history',
+    domainId: 'history',
+    description:
+      'From Babbage’s gears and Lovelace’s first program to Turing, transistors and the internet — the story of the machine you’re learning to master.',
+    whyItMatters:
+      'Every “new” idea in tech rhymes with an old one; history is a founder’s cheat sheet for what tends to work.',
+    prereqIds: [],
+    x: 1080,
+    y: 150,
+  },
+  {
+    id: 'hist-industrial',
+    title: 'Industrial Revolutions & Automation',
+    subject: 'history',
+    domainId: 'history',
+    description:
+      'How steam, electricity and computing each reshaped work, cities and society — and what the coming wave of robotics might do next.',
+    whyItMatters:
+      'A robotics startup changes how people work; understanding past automation waves is understanding your own impact.',
+    prereqIds: [],
+    x: 1080,
+    y: 250,
+  },
+
+  // ---- Chemistry (col 3, y 480-680) — coming soon ----
+  {
+    id: 'chem-atoms',
+    title: 'Atoms & the Periodic Table',
+    subject: 'chemistry',
+    domainId: 'chemistry',
+    description:
+      'What everything is made of: atoms, electrons, and the periodic table that organizes every element by its structure.',
+    whyItMatters:
+      'Silicon chips, copper wires and lithium batteries are all just clever uses of particular elements’ chemistry.',
+    prereqIds: [],
+    x: 1080,
+    y: 480,
+  },
+  {
+    id: 'chem-reactions',
+    title: 'Reactions & Energy',
+    subject: 'chemistry',
+    domainId: 'chemistry',
+    description:
+      'How bonds break and form, releasing or absorbing energy — the engine behind fuels, batteries and life itself.',
+    whyItMatters:
+      'A battery is a controlled chemical reaction; its energy density sets what your robot can carry and how long it runs.',
+    prereqIds: [],
+    x: 1080,
+    y: 580,
+  },
+  {
+    id: 'chem-materials',
+    title: 'Materials & Electrochemistry',
+    subject: 'chemistry',
+    domainId: 'chemistry',
+    description:
+      'Why metals conduct, why plastics don’t, and how electrochemistry turns chemical energy into the electricity that runs everything.',
+    whyItMatters:
+      'Choosing the right material — light, strong, conductive, cheap — is half of designing real robot hardware.',
+    prereqIds: [],
+    x: 1080,
+    y: 680,
+  },
 ]
 
 
@@ -666,7 +756,7 @@ export const domainLabels: { id: string; title: string; x: number; y: number }[]
   { id: 'label-hcw', title: 'How Computers Work', x: 0, y: 0 },
   { id: 'label-prog', title: 'Programming Fundamentals', x: 0, y: 630 },
   { id: 'label-math', title: 'Math for CS & Robotics', x: 0, y: 1060 },
-  { id: 'label-phys', title: 'Physics Foundations · coming soon', x: 360, y: -430 },
+  { id: 'label-phys', title: 'Physics Foundations', x: 360, y: -430 },
   { id: 'label-os', title: 'Operating Systems', x: 360, y: 0 },
   { id: 'label-algo', title: 'Algorithms & Data Structures', x: 360, y: 430 },
   { id: 'label-net', title: 'Networks', x: 360, y: 860 },
@@ -675,6 +765,8 @@ export const domainLabels: { id: string; title: string; x: number; y: number }[]
   { id: 'label-theory', title: 'Theory of Computation', x: 720, y: 430 },
   { id: 'label-ai', title: 'AI & Machine Learning', x: 720, y: 860 },
   { id: 'label-sec', title: 'Security & Crypto', x: 720, y: 1290 },
+  { id: 'label-hist', title: 'History of Science & Tech · coming soon', x: 1080, y: 0 },
+  { id: 'label-chem', title: 'Chemistry · coming soon', x: 1080, y: 430 },
 ]
 
 export const XP_PER_NODE = 100

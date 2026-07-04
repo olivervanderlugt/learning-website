@@ -13,6 +13,12 @@ import { physElectricityLesson } from './phys-electricity'
 import { roboSensingLesson } from './robo-sensing'
 import { roboControlLesson } from './robo-control'
 import { roboKinematicsLesson } from './robo-kinematics'
+import { progFunctionsLesson } from './prog-functions'
+import { progDataLesson } from './prog-data'
+import { mathLogicLesson } from './math-logic'
+import { physEnergyLesson } from './phys-energy'
+import { roboEmbeddedLesson } from './robo-embedded'
+import { roboRosLesson } from './robo-ros'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -29,4 +35,10 @@ export const lessons: Record<string, Lesson> = {
   'robo-sensing': roboSensingLesson,
   'robo-control': roboControlLesson,
   'robo-kinematics': roboKinematicsLesson,
+  'prog-functions': progFunctionsLesson,
+  'prog-data': progDataLesson,
+  'math-logic': mathLogicLesson,
+  'phys-energy': physEnergyLesson,
+  'robo-embedded': roboEmbeddedLesson,
+  'robo-ros': roboRosLesson,
 }
