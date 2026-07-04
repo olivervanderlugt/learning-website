@@ -1,4 +1,5 @@
 import SkillTreeView from './components/SkillTreeView'
+import LessonPlayer from './components/LessonPlayer'
 import { useStore } from './store'
 
 function App() {
@@ -31,12 +32,10 @@ function App() {
       </header>
 
       <main className="min-h-0 flex-1">
-        {view.name === 'map' ? (
+        {view.name === 'map' || !view.nodeId ? (
           <SkillTreeView />
         ) : (
-          <div className="flex h-full items-center justify-center">
-            <p className="text-slate-400">Lesson player arrives in P2.</p>
-          </div>
+          <LessonPlayer key={view.nodeId} nodeId={view.nodeId} />
         )}
       </main>
     </div>
