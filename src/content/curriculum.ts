@@ -185,6 +185,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: [],
     x: 0,
     y: 1410,
+    hasLesson: true,
   },
 
   // ---- Physics Foundations (col 1, y -380..-180) — coming soon ----

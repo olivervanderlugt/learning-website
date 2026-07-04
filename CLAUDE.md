@@ -58,7 +58,12 @@ The graph is a solid skeleton, NOT yet a bachelor's. To get there, per domain: ~
 5. The rest of CS breadth
 Missing domains to add eventually: electromagnetism, signals & systems, mechanical design/CAD, software engineering practice (git, testing), business/entrepreneurship track for the startup.
 
+## Playable lessons so far (8 nodes)
+How Computers Work: bits, gates, adder, cpu, hcw-exam. Math: math-linalg (vector playground), math-calculus (slope/derivative explorer). Games live in src/components/games/, all implement `{ onComplete(score) }`.
+SVG-drag games (VectorPlayground, SlopeExplorer): wrap `setPointerCapture` in try/catch (some pointers/headless reject it and would abort the drag). Drag works via the svg's onPointerMove + a dragKey state.
+
 ## Next
-- Ollie tests: P4 lessons, module exam node, bonus XOR-from-4-NAND puzzle, map navigation (jump-to + minimap), resources panels.
+- Ollie tests: P4 lessons, module exam, bonus XOR puzzle, map nav (jump-to + minimap), resource panels, and the two new math lessons (Vectors & Matrices, Calculus & Change — both immediately available, no prereqs).
 - Deploy via the manual steps above (or install `gh` + `brew` first).
-- Then follow the roadmap order above; extract a lesson-generation prompt template so lessons can be authored fast without touching components.
+- Continue roadmap order: next high-value nodes are math-prob (probability, for sensor fusion), then Robotics Bridge (robo-sensing/control now have linalg+calculus prereqs met once those exist), then Programming (needs a new `code`/REPL Screen kind — biggest infra piece).
+- Extract a lesson-generation prompt template so lessons can be authored fast without touching components (the content/data split already supports this).
