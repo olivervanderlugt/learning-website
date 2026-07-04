@@ -58,9 +58,16 @@ The graph is a solid skeleton, NOT yet a bachelor's. To get there, per domain: ~
 5. The rest of CS breadth
 Missing domains to add eventually: electromagnetism, signals & systems, mechanical design/CAD, software engineering practice (git, testing), business/entrepreneurship track for the startup.
 
-## Playable lessons so far (8 nodes)
-How Computers Work: bits, gates, adder, cpu, hcw-exam. Math: math-linalg (vector playground), math-calculus (slope/derivative explorer). Games live in src/components/games/, all implement `{ onComplete(score) }`.
-SVG-drag games (VectorPlayground, SlopeExplorer): wrap `setPointerCapture` in try/catch (some pointers/headless reject it and would abort the drag). Drag works via the svg's onPointerMove + a dragKey state.
+## Playable lessons so far (11 nodes)
+- How Computers Work: bits, gates, adder, cpu, hcw-exam (module exam).
+- Math: math-linalg (vector playground), math-calculus (slope/derivative explorer), math-prob (law-of-large-numbers coin sim).
+- Programming: prog-variables (live code runner).
+Games live in src/components/games/, all implement `{ onComplete(score) }`.
+
+Gotchas learned:
+- SVG-drag games (VectorPlayground, SlopeExplorer): wrap `setPointerCapture` in try/catch (some pointers/headless reject it and abort the drag). Drag works via the svg's onPointerMove + dragKey state.
+- Batch/rapid-click games (ProbabilitySim): use FUNCTIONAL setState (setX(prev=>...)) or rapid clicks race on stale closure state; fire onComplete from useEffect, not inside the updater.
+- `code` Screen kind runs learner JS in a Web Worker (blob URL) with a 2s terminate timeout — infinite-loop safe. Output captured via injected `print()`, compared line-normalized to `expected`.
 
 ## Next
 - Ollie tests: P4 lessons, module exam, bonus XOR puzzle, map nav (jump-to + minimap), resource panels, and the two new math lessons (Vectors & Matrices, Calculus & Change — both immediately available, no prereqs).

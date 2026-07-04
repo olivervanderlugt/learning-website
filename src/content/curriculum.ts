@@ -173,6 +173,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: [],
     x: 0,
     y: 1310,
+    hasLesson: true,
   },
   {
     id: 'math-calculus',

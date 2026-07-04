@@ -5,6 +5,7 @@ import RippleAdder from './RippleAdder'
 import CpuSim from './CpuSim'
 import VectorPlayground from './VectorPlayground'
 import SlopeExplorer from './SlopeExplorer'
+import ProbabilitySim from './ProbabilitySim'
 
 export interface GameProps {
   onComplete: (score: number) => void
@@ -18,4 +19,5 @@ export const games: Record<string, ComponentType<GameProps>> = {
   'cpu-sim': CpuSim,
   'vector-playground': VectorPlayground,
   'slope-explorer': SlopeExplorer,
+  'probability-sim': ProbabilitySim,
 }

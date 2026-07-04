@@ -7,6 +7,7 @@ import { hcwExamLesson } from './hcw-exam'
 import { mathLinalgLesson } from './math-linalg'
 import { mathCalculusLesson } from './math-calculus'
 import { progVariablesLesson } from './prog-variables'
+import { mathProbLesson } from './math-prob'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -17,4 +18,5 @@ export const lessons: Record<string, Lesson> = {
   'math-linalg': mathLinalgLesson,
   'math-calculus': mathCalculusLesson,
   'prog-variables': progVariablesLesson,
+  'math-prob': mathProbLesson,
 }
