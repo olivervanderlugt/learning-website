@@ -86,6 +86,20 @@ export interface GameScreen {
   gameId: string
 }
 
+/** Live-code challenge: learner writes/edits JS, runs it, must match expected output. */
+export interface CodeScreen {
+  kind: 'code'
+  prompt: string
+  /** Starter code shown in the editor (worked-example fading: fuller → emptier). */
+  starter: string
+  /** Expected stdout from print() calls, compared line-by-line (trimmed). */
+  expected: string
+  /** Optional hint revealed after a wrong run. */
+  hint?: string
+  /** Shown on success. */
+  success: string
+}
+
 export type Screen = (
   | ExplainScreen
   | PredictScreen
@@ -93,6 +107,7 @@ export type Screen = (
   | GatePuzzleScreen
   | SandboxScreen
   | GameScreen
+  | CodeScreen
 ) & {
   /** Optional screens (bonus exercises / deeper dives) get a Skip button. */
   optional?: boolean

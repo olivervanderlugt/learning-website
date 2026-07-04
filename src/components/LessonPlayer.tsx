@@ -8,6 +8,7 @@ import ExplainScreenView from './screens/ExplainScreenView'
 import PredictScreenView from './screens/PredictScreenView'
 import QuizScreenView from './screens/QuizScreenView'
 import GatePuzzleScreenView from './screens/GatePuzzleScreenView'
+import CodeScreenView from './screens/CodeScreenView'
 import { games } from './games'
 
 export default function LessonPlayer({ nodeId }: { nodeId: string }) {
@@ -141,6 +142,8 @@ function ScreenView({
     }
     case 'gatePuzzle':
       return <GatePuzzleScreenView screen={screen} onDone={onDone} />
+    case 'code':
+      return <CodeScreenView screen={screen} onDone={onDone} />
     case 'sandbox':
       return <p className="text-slate-400">Sandbox arrives in P4 — skipping.</p>
   }

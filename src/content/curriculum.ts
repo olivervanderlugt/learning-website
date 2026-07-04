@@ -104,6 +104,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: [],
     x: 0,
     y: 680,
+    hasLesson: true,
   },
   {
     id: 'prog-functions',
