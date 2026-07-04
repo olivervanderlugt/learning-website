@@ -56,6 +56,7 @@ export type SkillNodeData = {
   subject: Subject
   status: NodeStatus
   hasLesson: boolean
+  isExam?: boolean
 }
 
 export type SkillFlowNode = Node<SkillNodeData, 'skill'>
@@ -79,7 +80,7 @@ export function SkillNode({ data, selected }: NodeProps<SkillFlowNode>) {
       <Handle type="target" position={Position.Top} className="!bg-slate-600 !border-0 !h-1.5 !w-1.5" />
       <div className="flex items-start gap-2">
         <span className="mt-0.5 text-sm leading-none">
-          {mastered ? '✅' : locked ? '🔒' : data.hasLesson ? '▶️' : '✨'}
+          {mastered ? '✅' : locked ? '🔒' : data.isExam ? '🏅' : data.hasLesson ? '▶️' : '✨'}
         </span>
         <div className="min-w-0">
           <div className={`text-[13px] font-semibold leading-tight ${locked ? 'text-slate-400' : 'text-slate-100'}`}>

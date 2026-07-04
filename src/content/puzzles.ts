@@ -117,4 +117,23 @@ export const puzzles: Record<string, GatePuzzle> = {
       'A carry-out happens if EITHER half carried — OR the two AND outputs together. Five gates: 2 XOR, 2 AND, 1 OR.',
     ],
   },
+  'xor-nand-only': {
+    id: 'xor-nand-only',
+    title: 'Bonus: XOR from 4 NANDs',
+    goal: 'Rebuild XOR using ONLY NAND gates — the famous minimal solution uses just four.',
+    inputLabels: ['A', 'B'],
+    outputLabels: ['A XOR B'],
+    palette: ['NAND'],
+    truthTable: [
+      { inputs: [0, 0], outputs: [0] },
+      { inputs: [0, 1], outputs: [1] },
+      { inputs: [1, 0], outputs: [1] },
+      { inputs: [1, 1], outputs: [0] },
+    ],
+    intro: [
+      'Engineer’s challenge, fully optional: your earlier XOR used 5+ gates of mixed types. Chip designers do it with FOUR NANDs.',
+      'Hint: feed A and B into a first NAND. Then give a second NAND the pair (A, that output), a third the pair (that output, B) — and let a fourth combine things.',
+      'No shame in skipping — but solving this one is a genuine “I could design chips” moment.',
+    ],
+  },
 }

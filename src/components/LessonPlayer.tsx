@@ -77,7 +77,17 @@ export default function LessonPlayer({ nodeId }: { nodeId: string }) {
           {idx + 1}/{screens.length}
         </span>
       </div>
-      <p className="pb-4 text-xs font-bold uppercase tracking-wider text-slate-500">{node.title}</p>
+      <div className="flex items-center justify-between pb-4">
+        <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{node.title}</p>
+        {screen.optional && (
+          <button
+            onClick={advance}
+            className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-300 hover:bg-amber-500/20"
+          >
+            ⭐ Bonus challenge — skip →
+          </button>
+        )}
+      </div>
 
       <div className={`min-h-0 flex-1 ${wide ? 'pb-4' : 'overflow-y-auto pb-10'}`}>
         <ScreenView

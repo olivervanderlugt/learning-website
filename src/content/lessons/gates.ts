@@ -75,6 +75,7 @@ export const gatesLesson: Lesson = {
       ],
     },
     { kind: 'gatePuzzle', puzzleId: 'xor-from-parts' },
+    { kind: 'gatePuzzle', puzzleId: 'xor-nand-only', optional: true },
     {
       kind: 'explain',
       title: 'You just learned silicon’s vocabulary',

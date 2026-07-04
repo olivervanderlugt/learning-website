@@ -2,6 +2,15 @@
 
 export type Subject = 'cs' | 'physics' | 'engineering' | 'math' | 'robotics'
 
+/** Curated external material shown in the node detail panel ("Go deeper"). */
+export interface Resource {
+  title: string
+  url: string
+  type: 'video' | 'interactive' | 'article' | 'book' | 'course'
+  /** One line: why THIS resource, what to get from it. */
+  note: string
+}
+
 export interface KnowledgeNode {
   id: string
   title: string
@@ -17,6 +26,10 @@ export interface KnowledgeNode {
   y: number
   /** True when the node has a playable lesson. */
   hasLesson?: boolean
+  /** Node is a module exam (mixed retrieval test over several nodes). */
+  isExam?: boolean
+  /** Curated videos/links/books for going deeper than the lesson. */
+  resources?: Resource[]
 }
 
 export interface Domain {
@@ -73,13 +86,17 @@ export interface GameScreen {
   gameId: string
 }
 
-export type Screen =
+export type Screen = (
   | ExplainScreen
   | PredictScreen
   | QuizScreen
   | GatePuzzleScreen
   | SandboxScreen
   | GameScreen
+) & {
+  /** Optional screens (bonus exercises / deeper dives) get a Skip button. */
+  optional?: boolean
+}
 
 export interface Lesson {
   nodeId: string

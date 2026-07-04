@@ -43,7 +43,22 @@ Vite + React + TS · Tailwind v4 (@tailwindcss/vite, no config file) · zustand+
 3. On vercel.com: Add New → Project → import the repo. Vercel auto-detects Vite. Build command `npm run build`, output `dist` (defaults). Deploy.
 4. Every future `git push` auto-deploys.
 
+## Newer conventions (added with the comprehensiveness pass)
+- `resources?: Resource[]` on KnowledgeNode → "Go deeper" links (video/interactive/article/book/course) in the detail panel; curated in `resourcesByNode` at the bottom of curriculum.ts.
+- `optional?: boolean` on any Screen → renders a "Bonus challenge — skip" button (learner control; never make core pedagogy optional).
+- `isExam?: boolean` on KnowledgeNode → module exam: mixed FRESH retrieval questions (never reuse lesson quiz questions), prereqs = all module nodes.
+- Map: jump-to-domain select + whole-map button + subject legend + MiniMap; initial view focuses "How Computers Work".
+
+## Roadmap to bachelor depth (honest gap analysis)
+The graph is a solid skeleton, NOT yet a bachelor's. To get there, per domain: ~8-15 nodes with playable lessons + module exam + external-resource pairing (a real bachelor ≈ 180 ECTS ≈ years; this app should be the SPINE that sequences and tests, with Nand2Tetris/OCW/3B1B/CS50 etc. as the muscle). Priority order for Ollie's robotics goal:
+1. Robotics Bridge + Control (needs: calculus, linalg lessons first)
+2. Programming Fundamentals (hands-on code runner screens — new Screen kind needed)
+3. Math (calculus, linalg, probability as interactive lessons)
+4. Physics Foundations (forces, energy, circuits)
+5. The rest of CS breadth
+Missing domains to add eventually: electromagnetism, signals & systems, mechanical design/CAD, software engineering practice (git, testing), business/entrepreneurship track for the startup.
+
 ## Next
-- Ollie tests P4 (adder + CPU lessons) end-to-end in browser.
+- Ollie tests: P4 lessons, module exam node, bonus XOR-from-4-NAND puzzle, map navigation (jump-to + minimap), resources panels.
 - Deploy via the manual steps above (or install `gh` + `brew` first).
-- Then: content for remaining nodes (start with Programming Fundamentals or Robotics Bridge), free-play sandbox preset support, possibly extract lesson-generation prompt template so an AI tutor can emit new lesson files.
+- Then follow the roadmap order above; extract a lesson-generation prompt template so lessons can be authored fast without touching components.
