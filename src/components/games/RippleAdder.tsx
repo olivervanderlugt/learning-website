@@ -15,8 +15,8 @@ export default function RippleAdder({ onComplete }: { onComplete: (score: number
   const [step, setStep] = useState(-1) // -1 = editing, 0..3 = adders done (right to left)
   const [finished, setFinished] = useState(false)
 
-  const valA = a.reduce((s, bit, i) => s + bit * PLACES[i], 0)
-  const valB = b.reduce((s, bit, i) => s + bit * PLACES[i], 0)
+  const valA = a.reduce((s: number, bit, i) => s + bit * PLACES[i], 0)
+  const valB = b.reduce((s: number, bit, i) => s + bit * PLACES[i], 0)
 
   // Compute all stages (index 0 = rightmost/ones column).
   const stages: { sum: Bit; cout: Bit }[] = []
