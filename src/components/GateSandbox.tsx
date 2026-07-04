@@ -374,7 +374,7 @@ export default function GateSandbox({
                   <th key={l} className="pb-1 font-semibold">{l}</th>
                 ))}
                 {puzzle.outputLabels.map((l) => (
-                  <th key={l} className="pb-1 font-semibold text-cyan-300">want</th>
+                  <th key={l} className="pb-1 font-semibold text-cyan-300">{l}</th>
                 ))}
                 <th className="pb-1 font-semibold">got</th>
                 <th />
