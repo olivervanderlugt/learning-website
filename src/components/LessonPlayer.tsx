@@ -7,6 +7,7 @@ import type { Screen } from '../types'
 import ExplainScreenView from './screens/ExplainScreenView'
 import PredictScreenView from './screens/PredictScreenView'
 import QuizScreenView from './screens/QuizScreenView'
+import GatePuzzleScreenView from './screens/GatePuzzleScreenView'
 import { games } from './games'
 
 export default function LessonPlayer({ nodeId }: { nodeId: string }) {
@@ -61,9 +62,10 @@ export default function LessonPlayer({ nodeId }: { nodeId: string }) {
   }
 
   const screen = screens[idx]
+  const wide = screen.kind === 'gatePuzzle' || screen.kind === 'sandbox'
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-2xl flex-col px-6">
+    <div className={`mx-auto flex h-full w-full flex-col px-6 ${wide ? 'max-w-6xl' : 'max-w-2xl'}`}>
       <div className="flex items-center gap-3 py-4">
         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-800">
           <div
@@ -77,7 +79,7 @@ export default function LessonPlayer({ nodeId }: { nodeId: string }) {
       </div>
       <p className="pb-4 text-xs font-bold uppercase tracking-wider text-slate-500">{node.title}</p>
 
-      <div className="min-h-0 flex-1 overflow-y-auto pb-10">
+      <div className={`min-h-0 flex-1 ${wide ? 'pb-4' : 'overflow-y-auto pb-10'}`}>
         <ScreenView
           key={idx}
           screen={screen}
@@ -128,9 +130,9 @@ function ScreenView({
       )
     }
     case 'gatePuzzle':
-      return <p className="text-slate-400">Gate puzzles arrive in P3 — skipping.</p>
+      return <GatePuzzleScreenView screen={screen} onDone={onDone} />
     case 'sandbox':
-      return <p className="text-slate-400">Sandbox arrives in P3 — skipping.</p>
+      return <p className="text-slate-400">Sandbox arrives in P4 — skipping.</p>
   }
 }
 
