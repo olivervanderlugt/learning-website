@@ -44,11 +44,28 @@ export type NodeStatus = 'locked' | 'available' | 'mastered'
 
 // ---------- Lessons ----------
 
+/** A jump to another lesson; the learner returns here afterward (interlinking). */
+export interface LessonLink {
+  nodeId: string
+  label: string
+}
+
+/** Reusable quiz question shape (used by QuizScreen and a lesson's extra-practice pool). */
+export interface QuizQuestion {
+  question: string
+  options: string[]
+  correctIndex: number
+  /** One per option: why it's right, or which misconception it reflects. */
+  explanations: string[]
+}
+
 export interface ExplainScreen {
   kind: 'explain'
   title: string
   /** Short paragraphs — max ~3 sentences each before interaction. */
   body: string[]
+  /** Optional deeper explanation, revealed on demand via "Go deeper" (adaptive tempo). */
+  deeper?: string[]
 }
 
 export interface PredictScreen {
@@ -61,13 +78,8 @@ export interface PredictScreen {
   reveal: string
 }
 
-export interface QuizScreen {
+export interface QuizScreen extends QuizQuestion {
   kind: 'quiz'
-  question: string
-  options: string[]
-  correctIndex: number
-  /** One per option: why it's right, or which misconception it reflects. */
-  explanations: string[]
 }
 
 export interface GatePuzzleScreen {
@@ -111,11 +123,15 @@ export type Screen = (
 ) & {
   /** Optional screens (bonus exercises / deeper dives) get a Skip button. */
   optional?: boolean
+  /** Links to prerequisite/related lessons; jumping saves this lesson's place and returns after. */
+  links?: LessonLink[]
 }
 
 export interface Lesson {
   nodeId: string
   screens: Screen[]
+  /** Pool of extra questions offered on the results screen for extra practice (adaptive tempo). */
+  extraPractice?: QuizQuestion[]
 }
 
 // ---------- Gate sandbox ----------
@@ -142,6 +158,14 @@ export interface GatePuzzle {
 
 // ---------- Progress (persisted) ----------
 
+export type Theme = 'dark' | 'light'
+
+/** A saved place to return to after an interlink detour. */
+export interface NavEntry {
+  nodeId: string
+  screenIndex: number
+}
+
 export interface Progress {
   version: 1
   xp: number
@@ -150,4 +174,9 @@ export interface Progress {
   masteredNodeIds: string[]
   /** nodeId → best quiz score as fraction 0..1 */
   quizScores: Record<string, number>
+  /** nodeId → last screen index reached, so a lesson resumes mid-session. */
+  lessonProgress: Record<string, number>
+  /** Return-stack for interlink detours (jump to a prereq lesson, come back). */
+  navStack: NavEntry[]
+  theme: Theme
 }

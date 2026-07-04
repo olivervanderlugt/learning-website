@@ -26,6 +26,17 @@ Vite + React + TS · Tailwind v4 (@tailwindcss/vite, no config file) · zustand+
 6. XP only for mastery. No streaks/leagues. Celebrate unlocks with animation.
 7. Every concept: one-line real-world/robotics hook (whyItMatters).
 
+## Quality gate (run EVERY time you add/change content)
+1. `npm run build` (this is the real typecheck — `tsc -b`).
+2. Content validator: `src/content/validate.ts` runs automatically on dev boot and logs to the browser console: `[content-validation] ✓ all content valid` or a list of problems. It checks duplicate ids, prereq/link targets exist, quiz explanations==options, gameId/puzzleId resolve, lessons end with a quiz, puzzle truth-table widths, resource URLs. ADD a new invariant here whenever a new content rule matters.
+3. For any new interactive game/sim, browser-verify it actually completes (drive it via preview). For sims with a win condition, also confirm it's WINNABLE (e.g. PID: numeric node script).
+4. Fact-check technical claims by hand (validator can't). All current lessons hand-verified.
+
+## Feature notes (adaptive tempo, interlinking, theming)
+- **Interlinking + mid-session save**: any Screen can carry `links: LessonLink[]`. Clicking a link calls `jumpToLesson` (pushes a return entry onto `navStack`, persisted), opens the target lesson; a "↩ return" banner + the results "Back to X" button call `exitLesson` which pops the stack. Lesson position is saved per node in `lessonProgress` (persisted) and resumed on reopen (quiz section restarts fresh to keep scoring whole).
+- **Adaptive tempo**: `ExplainScreen.deeper?: string[]` → "Go deeper" toggle. `Lesson.extraPractice?: QuizQuestion[]` → "Extra practice" button on the results screen (ungraded reinforcement).
+- **Light/dark mode**: `store.theme` toggled in header; App applies `light`/`dark` class to `<html>`. Light mode = `html.light` block in index.css that REVERSES the slate ramp + darkens accent-300 text (Tailwind v4 emits `var(--color-*)`, so this re-themes with zero component edits). React Flow `colorMode` follows theme.
+
 ## Conventions
 - Extend working files; small targeted diffs; one game = one file with `{ onComplete(score) }`.
 - Content ONLY in src/content — components never hardcode lesson text.

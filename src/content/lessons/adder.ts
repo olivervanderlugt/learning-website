@@ -33,6 +33,7 @@ export const adderLesson: Lesson = {
       correctIndex: 2,
       reveal:
         'It’s XOR — the difference detector outputs 1 exactly when the bits differ, which is precisely the sum column. And check the carry column: 0,0,0,1 — only on when BOTH inputs are 1. That’s AND. The adder was hiding in last lesson all along.',
+      links: [{ nodeId: 'gates', label: 'Rebuild XOR & AND (The Logic of Gates)' }],
     },
     { kind: 'gatePuzzle', puzzleId: 'half-adder' },
     {

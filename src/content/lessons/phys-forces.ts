@@ -44,6 +44,7 @@ export const physForcesLesson: Lesson = {
       correctIndex: 0,
       reveal:
         'Acceleration is the DERIVATIVE of velocity — the rate of change you met in Calculus & Change. And velocity is the derivative of position. Physics and calculus are the same language: Newton literally invented calculus to write these laws. One idea, two subjects.',
+      links: [{ nodeId: 'math-calculus', label: 'Refresher: Calculus & Change' }],
     },
     {
       kind: 'explain',

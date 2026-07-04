@@ -25,6 +25,7 @@ export const roboSensingLesson: Lesson = {
       correctIndex: 0,
       reveal:
         'The voltage must be digitized by an ADC — analog-to-digital converter — which snaps the continuous voltage to the nearest of a fixed set of levels and reports it as bits. This is the exact moment the physical world becomes the binary you learned in Speaking in Switches. Try it next.',
+      links: [{ nodeId: 'bits', label: 'Refresher: Speaking in Switches (bits)' }],
     },
     { kind: 'game', gameId: 'adc-sim' },
     {

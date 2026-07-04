@@ -58,6 +58,7 @@ export default function SkillTreeView() {
 function SkillTreeInner() {
   const masteredNodeIds = useStore((s) => s.masteredNodeIds)
   const openLesson = useStore((s) => s.openLesson)
+  const theme = useStore((s) => s.theme)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const { fitBounds, fitView } = useReactFlow()
 
@@ -129,17 +130,17 @@ function SkillTreeInner() {
         minZoom={0.15}
         maxZoom={1.6}
         proOptions={{ hideAttribution: true }}
-        colorMode="dark"
+        colorMode={theme}
         className="bg-slate-950"
       >
-        <Background variant={BackgroundVariant.Dots} gap={24} size={1} color="#1e293b" />
+        <Background variant={BackgroundVariant.Dots} gap={24} size={1} color={theme === 'light' ? '#cbd5e1' : '#1e293b'} />
         <Controls showInteractive={false} position="bottom-left" />
         <MiniMap
           position="bottom-right"
           pannable
           zoomable
-          bgColor="#020617"
-          maskColor="rgba(2, 6, 23, 0.75)"
+          bgColor={theme === 'light' ? '#e2e8f0' : '#020617'}
+          maskColor={theme === 'light' ? 'rgba(203,213,225,0.6)' : 'rgba(2, 6, 23, 0.75)'}
           nodeColor={(n) => {
             const kn = nodeById.get(n.id)
             if (!kn) return 'transparent'

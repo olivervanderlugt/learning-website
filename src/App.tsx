@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import SkillTreeView from './components/SkillTreeView'
 import LessonPlayer from './components/LessonPlayer'
 import SettingsPanel from './components/SettingsPanel'
@@ -6,7 +7,16 @@ import { useStore } from './store'
 function App() {
   const view = useStore((s) => s.view)
   const xp = useStore((s) => s.xp)
+  const theme = useStore((s) => s.theme)
+  const toggleTheme = useStore((s) => s.toggleTheme)
   const backToMap = useStore((s) => s.backToMap)
+
+  // Apply theme class to <html> so the light-mode CSS variables take effect.
+  useEffect(() => {
+    const root = document.documentElement
+    root.classList.toggle('light', theme === 'light')
+    root.classList.toggle('dark', theme === 'dark')
+  }, [theme])
 
   return (
     <div className="flex h-full flex-col">
@@ -29,6 +39,14 @@ function App() {
           <div className="rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-semibold text-amber-300">
             ⚡ {xp} XP
           </div>
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle light/dark theme"
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="rounded-lg border border-slate-700 px-3 py-1.5 text-sm text-slate-300 hover:bg-slate-800"
+          >
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
           <SettingsPanel />
         </div>
       </header>

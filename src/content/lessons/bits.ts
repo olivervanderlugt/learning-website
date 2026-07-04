@@ -44,6 +44,11 @@ export const bitsLesson: Lesson = {
         'That’s why so much tech speaks in 0–255: the brightness of a camera pixel, a color channel, a servo angle command — each is one byte.',
         'When a distance sensor tells your robot “obstacle at 47 cm”, the wire literally carries 00101111. You can now read your robot’s mind.',
       ],
+      deeper: [
+        'Why 8 bits to a byte and not 10? History plus convenience: 8 is a power of two (2³), so a byte splits neatly into halves and quarters, and 256 values comfortably covered early text (ASCII) with room to spare.',
+        'Bigger numbers just use more bytes: two bytes (16 bits) reach 65,535; four bytes (32 bits) pass 4 billion; eight bytes (64 bits) are what modern CPUs handle in one go.',
+        'So “47 cm” as 00101111 is 32+8+4+2+1 = 47 — one byte, one wire’s worth of switches, exactly the counting you just practised.',
+      ],
     },
     {
       kind: 'predict',
@@ -121,6 +126,41 @@ export const bitsLesson: Lesson = {
         'Correct: every existing combination now exists twice (new bit 0, new bit 1) — 2ⁿ growth is why 64 bits can index the whole internet.',
         'Tripling would need three-state switches. Ours have two states, so each bit multiplies possibilities by 2.',
         'Squaring would mean 8 bits → 65,536 values, but 8 bits give 256. Each single bit multiplies by 2, so n bits give 2ⁿ.',
+      ],
+    },
+  ],
+  extraPractice: [
+    {
+      question: 'What is binary 1110 in decimal?',
+      options: ['14', '11', '7', '1110'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the ON places are 8, 4 and 2 → 8+4+2 = 14.',
+        '11 would be 1011 — different switches. In 1110 the ON places are 8, 4, 2.',
+        '7 is 0111 (4+2+1). Here the rightmost bit is 0 and the 8s bit is on, giving 14.',
+        'That’s the pattern, not the value — read place values 8,4,2,1: 8+4+2 = 14.',
+      ],
+    },
+    {
+      question: 'How many bits do you need to represent 100 different values?',
+      options: ['6', '7', '10', '100'],
+      correctIndex: 1,
+      explanations: [
+        '6 bits give 2⁶ = 64, not enough for 100.',
+        'Correct: 2⁶ = 64 < 100 ≤ 128 = 2⁷, so 7 bits is the smallest that covers 100.',
+        '10 bits give 1024 — far more than needed. The smallest that reaches 100 is 7.',
+        'You don’t need one bit per value — bits double, so 7 bits already cover 128 values.',
+      ],
+    },
+    {
+      question: 'What is decimal 20 in binary?',
+      options: ['10100', '11000', '10010', '01010'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: 20 = 16 + 4, so the 16s and 4s places are on → 10100.',
+        '11000 is 16+8 = 24. Twenty needs 16 and 4, not 16 and 8.',
+        '10010 is 16+2 = 18. Two short — you need the 4s place, not the 2s: 10100.',
+        '01010 is 8+2 = 10, half of 20. Use 16+4 = 10100.',
       ],
     },
   ],

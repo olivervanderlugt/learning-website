@@ -34,6 +34,15 @@ export const roboControlLesson: Lesson = {
         'The I term adds up accumulated error over time — its integral — and erases any stubborn steady gap, like the constant pull of gravity.',
         'Derivative and integral: exactly the two moves from Calculus & Change. Now go tune a real one.',
       ],
+      deeper: [
+        'Concretely, the controller computes: output = Kp·e + Ki·∫e dt + Kd·(de/dt), where e is the error (target − current).',
+        'Kp, Ki and Kd are “gains” — knobs setting how strongly each term contributes. Tuning them is the whole art: too much Kp overshoots, too little Kd lets it ring, too little Ki leaves a droop.',
+        'Because ∫e dt and de/dt are a running integral and derivative computed every loop, a PID controller is literally doing calculus on the error signal in real time.',
+      ],
+      links: [
+        { nodeId: 'math-calculus', label: 'Refresher: Calculus & Change' },
+        { nodeId: 'phys-forces', label: 'Refresher: Forces & Motion' },
+      ],
     },
     { kind: 'game', gameId: 'pid-sim' },
     {

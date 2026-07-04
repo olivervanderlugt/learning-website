@@ -17,6 +17,9 @@ export default function SettingsPanel() {
       completedScreens: s.completedScreens,
       masteredNodeIds: s.masteredNodeIds,
       quizScores: s.quizScores,
+      lessonProgress: s.lessonProgress,
+      navStack: s.navStack,
+      theme: s.theme,
     }
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)

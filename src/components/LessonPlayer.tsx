@@ -3,7 +3,7 @@ import { motion } from 'motion/react'
 import { lessons } from '../content/lessons'
 import { nodeById, nodes as curriculum, XP_PER_NODE } from '../content/curriculum'
 import { useStore } from '../store'
-import type { Screen } from '../types'
+import type { LessonLink, QuizQuestion, Screen } from '../types'
 import ExplainScreenView from './screens/ExplainScreenView'
 import PredictScreenView from './screens/PredictScreenView'
 import QuizScreenView from './screens/QuizScreenView'
@@ -16,15 +16,34 @@ export default function LessonPlayer({ nodeId }: { nodeId: string }) {
   const node = nodeById.get(nodeId)
   const backToMap = useStore((s) => s.backToMap)
   const completeScreen = useStore((s) => s.completeScreen)
-
-  const [idx, setIdx] = useState(0)
-  // quiz screen index → was the first committed answer correct
-  const [quizResults, setQuizResults] = useState<Record<number, boolean>>({})
+  const setLessonScreen = useStore((s) => s.setLessonScreen)
+  const jumpToLesson = useStore((s) => s.jumpToLesson)
+  const exitLesson = useStore((s) => s.exitLesson)
+  const navStack = useStore((s) => s.navStack)
 
   const quizIndices = useMemo(
     () => (lesson ? lesson.screens.flatMap((s, i) => (s.kind === 'quiz' ? [i] : [])) : []),
     [lesson],
   )
+
+  // Resume from the saved position; restart the quiz section fresh so scoring stays whole.
+  const initialIdx = useMemo(() => {
+    if (!lesson) return 0
+    const mastered = useStore.getState().masteredNodeIds.includes(nodeId)
+    const raw = useStore.getState().lessonProgress[nodeId] ?? 0
+    const firstQuiz = quizIndices[0] ?? lesson.screens.length
+    const start = mastered ? 0 : Math.min(raw, firstQuiz)
+    return start >= lesson.screens.length ? 0 : start
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodeId, lesson])
+
+  const [idx, setIdx] = useState(initialIdx)
+  const [quizResults, setQuizResults] = useState<Record<number, boolean>>({})
+
+  // Persist position as the learner advances (mid-session save).
+  useEffect(() => {
+    if (lesson) setLessonScreen(nodeId, idx)
+  }, [nodeId, idx, lesson, setLessonScreen])
 
   if (!lesson || !node) {
     return (
@@ -52,21 +71,24 @@ export default function LessonPlayer({ nodeId }: { nodeId: string }) {
 
   if (finished) {
     const correct = quizIndices.filter((i) => quizResults[i]).length
-    return (
-      <ResultsScreen
-        nodeId={nodeId}
-        correct={correct}
-        total={quizIndices.length}
-        onRetry={retryQuiz}
-      />
-    )
+    return <ResultsScreen nodeId={nodeId} correct={correct} total={quizIndices.length} onRetry={retryQuiz} />
   }
 
   const screen = screens[idx]
   const wide = screen.kind === 'gatePuzzle' || screen.kind === 'sandbox'
+  const parent = navStack[navStack.length - 1]
+  const parentTitle = parent ? nodeById.get(parent.nodeId)?.title : undefined
 
   return (
     <div className={`mx-auto flex h-full w-full flex-col px-6 ${wide ? 'max-w-6xl' : 'max-w-2xl'}`}>
+      {parentTitle && (
+        <button
+          onClick={exitLesson}
+          className="mt-3 flex items-center gap-2 self-start rounded-lg border border-violet-500/40 bg-violet-500/10 px-3 py-1 text-xs font-semibold text-violet-300 hover:bg-violet-500/20"
+        >
+          ↩ You detoured here — return to “{parentTitle}”
+        </button>
+      )}
       <div className="flex items-center gap-3 py-4">
         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-800">
           <div
@@ -99,7 +121,35 @@ export default function LessonPlayer({ nodeId }: { nodeId: string }) {
           onQuizAnswer={(ok) => setQuizResults((r) => ({ ...r, [idx]: ok }))}
           onDone={advance}
         />
+        {screen.links && screen.links.length > 0 && (
+          <LinkRow links={screen.links} onJump={(to) => jumpToLesson(nodeId, idx, to)} />
+        )}
       </div>
+    </div>
+  )
+}
+
+function LinkRow({ links, onJump }: { links: LessonLink[]; onJump: (nodeId: string) => void }) {
+  return (
+    <div className="mt-5 rounded-xl border border-slate-800 bg-slate-900/60 p-3">
+      <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Need a refresher?</p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {links.map((l) => {
+          const exists = nodeById.get(l.nodeId)?.hasLesson
+          return (
+            <button
+              key={l.nodeId}
+              disabled={!exists}
+              onClick={() => onJump(l.nodeId)}
+              className="rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold text-cyan-300 hover:bg-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-40"
+              title={exists ? 'Jump there and return here afterward' : 'Lesson not built yet'}
+            >
+              ↗ {l.label}
+            </button>
+          )
+        })}
+      </div>
+      <p className="mt-2 text-[11px] text-slate-600">You’ll come right back here when you’re done.</p>
     </div>
   )
 }
@@ -134,18 +184,14 @@ function ScreenView({
       )
     case 'game': {
       const Game = games[screen.gameId]
-      return (
-        <div>
-          {Game ? <Game onComplete={() => onDone()} /> : <p>Unknown game: {screen.gameId}</p>}
-        </div>
-      )
+      return <div>{Game ? <Game onComplete={() => onDone()} /> : <p>Unknown game: {screen.gameId}</p>}</div>
     }
     case 'gatePuzzle':
       return <GatePuzzleScreenView screen={screen} onDone={onDone} />
     case 'code':
       return <CodeScreenView screen={screen} onDone={onDone} />
     case 'sandbox':
-      return <p className="text-slate-400">Sandbox arrives in P4 — skipping.</p>
+      return <p className="text-slate-400">Free-play sandbox coming soon — skipping.</p>
   }
 }
 
@@ -160,18 +206,20 @@ function ResultsScreen({
   total: number
   onRetry: () => void
 }) {
-  const backToMap = useStore((s) => s.backToMap)
+  const exitLesson = useStore((s) => s.exitLesson)
   const recordQuizScore = useStore((s) => s.recordQuizScore)
   const masterNode = useStore((s) => s.masterNode)
+  const navStack = useStore((s) => s.navStack)
   const score = total > 0 ? correct / total : 1
   const passed = score >= 0.8
+  const lesson = lessons[nodeId]
+  const [practicing, setPracticing] = useState(false)
 
-  // Snapshot the mastered set as it was when the results screen mounted, so the
-  // unlock list doesn't vanish once the store commits this node as mastered.
+  const parent = navStack[navStack.length - 1]
+  const parentTitle = parent ? nodeById.get(parent.nodeId)?.title : undefined
+
   const before = useRef<string[] | null>(null)
-  if (before.current === null) {
-    before.current = useStore.getState().masteredNodeIds
-  }
+  if (before.current === null) before.current = useStore.getState().masteredNodeIds
   const alreadyMastered = before.current.includes(nodeId)
 
   const newlyUnlocked = useMemo(() => {
@@ -183,12 +231,10 @@ function ResultsScreen({
         n.prereqIds.includes(nodeId) &&
         !after.has(n.id) &&
         n.prereqIds.every((p) => after.has(p)) &&
-        // it was locked before this mastery
         !n.prereqIds.every((p) => prior.includes(p)),
     )
   }, [passed, nodeId])
 
-  // Commit results exactly once, after render.
   const committed = useRef(false)
   useEffect(() => {
     if (committed.current) return
@@ -196,6 +242,12 @@ function ResultsScreen({
     recordQuizScore(nodeId, score)
     if (passed) masterNode(nodeId, XP_PER_NODE)
   }, [nodeId, score, passed, recordQuizScore, masterNode])
+
+  if (practicing && lesson?.extraPractice?.length) {
+    return <ExtraPractice questions={lesson.extraPractice} onDone={() => setPracticing(false)} />
+  }
+
+  const exitLabel = parentTitle ? `↩ Back to “${parentTitle}”` : 'Back to the map'
 
   return (
     <div className="flex h-full items-center justify-center px-6">
@@ -218,15 +270,11 @@ function ResultsScreen({
             <h2 className="mt-4 text-2xl font-black">Node mastered!</h2>
             <p className="mt-2 text-slate-300">
               Quiz: {correct}/{total} correct
-              {!alreadyMastered && (
-                <span className="ml-2 font-bold text-amber-300">+{XP_PER_NODE} XP</span>
-              )}
+              {!alreadyMastered && <span className="ml-2 font-bold text-amber-300">+{XP_PER_NODE} XP</span>}
             </p>
             {newlyUnlocked.length > 0 && (
               <div className="mt-5 space-y-2">
-                <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">
-                  Unlocked
-                </p>
+                <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Unlocked</p>
                 {newlyUnlocked.map((n, i) => (
                   <motion.div
                     key={n.id}
@@ -246,14 +294,13 @@ function ResultsScreen({
             <div className="text-6xl">🌱</div>
             <h2 className="mt-4 text-2xl font-black">Almost there</h2>
             <p className="mt-2 text-sm leading-relaxed text-slate-300">
-              You got {correct}/{total} — mastery needs {Math.ceil(total * 0.8)}/{total}. That’s not
-              a failure, it’s information: one idea hasn’t clicked yet. Skim the explanations again,
-              then retake the quiz.
+              You got {correct}/{total} — mastery needs {Math.ceil(total * 0.8)}/{total}. That’s not a failure, it’s
+              information: one idea hasn’t clicked yet. Skim the explanations again, then retake the quiz.
             </p>
           </>
         )}
 
-        <div className="mt-7 flex justify-center gap-3">
+        <div className="mt-7 flex flex-wrap justify-center gap-3">
           {!passed && (
             <button
               onClick={onRetry}
@@ -262,18 +309,55 @@ function ResultsScreen({
               Retake quiz
             </button>
           )}
+          {lesson?.extraPractice?.length ? (
+            <button
+              onClick={() => setPracticing(true)}
+              className="rounded-lg border border-emerald-500/50 bg-emerald-500/10 px-5 py-2.5 text-sm font-bold text-emerald-300 hover:bg-emerald-500/20"
+            >
+              🔁 Extra practice ({lesson.extraPractice.length})
+            </button>
+          ) : null}
           <button
-            onClick={backToMap}
+            onClick={exitLesson}
             className={
               passed
                 ? 'rounded-lg bg-cyan-500 px-5 py-2.5 text-sm font-bold text-slate-950 hover:bg-cyan-400'
                 : 'rounded-lg border border-slate-700 px-5 py-2.5 text-sm text-slate-300 hover:bg-slate-800'
             }
           >
-            Back to the map
+            {exitLabel}
           </button>
         </div>
       </motion.div>
+    </div>
+  )
+}
+
+/** Optional extra-practice quiz run (adaptive tempo — not graded, just reinforcement). */
+function ExtraPractice({ questions, onDone }: { questions: QuizQuestion[]; onDone: () => void }) {
+  const [i, setI] = useState(0)
+  const q = questions[i]
+  const last = i === questions.length - 1
+  return (
+    <div className="mx-auto flex h-full w-full max-w-2xl flex-col px-6">
+      <div className="flex items-center justify-between py-4">
+        <p className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+          Extra practice {i + 1}/{questions.length}
+        </p>
+        <button onClick={onDone} className="text-xs text-slate-500 hover:text-slate-300">
+          exit practice
+        </button>
+      </div>
+      <div className="min-h-0 flex-1 overflow-y-auto pb-10">
+        <QuizScreenView
+          key={i}
+          screen={{ kind: 'quiz', ...q }}
+          questionNumber={i + 1}
+          totalQuestions={questions.length}
+          onAnswer={() => {}}
+          onDone={() => (last ? onDone() : setI(i + 1))}
+        />
+      </div>
     </div>
   )
 }

@@ -9,13 +9,22 @@ interface View {
 
 interface AppState extends Progress {
   view: View
+  /** Open a lesson from the map (resumes from lessonProgress). */
   openLesson: (nodeId: string) => void
+  /** Full exit to the map, clearing any interlink detour stack. */
   backToMap: () => void
+  /** Jump to a linked lesson mid-lesson, saving this spot to return to. */
+  jumpToLesson: (fromNodeId: string, fromScreenIndex: number, toNodeId: string) => void
+  /** Leave the current lesson: pop the detour stack (return to parent) or go to map. */
+  exitLesson: () => void
+  /** Persist the current screen index so the lesson resumes later. */
+  setLessonScreen: (nodeId: string, screenIndex: number) => void
   completeScreen: (nodeId: string, screenIndex: number) => void
   recordQuizScore: (nodeId: string, score: number) => void
   masterNode: (nodeId: string, xpGain: number) => void
+  toggleTheme: () => void
   resetProgress: () => void
-  importProgress: (data: Progress) => void
+  importProgress: (data: Partial<Progress>) => void
 }
 
 const initialProgress: Progress = {
@@ -24,6 +33,9 @@ const initialProgress: Progress = {
   completedScreens: [],
   masteredNodeIds: [],
   quizScores: {},
+  lessonProgress: {},
+  navStack: [],
+  theme: 'dark',
 }
 
 export const useStore = create<AppState>()(
@@ -31,36 +43,67 @@ export const useStore = create<AppState>()(
     (set) => ({
       ...initialProgress,
       view: { name: 'map' },
-      openLesson: (nodeId) => set({ view: { name: 'lesson', nodeId } }),
-      backToMap: () => set({ view: { name: 'map' } }),
+
+      openLesson: (nodeId) => set({ view: { name: 'lesson', nodeId }, navStack: [] }),
+
+      backToMap: () => set({ view: { name: 'map' }, navStack: [] }),
+
+      jumpToLesson: (fromNodeId, fromScreenIndex, toNodeId) =>
+        set((s) => ({
+          view: { name: 'lesson', nodeId: toNodeId },
+          navStack: [...s.navStack, { nodeId: fromNodeId, screenIndex: fromScreenIndex }],
+          lessonProgress: { ...s.lessonProgress, [fromNodeId]: fromScreenIndex },
+        })),
+
+      exitLesson: () =>
+        set((s) => {
+          if (s.navStack.length === 0) return { view: { name: 'map' } }
+          const stack = s.navStack.slice()
+          const parent = stack.pop()!
+          return {
+            view: { name: 'lesson', nodeId: parent.nodeId },
+            navStack: stack,
+            lessonProgress: { ...s.lessonProgress, [parent.nodeId]: parent.screenIndex },
+          }
+        }),
+
+      setLessonScreen: (nodeId, screenIndex) =>
+        set((s) => ({ lessonProgress: { ...s.lessonProgress, [nodeId]: screenIndex } })),
+
       completeScreen: (nodeId, screenIndex) =>
         set((s) => {
           const key = `${nodeId}:${screenIndex}`
           if (s.completedScreens.includes(key)) return s
           return { completedScreens: [...s.completedScreens, key] }
         }),
+
       recordQuizScore: (nodeId, score) =>
         set((s) => ({
-          quizScores: {
-            ...s.quizScores,
-            [nodeId]: Math.max(s.quizScores[nodeId] ?? 0, score),
-          },
+          quizScores: { ...s.quizScores, [nodeId]: Math.max(s.quizScores[nodeId] ?? 0, score) },
         })),
+
       masterNode: (nodeId, xpGain) =>
         set((s) =>
           s.masteredNodeIds.includes(nodeId)
             ? s
             : { masteredNodeIds: [...s.masteredNodeIds, nodeId], xp: s.xp + xpGain },
         ),
-      resetProgress: () => set({ ...initialProgress }),
+
+      toggleTheme: () => set((s) => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
+
+      resetProgress: () => set((s) => ({ ...initialProgress, theme: s.theme })),
+
       importProgress: (data) =>
-        set({
+        set((s) => ({
           version: 1,
           xp: data.xp ?? 0,
           completedScreens: data.completedScreens ?? [],
           masteredNodeIds: data.masteredNodeIds ?? [],
           quizScores: data.quizScores ?? {},
-        }),
+          lessonProgress: data.lessonProgress ?? {},
+          navStack: [],
+          theme: data.theme ?? s.theme,
+        })),
     }),
     {
       name: 'learn-progress-v1',
@@ -70,6 +113,9 @@ export const useStore = create<AppState>()(
         completedScreens: s.completedScreens,
         masteredNodeIds: s.masteredNodeIds,
         quizScores: s.quizScores,
+        lessonProgress: s.lessonProgress,
+        navStack: s.navStack,
+        theme: s.theme,
       }),
     },
   ),
