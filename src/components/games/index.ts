@@ -3,6 +3,7 @@ import BinaryCounter from './BinaryCounter'
 import BinaryConverter from './BinaryConverter'
 import RippleAdder from './RippleAdder'
 import CpuSim from './CpuSim'
+import VectorPlayground from './VectorPlayground'
 
 export interface GameProps {
   onComplete: (score: number) => void
@@ -14,4 +15,5 @@ export const games: Record<string, ComponentType<GameProps>> = {
   'binary-converter': BinaryConverter,
   'ripple-adder': RippleAdder,
   'cpu-sim': CpuSim,
+  'vector-playground': VectorPlayground,
 }

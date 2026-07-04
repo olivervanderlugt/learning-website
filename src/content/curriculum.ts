@@ -158,6 +158,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: [],
     x: 0,
     y: 1210,
+    hasLesson: true,
   },
   {
     id: 'math-prob',

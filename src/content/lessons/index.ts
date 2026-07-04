@@ -4,6 +4,7 @@ import { gatesLesson } from './gates'
 import { adderLesson } from './adder'
 import { cpuLesson } from './cpu'
 import { hcwExamLesson } from './hcw-exam'
+import { mathLinalgLesson } from './math-linalg'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -11,4 +12,5 @@ export const lessons: Record<string, Lesson> = {
   adder: adderLesson,
   cpu: cpuLesson,
   'hcw-exam': hcwExamLesson,
+  'math-linalg': mathLinalgLesson,
 }
