@@ -90,8 +90,17 @@ Gotchas learned:
 - Batch/rapid-click games (ProbabilitySim): use FUNCTIONAL setState (setX(prev=>...)) or rapid clicks race on stale closure state; fire onComplete from useEffect, not inside the updater.
 - `code` Screen kind runs learner JS in a Web Worker (blob URL) with a 2s terminate timeout — infinite-loop safe. Output captured via injected `print()`, compared line-normalized to `expected`.
 
-## Next
-- Ollie tests: the full Physics→Robotics→PID vertical slice, the code runner (Programming), and probability. All 15 lessons are playable; the whole "How Computers Work" module + core math trio + physics pair + robotics pair are done.
-- Deploy via the manual steps above (or install `gh` + `brew` first).
-- Remaining nodes to build (roadmap): robo-kinematics + robo-embedded + robo-ros (finish Robotics Bridge); math-logic; prog-functions + prog-data (continue Programming with the code runner); then breadth across algorithms/OS/networks/etc. Physics could add phys-energy.
-- Extract a lesson-generation prompt template so lessons can be authored fast without touching components (content/data split already supports it — a lesson is one file + optional one game file + registry lines + hasLesson flag).
+## Next (resume here tomorrow)
+STATE as of last session: 20 playable lessons; 5 domains COMPLETE (How Computers Work, Programming, Math, Physics, Robotics Bridge). All committed on `main`, working tree clean, build green, content validator clean. History + Chemistry added as subjects (6 placeholder nodes, no lessons yet).
+
+To restart the dev server: `export PATH="$HOME/.local/node/bin:$PATH"` then `cd ~/Claude/Projects/"Learning website"` then `npm run dev` → open the printed http://localhost:5173.
+
+Priority queue for next lessons (each = one lesson file + optional game + registry lines + hasLesson flag; then `npm run build` + check the browser console for `[content-validation] ✓`):
+1. First real History + Chemistry lessons (hist-computing is a great, low-prereq start; chem-atoms too). Ollie explicitly asked for these subjects.
+2. Algorithms & Data Structures (algo-bigo → algo-structures → algo-graphs) — algo-graphs pairs with a pathfinding interactive; high robotics value (A*).
+3. AI & Machine Learning (ai-search, ai-learning, ai-neural) — builds on math + algorithms.
+4. Then OS, Networks, Databases, Theory, Security breadth.
+
+Bigger arc (see "Roadmap to bachelor depth" above): after breadth, deepen each node (Stage 1) → rigor/proofs (Stage 2) → labs/projects (Stage 3) → spaced-repetition retention (Stage 4) → cross-domain capstones + business track (Stage 5).
+
+Nice-to-haves: extract a lesson-generation prompt template; give GateSandbox `colorMode` from theme (still hardcoded dark); deploy to Vercel for a permanent/mobile URL (manual steps above — gh CLI not installed).
