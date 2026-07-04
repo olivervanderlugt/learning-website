@@ -10,6 +10,7 @@ import ForceSim from './ForceSim'
 import OhmsLawSim from './OhmsLawSim'
 import AdcSim from './AdcSim'
 import PidSim from './PidSim'
+import ArmSim from './ArmSim'
 
 export interface GameProps {
   onComplete: (score: number) => void
@@ -28,4 +29,5 @@ export const games: Record<string, ComponentType<GameProps>> = {
   'ohms-law-sim': OhmsLawSim,
   'adc-sim': AdcSim,
   'pid-sim': PidSim,
+  'arm-sim': ArmSim,
 }

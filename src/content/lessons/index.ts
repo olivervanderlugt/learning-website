@@ -12,6 +12,7 @@ import { physForcesLesson } from './phys-forces'
 import { physElectricityLesson } from './phys-electricity'
 import { roboSensingLesson } from './robo-sensing'
 import { roboControlLesson } from './robo-control'
+import { roboKinematicsLesson } from './robo-kinematics'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -27,4 +28,5 @@ export const lessons: Record<string, Lesson> = {
   'phys-electricity': physElectricityLesson,
   'robo-sensing': roboSensingLesson,
   'robo-control': roboControlLesson,
+  'robo-kinematics': roboKinematicsLesson,
 }

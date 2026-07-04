@@ -451,6 +451,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['math-linalg', 'robo-sensing'],
     x: 720,
     y: 20,
+    hasLesson: true,
   },
   {
     id: 'robo-ros',

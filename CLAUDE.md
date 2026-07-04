@@ -69,12 +69,12 @@ The graph is a solid skeleton, NOT yet a bachelor's. To get there, per domain: ~
 5. The rest of CS breadth
 Missing domains to add eventually: electromagnetism, signals & systems, mechanical design/CAD, software engineering practice (git, testing), business/entrepreneurship track for the startup.
 
-## Playable lessons so far (15 nodes)
+## Playable lessons so far (16 nodes)
 - How Computers Work: bits, gates, adder, cpu, hcw-exam (module exam).
 - Math: math-linalg (vector playground), math-calculus (slope/derivative explorer), math-prob (law-of-large-numbers coin sim).
 - Programming: prog-variables (live code runner).
 - Physics: phys-forces (F=ma launch sim), phys-electricity (Ohm's-law circuit sim).
-- Robotics Bridge: robo-sensing (ADC quantizer sim), robo-control (interactive PID tuner — the payoff).
+- Robotics Bridge: robo-sensing (ADC quantizer), robo-control (interactive PID tuner), robo-kinematics (2-joint arm forward-kinematics sim, links to linalg).
 The full vertical slice Physics → Robotics → tuned PID controller is playable. robo-control unlocks once robo-sensing + phys-forces are mastered (chain: phys-forces + phys-electricity → robo-sensing → robo-control).
 Games live in src/components/games/, all implement `{ onComplete(score) }`.
 - PID sim (PidSim.tsx): simulation is deterministic; constants (STEPS=400, DRAG=0.8, GRAVITY=2.5, TOL=0.5) were numerically tuned so P-only and PI-without-D FAIL but P≈4/I≈2/D≈4 settles — verify any change to these still leaves it winnable (quick node script simulating the loop).
