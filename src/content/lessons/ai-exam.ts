@@ -1,0 +1,180 @@
+import type { Lesson } from '../../types'
+
+export const aiExamLesson: Lesson = {
+  nodeId: 'ai-exam',
+  screens: [
+    {
+      kind: 'explain',
+      title: 'Module exam — think like the machine',
+      body: [
+        'Ten questions across the whole AI & ML module — search, learning, neural nets — all NEW, no repeats from the lesson quizzes. No sims, no notes: retrieval from memory is the point.',
+        'Score 80% and the module is sealed. Below that? You lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'A picking robot must visit 6 bins in some order, and its planner checks every ordering. How many orderings — and what happens at 12 bins?',
+      options: [
+        '720 orderings — and doubling to 12 bins multiplies that by over 600,000×',
+        '720 orderings — and doubling to 12 bins doubles it to 1,440',
+        '36 orderings — orderings grow as bins squared',
+        '12 orderings — one route per bin',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: 6! = 720, but 12! ≈ 479 million — a 665,280× jump. Each added bin MULTIPLIES the count; that’s the combinatorial explosion in one number.',
+        'Doubling the bins doesn’t double the routes — every new bin multiplies the count by its position (7, then 8, then 9…). Factorials compound; they never merely add.',
+        '6² = 36 undercounts badly — orderings are 6×5×4×3×2×1, not 6×6. Factorial growth crushes even exponentials, let alone squares.',
+        'One route per bin would be lovely — but a route is a full SEQUENCE of all 6 bins, and sequences multiply: 6 choices, then 5, then 4…',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Your delivery drone’s A* uses “straight-line distance × 2” as its heuristic, to be “extra cautious”. What actually breaks?',
+      options: [
+        'The heuristic can now overestimate the true cost, so A* loses its shortest-route guarantee',
+        'Nothing — any distance-based heuristic keeps A* optimal',
+        'A* becomes much slower, but stays optimal',
+        'A* crashes — heuristics must exactly equal the remaining cost',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: admissibility means never overestimating, and ×2 blows past the true cost whenever a near-straight path exists. A* can then commit to a route that isn’t shortest — the guarantee, not the code, is what breaks.',
+        'Distance-based isn’t the rule — UNDERESTIMATING is. Plain straight-line distance is legal precisely because no real path can beat a straight line; doubled, it can claim costs no path has.',
+        'Backwards on both counts: an inflated heuristic often searches FASTER (it’s greedier) — the price you quietly pay is optimality.',
+        'Exact remaining cost would be ideal but is almost never computable — heuristics are allowed to underestimate freely. The one sin is overestimating.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Two robots compete to grab items off a shared conveyor. When YOUR robot plans its next grab, what should it assume about the rival?',
+      options: [
+        'That the rival makes its BEST possible counter-move — plan against the strongest reply',
+        'That the rival moves randomly, so average over its options',
+        'That the rival will blunder — plan for the most favorable reply',
+        'Nothing — plan as if the conveyor were yours alone, then patch problems live',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: that’s minimax — alternate layers of “my choice / their best response” and optimize the worst case. A plan that survives the rival’s best move survives everything weaker.',
+        'Averaging suits genuinely random worlds (dice, sensor noise) — but a competent adversary isn’t random, and averaging lets one sharp counter-move wreck your “good on average” plan.',
+        'Hoping for blunders is planning’s happy-path fallacy — the one time the rival plays well, your plan collapses. Assume best play; be pleasantly surprised otherwise.',
+        'Ignoring the adversary means your plan is stale the moment they act — the rival’s choices belong INSIDE the search tree, not in after-the-fact patches.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Loss L(w) = (w − 3)², current weight w = 5, learning rate 0.25. After one gradient-descent step, w = ?',
+      options: ['4', '6', '4.5', '3'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: gradient = 2(w − 3) = 4, step = 0.25 × 4 = 1, downhill means subtract: 5 − 1 = 4. One step closer to the valley at w = 3.',
+        '6 comes from ADDING the gradient — that’s stepping uphill, and the loss grows from 4 to 9. Descent means minus the gradient, always.',
+        '4.5 uses gradient (w − 3) = 2 — the derivative of a square brings down the exponent: d/dw (w−3)² = 2(w−3) = 4, not 2.',
+        '3 is the minimum, but one step doesn’t teleport there — with lr 0.25 you move 1 unit of the 2-unit gap. Gradient descent takes STEPS; it doesn’t solve.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Run A: loss shrinks steadily but agonizingly slowly. Run B: loss rockets to NaN within ten steps. Diagnoses?',
+      options: [
+        'A’s learning rate is too small; B’s is too large',
+        'A’s learning rate is too large; B’s is too small',
+        'A is overfitting; B is underfitting',
+        'Both simply need more training data',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: tiny steps crawl down the valley (A), oversized steps overshoot to ever-steeper ground until the numbers blow up (B). Same knob, opposite failure modes — the #1 practical training bug.',
+        'Reversed: a too-LARGE rate can’t produce slow steady progress — each overshoot lands farther out, so divergence shows up fast and loud, exactly like B.',
+        'Overfitting is a train-vs-test GAP, invisible in a single loss curve — these two curves are pure optimization symptoms, before generalization even enters the picture.',
+        'Data quantity can’t fix step size — B would explode on a million examples too. Diagnose the optimizer before blaming the dataset.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'A weed-spraying robot scores 100% on its 500 training photos — evaluated on those SAME 500 photos. In the field it sprays crops. The methodological sin?',
+      options: [
+        'It was tested on its own training data, so the 100% measured memorization, not generalization',
+        'The learning rate was too low to learn real weeds',
+        'It should have trained longer on the same 500 photos',
+        '500 photos is plenty — field conditions will match the photos eventually',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: grading a model on examples it studied is grading recall, not understanding. Only held-out photos it has never seen can predict field behavior — that’s the entire point of a test set.',
+        'A too-low rate would show up as poor TRAINING scores — this model fit its training set perfectly. The optimizer worked; the evaluation lied.',
+        'More epochs on the same photos deepen memorization — the training score is already maxed, and the field gap only widens.',
+        '“Eventually” never comes — the field has infinite variation the 500 photos don’t. Without an unseen test set you don’t even know how bad it is until crops die.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'On a bumpy, many-valleyed loss landscape, gradient descent is guaranteed to find…',
+      options: [
+        'A valley — some local minimum, not necessarily the lowest one',
+        'The global minimum, given enough steps',
+        'The exact point where loss equals zero',
+        'Nothing — it wanders randomly forever',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: it follows the slope downhill until the slope vanishes — whichever valley it started above. Local, not global, is the honest guarantee; noise (SGD) and restarts are how practice copes.',
+        'No amount of steps escapes a valley by pure descent — at the bottom the gradient is zero and the walk stops, even if a deeper valley sits one ridge away.',
+        'Zero loss may not exist anywhere on the landscape (noisy data guarantees residual error) — descent finds a LOW point, not a perfect one.',
+        'Nothing random about it — each step is the locally steepest descent. The critique is that it’s TOO disciplined: it never climbs, so it can’t leave a mediocre valley.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'A single neuron classifies grasps as safe/unsafe from two features. Which dataset can NO weight setting ever get right?',
+      options: [
+        'Safe cases in two opposite corners, unsafe in the other two — crosswise pairs',
+        'Safe on the left half, unsafe on the right half',
+        'Safe above a diagonal line, unsafe below it',
+        'Any dataset with more than 100 points',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: that’s XOR geometry — any single line that captures both safe corners drags an unsafe corner along. One neuron IS one line, so crosswise classes are provably out of reach.',
+        'A vertical split is the easiest case there is — one line, weights pointing left-right, done. Single neurons eat linearly separable data for breakfast.',
+        'A diagonal is still just one straight line — tilting is exactly what the two weights do. Slope is free; a second CUT is what a lone neuron can’t make.',
+        'Point COUNT is irrelevant — a million points split by one line is trivial; four points arranged crosswise are impossible. Geometry decides, not size.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: '“Just train the single neuron longer with more XOR examples — it’ll get there.” Why is your teammate wrong?',
+      options: [
+        'No weight setting exists to find — the limit is geometric, so the fix is architectural: add a hidden layer',
+        'He’s right — enough examples always find a way',
+        'The neuron just needs a smaller learning rate to settle in',
+        'The examples need relabeling before training can work',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: training searches the space of weight settings, and for XOR that space contains NO winner (Minsky & Papert proved it). More data searches harder for something that isn’t there — only new architecture changes what’s findable.',
+        'More data helps when a good setting EXISTS somewhere in weight space — here the search space itself is empty of solutions. You can’t sample your way past a proof.',
+        'Learning-rate tuning changes how you travel, not where you can arrive — every destination is one straight line, and no line solves XOR.',
+        'The labels are correct — XOR is genuinely crosswise. Relabeling to make it learnable would mean solving a different problem.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Why do vision networks stack MANY layers instead of one enormous hidden layer?',
+      options: [
+        'Layers compose — each builds richer features from the previous one’s (edges → parts → objects), often far more efficiently than one wide layer',
+        'More layers always means higher accuracy, guaranteed',
+        'Deep networks need almost no training data',
+        'Depth automatically prevents overfitting',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: depth buys REUSE — an edge detector learned once feeds every part detector above it. Building complex shapes from shared simple pieces can need exponentially fewer neurons than one flat layer doing it all.',
+        'No guarantee — extra depth also makes training harder (vanishing gradients) and past a point adds nothing but cost. Depth is a design trade-off, not a free upgrade.',
+        'The opposite reputation is deserved: deep nets are famously data-HUNGRY — millions of weights need millions of examples to pin down.',
+        'More depth means more capacity, which makes memorizing the training set EASIER — overfitting pressure goes up, which is why test-set discipline matters more for big models, not less.',
+      ],
+    },
+  ],
+}

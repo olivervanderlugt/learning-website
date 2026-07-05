@@ -1,0 +1,155 @@
+import type { Lesson } from '../../types'
+
+export const progExamLesson: Lesson = {
+  nodeId: 'prog-exam',
+  screens: [
+    {
+      kind: 'explain',
+      title: 'Module exam — think like the interpreter',
+      body: [
+        'Ten questions across the whole module — variables, loops, functions, arrays — all NEW, no repeats from the lesson quizzes. No code runner this time: trace every snippet in your head, the way the machine would.',
+        'Score 80% and Programming Fundamentals is sealed. Below that costs nothing — you’ll see exactly which idea slipped, review it, and retake.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Trace this by hand. What prints?\n\nlet n = 0\nfor (let i = 0; i < 5; i = i + 1) {\n  if (i < 2) { n = n + 10 } else { n = n + 1 }\n}\nprint(n)',
+      options: ['23', '50', '32', '14'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: i = 0 and 1 take the +10 branch (n = 20), then i = 2, 3, 4 take the +1 branch — 20 + 3 = 23.',
+        '50 assumes every iteration adds 10 — but the if splits the loop: only i = 0 and 1 satisfy i < 2.',
+        '32 comes from letting i = 2 into the +10 branch — but i < 2 is FALSE at exactly 2. Strict less-than excludes the boundary.',
+        '14 gives +10 only once — but the loop starts at i = 0, so BOTH 0 and 1 are below 2. Two big hits, then three small ones.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A classic trap — what does this print?\n\nlet a = 3\nlet b = 5\na = b\nb = a\nprint(a)\nprint(b)',
+      options: ['5 then 5', '5 then 3', '3 then 5', '3 then 3'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: a = b makes a hold 5, destroying the 3 forever. Then b = a copies the NEW a — 5 again. A real swap needs a third variable to save the 3 first.',
+        '“5 then 3” is what a swap WOULD give — but assignment copies the current value, and by the time b = a runs, the 3 is already gone.',
+        '“3 then 5” treats the assignments as if they never ran — but a = b really does overwrite a with 5.',
+        '“3 then 3” copies in the wrong direction — a = b means “put b’s value INTO a”, right side into left side, always.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A landing sequence counts down: for (let i = 10; i > 0; i = i - 2) { fireThruster() }. How many times does the thruster fire?',
+      options: ['5', '10', '6', '4'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: i takes 10, 8, 6, 4, 2 — five runs. Then i becomes 0, and 0 > 0 is false, so the loop stops.',
+        '10 ignores the step — i drops by 2 each pass, not 1, so it visits only the even numbers on the way down.',
+        '6 sneaks in a run at i = 0 — but the condition i > 0 is checked BEFORE each run, and 0 > 0 fails.',
+        '4 stops one early, as if i = 2 didn’t qualify — but 2 > 0 is true, so that pass fires too.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Trace the calls. What prints?\n\nfunction add3(n) {\n  return n + 3\n}\nfunction twice(n) {\n  return add3(add3(n))\n}\nprint(twice(4))',
+      options: ['10', '7', '14', '8'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the inner add3(4) returns 7, and that 7 feeds the outer call — add3(7) = 10. Nested calls evaluate inside-out.',
+        '7 applies add3 only once — but twice wraps one call INSIDE another, so the +3 happens twice.',
+        '14 reads “twice” as multiply-by-2, computing (4+3)×2 — but a name is just a label; only the body counts, and the body is two +3s.',
+        '8 doubles the input and skips add3 entirely — twice never multiplies, it just calls add3 on add3’s answer.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'What does this program print?\n\nfunction f() {\n  return 5\n  print("after")\n}\nprint(f())',
+      options: ['just 5', '5 then after', 'after then 5', 'nothing'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: return EXITS the function on the spot, handing back 5 — the print("after") line is unreachable and never runs.',
+        'Lines after a return don’t get a turn — return isn’t a label at the end, it’s an immediate exit door.',
+        'Nothing runs before the return either — the function starts at the top and leaves at the return, in that order.',
+        'The function does produce output: it returns 5, and the outer print(f()) displays it.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'What prints?\n\nfunction boost(speed) {\n  speed = speed + 10\n}\nlet speed = 5\nboost(speed)\nprint(speed)',
+      options: ['5', '15', '10', 'undefined'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the parameter speed is the function’s own local box holding a COPY of the number 5. Boosting the copy leaves the outer variable untouched — to change it, boost would have to return 15 and the caller store it.',
+        '15 assumes the parameter and the outer variable are the same box — but a number argument is copied in, and the copy is thrown away when the call ends.',
+        '10 adds the boost to nothing — the copy briefly becomes 15 inside, but neither 10 nor 15 ever reaches the outer speed.',
+        'The outer speed was properly declared and set to 5 — it never becomes undefined; it just never changes.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Your teammate rewrites the INSIDE of readSensor() to be faster, but its inputs and return value stay exactly the same. What happens to navigate(), which calls it?',
+      options: [
+        'Nothing — navigate() depends only on the contract, which didn’t change',
+        'navigate() must be rewritten to match the new internals',
+        'navigate() breaks until readSensor() is renamed',
+        'The whole program must be retyped from the top',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: that’s abstraction paying off — callers rely on the black box’s contract (inputs in, answer out), not its guts. Same contract, zero ripple.',
+        'If callers had to track internals, big programs would be impossible — the entire point of a function boundary is that internals can change freely behind it.',
+        'It’s the opposite — renaming is exactly what WOULD break callers, because they call it by name. Unchanged name + unchanged contract = unchanged callers.',
+        'Programs aren’t fragile as a whole like that — changes stay contained inside the function’s walls, which is why teams can work on different functions at once.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A robot wants its closest obstacle. What prints?\n\nlet scan = [5, 25, 8, 30]\nlet closest = 100\nfor (let i = 0; i < scan.length; i = i + 1) {\n  if (scan[i] < closest) { closest = scan[i] }\n}\nprint(closest)',
+      options: ['5', '30', '100', '68'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: closest only ever drops — 100 → 5 at i = 0, then 25, 8, 30 all fail the < 5 test. The loop found the minimum.',
+        '30 is the MAXIMUM — you’d get it by flipping the comparison to >. The < keeps the smallest value seen so far.',
+        '100 assumes closest never updates — but 5 < 100 is true on the very first pass, so it’s replaced immediately.',
+        '68 is the SUM of all readings — that’s the accumulation pattern (closest + scan[i]), not the keep-the-smaller pattern used here.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A path has waypoints.length points. You write: for (let i = 0; i <= waypoints.length; i = i + 1) { goTo(waypoints[i]) }. What goes wrong?',
+      options: [
+        'The final pass reads past the end — waypoints[waypoints.length] is undefined',
+        'The loop skips the last waypoint',
+        'Nothing — <= is needed to include the last element',
+        'The loop never terminates',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: valid indexes run 0 to length−1, so when i equals length, waypoints[i] is one slot past the end — the robot gets sent to undefined. The classic off-by-one.',
+        'Skipping the last one is the OPPOSITE bug (i < length − 1). Here the loop goes too far, not too short.',
+        'Tempting — but < length already reaches the last element, because index 0 means the last one sits at length−1, not length.',
+        'It terminates fine — i climbs past length and the condition goes false. The crime is the one bad read on the way out.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'waypoints is an array of {x, y} objects. Which expression reads the x of the SECOND waypoint?',
+      options: ['waypoints[1].x', 'waypoints[2].x', 'waypoints.x[1]', 'waypoints[0].x'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: indexes start at 0, so the second waypoint lives at [1] — index into the array first, then dot into the object’s field.',
+        '[2] counts from 1 — natural, but arrays don’t: [2] is the THIRD waypoint. Second means index 1.',
+        'That reverses the layers — the array holds objects, not the other way round, so you must pick a waypoint BEFORE you can ask for its x.',
+        '[0] overcorrects the off-by-one — index 0 is the FIRST waypoint. Shift everything down by exactly one, not two.',
+      ],
+    },
+  ],
+}

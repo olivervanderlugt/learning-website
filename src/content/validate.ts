@@ -1,4 +1,4 @@
-import { nodes, nodeById } from './curriculum'
+import { domains, nodes, nodeById } from './curriculum'
 import { lessons } from './lessons'
 import { puzzles } from './puzzles'
 import { games } from '../components/games'
@@ -30,6 +30,24 @@ export function validateContent(): string[] {
       if (!/^https?:\/\//.test(r.url)) err(`Node ${n.id} resource "${r.title}" has a non-http url`)
       if (!r.note?.trim()) err(`Node ${n.id} resource "${r.title}" has no note`)
     }
+  }
+
+  // --- Module exams: every domain has exactly one, gated on ALL its other nodes ---
+  for (const d of domains) {
+    const domainNodes = nodes.filter((n) => n.domainId === d.id)
+    const exams = domainNodes.filter((n) => n.isExam)
+    if (exams.length !== 1) {
+      err(`Domain ${d.id} has ${exams.length} exam nodes (needs exactly 1)`)
+      continue
+    }
+    const exam = exams[0]
+    const others = domainNodes.filter((n) => n.id !== exam.id).map((n) => n.id)
+    const prereqs = new Set(exam.prereqIds)
+    for (const id of others) if (!prereqs.has(id)) err(`Exam ${exam.id} is missing domain prereq ${id}`)
+    for (const p of exam.prereqIds)
+      if (!others.includes(p)) err(`Exam ${exam.id} lists prereq ${p} outside its domain`)
+    const quizzes = lessons[exam.id]?.screens.filter((s) => s.kind === 'quiz').length ?? 0
+    if (quizzes < 8) err(`Exam ${exam.id} has only ${quizzes} quiz questions (needs >=8 fresh ones)`)
   }
 
   // --- Lessons ---

@@ -92,7 +92,8 @@ New Subject values + domains + nodes (data-only is cheap; lessons come later). O
 14. **Law & Intellectual Property** — patents, liability, regulation of robots/AI. Practical survival knowledge for a hardware startup.
 Also fold in earlier gaps: **electromagnetism** and **advanced calculus/differential equations** (deepen Physics/Math rather than new domains).
 
-## Playable lessons so far (47 nodes — ALL 14 domains COMPLETE)
+## Playable lessons so far (60 nodes — ALL 14 domains COMPLETE, each with a module exam)
+- **Module exams (Stage 1, part 1 — DONE)**: every domain has an `isExam` node (hcw-exam + 13 new: prog/math/phys/algo/os/net/db/theory/ai/sec/robo/hist/chem-exam). Each: 1 intro + 10 FRESH quiz questions (authored against the domain lessons to avoid reuse), all `correctIndex: 0` (shuffle convention), misconception-specific explanations, numerics hand-verified. Validator ENFORCES: exactly one exam per domain, exam prereqs = all other domain nodes, ≥8 quiz questions. Map: exams sit below their cluster (redundant prereq edges auto-hidden by SkillTreeView's transitive-closure logic); History was restructured into a horizontal ROW (x2600/2840/3080, y0) so its 3 prereq-free nodes fan into hist-exam (2840,240) without edges crossing nodes. hist-exam browser-verified end-to-end (unlock → 10/10 → mastered +100 XP).
 - How Computers Work: bits, gates, adder, cpu, hcw-exam (module exam).
 - Math: math-linalg (vector playground), math-calculus (slope/derivative explorer), math-prob (law-of-large-numbers coin sim).
 - Programming: prog-variables (live code runner).
@@ -124,15 +125,14 @@ Gotchas learned:
 - Light mode: never use `text-white` in games — use `text-slate-100` (the html.light block reverses the slate ramp, white stays white on light cards). Older games (ProbabilitySim etc.) still violate this; fix opportunistically.
 
 ## Next (resume here)
-STATE as of last session: 47 playable lessons; ALL 14 domains COMPLETE — full breadth reached. All committed on `main`, working tree clean, build green, content validator clean, all 7 new games browser-verified winnable, all code screens Node-verified. Quiz/predict option shuffling added app-wide.
+STATE as of last session: 60 playable nodes; ALL 14 domains COMPLETE and ALL 14 have a module exam (Stage 1 part 1 done). All committed on `main`, build green, content validator clean (incl. the new one-exam-per-domain invariant), map layout screenshot-verified per domain, hist-exam played end-to-end in the browser.
 
 To restart the dev server: `export PATH="$HOME/.local/node/bin:$PATH"` then `cd ~/Claude/Projects/"Learning website"` then `npm run dev` → open the printed http://localhost:5173.
 
-Breadth is DONE. Next priorities (Stage 1+ of the bachelor-depth roadmap):
-1. Module exams per domain (like hcw-exam: FRESH mixed retrieval questions, prereqs = all domain nodes, isExam: true) — History, Chemistry, Algorithms, AI/ML, OS, Networks, Databases, Theory, Security all lack one. Highest learning-science value per effort.
-2. Spaced repetition: resurface mastered nodes' extraPractice after N days (needs a lastMastered timestamp in Progress).
-3. Deepen high-value nodes toward bachelor rigor (calculus limits/chain rule, linalg determinants/eigen, prob distributions/Bayes as full lessons).
-4. Deploy to Vercel (manual steps above) for a permanent/mobile URL.
+Next priorities (Stage 1's second half → Stage 4 preview):
+1. Deepen the robotics-critical nodes to 2–4 lessons each: calculus (limits/chain rule), linalg (determinants/eigen), probability (distributions/Bayes), control, programming — concept → worked problems → independent problem sets via bigger extraPractice pools.
+2. Spaced repetition: resurface mastered nodes' extraPractice after N days (needs a lastMastered timestamp in Progress + a due-review queue on the map).
+3. Deploy to Vercel (manual steps above) for a permanent/mobile URL.
 
 Bigger arc (see "Roadmap to bachelor depth" above): after breadth, deepen each node (Stage 1) → rigor/proofs (Stage 2) → labs/projects (Stage 3) → spaced-repetition retention (Stage 4) → cross-domain capstones + business track (Stage 5).
 

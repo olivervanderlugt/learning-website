@@ -142,6 +142,21 @@ export const nodes: KnowledgeNode[] = [
     y: 240,
     hasLesson: true,
   },
+  {
+    id: 'prog-exam',
+    title: 'Module Exam: Programming',
+    subject: 'cs',
+    domainId: 'programming',
+    description:
+      'Ten fresh questions across variables, control flow, functions and data structures — including code you trace in your head. 80% to pass.',
+    whyItMatters:
+      'If you can predict what code does without running it, you actually speak the language — that is what this exam checks.',
+    prereqIds: ['prog-variables', 'prog-functions', 'prog-data'],
+    x: 240,
+    y: 400,
+    hasLesson: true,
+    isExam: true,
+  },
 
   // ---- Math for CS & Robotics (col 0, y 1010-1210) ----
   {
@@ -200,6 +215,21 @@ export const nodes: KnowledgeNode[] = [
     y: 0,
     hasLesson: true,
   },
+  {
+    id: 'math-exam',
+    title: 'Module Exam: Math',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Ten fresh questions across logic, vectors & matrices, probability and calculus — small numbers, real computation, from memory. 80% to pass.',
+    whyItMatters:
+      'Robotics runs on all four of these at once; the exam checks they coexist in your head, not just in separate lessons.',
+    prereqIds: ['math-logic', 'math-linalg', 'math-prob', 'math-calculus'],
+    x: 860,
+    y: 280,
+    hasLesson: true,
+    isExam: true,
+  },
 
   // ---- Physics Foundations (col 1, y -380..-180) — coming soon ----
   {
@@ -243,6 +273,21 @@ export const nodes: KnowledgeNode[] = [
     x: 1760,
     y: 140,
     hasLesson: true,
+  },
+  {
+    id: 'phys-exam',
+    title: 'Module Exam: Physics',
+    subject: 'physics',
+    domainId: 'physics',
+    description:
+      'Ten fresh questions across forces, energy and circuits — with numbers, units and the classic traps. From memory. 80% to pass.',
+    whyItMatters:
+      'Whether your robot climbs the ramp is decided by exactly these equations — better to fail them here than in hardware.',
+    prereqIds: ['phys-forces', 'phys-energy', 'phys-electricity'],
+    x: 2060,
+    y: 300,
+    hasLesson: true,
+    isExam: true,
   },
 
   // ---- Operating Systems (col 1, y 50-250) ----
@@ -288,6 +333,21 @@ export const nodes: KnowledgeNode[] = [
     y: 880,
     hasLesson: true,
   },
+  {
+    id: 'os-exam',
+    title: 'Module Exam: Operating Systems',
+    subject: 'cs',
+    domainId: 'os',
+    description:
+      'Ten fresh questions across scheduling, virtual memory and I/O — including traces you compute by hand. 80% to pass.',
+    whyItMatters:
+      'A robot is a dozen processes sharing one small computer — the OS rules you retrieve here are what keep them from trampling each other.',
+    prereqIds: ['os-processes', 'os-memory', 'os-io'],
+    x: -300,
+    y: 1060,
+    hasLesson: true,
+    isExam: true,
+  },
 
   // ---- Algorithms & Data Structures (col 1, y 480-680) ----
   {
@@ -331,6 +391,21 @@ export const nodes: KnowledgeNode[] = [
     x: 960,
     y: 1000,
     hasLesson: true,
+  },
+  {
+    id: 'algo-exam',
+    title: 'Module Exam: Algorithms',
+    subject: 'cs',
+    domainId: 'algorithms',
+    description:
+      'Ten fresh questions across Big-O, data structures and pathfinding — classify new code, pick the right container, reason about A*. 80% to pass.',
+    whyItMatters:
+      'Choosing the wrong structure or blowing up quadratically is the classic way robot code dies at scale — this exam is the vaccine.',
+    prereqIds: ['algo-bigo', 'algo-structures', 'algo-graphs'],
+    x: 720,
+    y: 1120,
+    hasLesson: true,
+    isExam: true,
   },
 
   // ---- Networks (col 1, y 910-1110) ----
@@ -376,6 +451,21 @@ export const nodes: KnowledgeNode[] = [
     y: 1640,
     hasLesson: true,
   },
+  {
+    id: 'net-exam',
+    title: 'Module Exam: Networks',
+    subject: 'cs',
+    domainId: 'networks',
+    description:
+      'Ten fresh questions across layers, packets and protocols — new scenarios, from memory. 80% to pass.',
+    whyItMatters:
+      'When your robot drops off the network mid-mission, this is the mental model you will debug with.',
+    prereqIds: ['net-stack', 'net-packets', 'net-protocols'],
+    x: -260,
+    y: 1760,
+    hasLesson: true,
+    isExam: true,
+  },
 
   // ---- Databases (col 1, y 1340-1540) ----
   {
@@ -419,6 +509,21 @@ export const nodes: KnowledgeNode[] = [
     x: 1760,
     y: 1640,
     hasLesson: true,
+  },
+  {
+    id: 'db-exam',
+    title: 'Module Exam: Databases',
+    subject: 'cs',
+    domainId: 'databases',
+    description:
+      'Ten fresh questions across tables, SQL and transactions — trace new queries on new data, from memory. 80% to pass.',
+    whyItMatters:
+      'Every mission log and map your robot keeps must survive crashes and queries — prove you know why it does.',
+    prereqIds: ['db-relational', 'db-sql', 'db-transactions'],
+    x: 1760,
+    y: 1760,
+    hasLesson: true,
+    isExam: true,
   },
 
   // ---- Robotics Bridge (col 2, y -280..-80) ----
@@ -492,6 +597,21 @@ export const nodes: KnowledgeNode[] = [
     y: 1180,
     hasLesson: true,
   },
+  {
+    id: 'robo-exam',
+    title: 'Module Exam: Robotics Bridge',
+    subject: 'robotics',
+    domainId: 'robotics-bridge',
+    description:
+      'Ten fresh questions across sensing, control, kinematics, embedded systems and ROS — the capstone check on the whole bridge. 80% to pass.',
+    whyItMatters:
+      'This module is where every other subject converges into an actual robot — passing it from memory means the convergence happened in your head too.',
+    prereqIds: ['robo-sensing', 'robo-control', 'robo-kinematics', 'robo-embedded', 'robo-ros'],
+    x: 1520,
+    y: 1300,
+    hasLesson: true,
+    isExam: true,
+  },
 
   // ---- Theory of Computation (col 2, y 480-680) ----
   {
@@ -535,6 +655,21 @@ export const nodes: KnowledgeNode[] = [
     x: 480,
     y: 1640,
     hasLesson: true,
+  },
+  {
+    id: 'theory-exam',
+    title: 'Module Exam: Theory',
+    subject: 'cs',
+    domainId: 'theory',
+    description:
+      'Ten fresh questions across state machines, computability and complexity — trace new FSMs, reason about impossible programs. 80% to pass.',
+    whyItMatters:
+      'Theory tells you which robot features are impossible before you waste a month on them — worth retrieving precisely.',
+    prereqIds: ['theory-fsm', 'theory-turing', 'theory-complexity'],
+    x: 480,
+    y: 1760,
+    hasLesson: true,
+    isExam: true,
   },
 
   // ---- AI & Machine Learning (col 2, y 910-1110) ----
@@ -580,6 +715,21 @@ export const nodes: KnowledgeNode[] = [
     y: 1520,
     hasLesson: true,
   },
+  {
+    id: 'ai-exam',
+    title: 'Module Exam: AI & ML',
+    subject: 'cs',
+    domainId: 'ai-ml',
+    description:
+      'Ten fresh questions across search, learning from data and neural networks — new scenarios, real gradient arithmetic. 80% to pass.',
+    whyItMatters:
+      'Perception and planning are the hardest half of any robot — this exam checks the foundations actually stuck.',
+    prereqIds: ['ai-search', 'ai-learning', 'ai-neural'],
+    x: 1100,
+    y: 1680,
+    hasLesson: true,
+    isExam: true,
+  },
 
   // ---- Security & Crypto (col 2, y 1340-1540) ----
   {
@@ -624,6 +774,21 @@ export const nodes: KnowledgeNode[] = [
     y: 2120,
     hasLesson: true,
   },
+  {
+    id: 'sec-exam',
+    title: 'Module Exam: Security',
+    subject: 'cs',
+    domainId: 'security',
+    description:
+      'Ten fresh questions across threat models, crypto and hardening — new scenarios, one cipher to crack by hand. 80% to pass.',
+    whyItMatters:
+      'A robot is a computer that can push things — the security instincts you retrieve here are a safety feature.',
+    prereqIds: ['sec-threats', 'sec-crypto', 'sec-systems'],
+    x: 260,
+    y: 2240,
+    hasLesson: true,
+    isExam: true,
+  },
 
   // ---- History of Science & Technology (col 3, y 50-250) ----
   {
@@ -650,8 +815,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Every “new” idea in tech rhymes with an old one; history is a founder’s cheat sheet for what tends to work.',
     prereqIds: [],
-    x: 2600,
-    y: 120,
+    x: 2840,
+    y: 0,
     hasLesson: true,
   },
   {
@@ -664,9 +829,24 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robotics startup changes how people work; understanding past automation waves is understanding your own impact.',
     prereqIds: [],
-    x: 2600,
+    x: 3080,
+    y: 0,
+    hasLesson: true,
+  },
+  {
+    id: 'hist-exam',
+    title: 'Module Exam: History',
+    subject: 'history',
+    domainId: 'history',
+    description:
+      'Ten fresh questions across the scientific revolution, computing and automation waves — causes and patterns, not trivia. 80% to pass.',
+    whyItMatters:
+      'History only pays off if the patterns are retrievable when you face the same choice — that retrieval is what this exam trains.',
+    prereqIds: ['hist-scientific-revolution', 'hist-computing', 'hist-industrial'],
+    x: 2840,
     y: 240,
     hasLesson: true,
+    isExam: true,
   },
 
   // ---- Chemistry (col 3, y 480-680) ----
@@ -711,6 +891,21 @@ export const nodes: KnowledgeNode[] = [
     x: 2600,
     y: 720,
     hasLesson: true,
+  },
+  {
+    id: 'chem-exam',
+    title: 'Module Exam: Chemistry',
+    subject: 'chemistry',
+    domainId: 'chemistry',
+    description:
+      'Ten fresh questions across atoms, reactions and materials — identify elements, track electrons, follow the energy. 80% to pass.',
+    whyItMatters:
+      'Batteries, wires and chips are applied chemistry — retrieving these basics cold is what lets you read a datasheet critically.',
+    prereqIds: ['chem-atoms', 'chem-reactions', 'chem-materials'],
+    x: 2600,
+    y: 840,
+    hasLesson: true,
+    isExam: true,
   },
 ]
 

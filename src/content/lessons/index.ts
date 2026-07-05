@@ -46,6 +46,19 @@ import { theoryComplexityLesson } from './theory-complexity'
 import { secThreatsLesson } from './sec-threats'
 import { secCryptoLesson } from './sec-crypto'
 import { secSystemsLesson } from './sec-systems'
+import { progExamLesson } from './prog-exam'
+import { mathExamLesson } from './math-exam'
+import { physExamLesson } from './phys-exam'
+import { algoExamLesson } from './algo-exam'
+import { osExamLesson } from './os-exam'
+import { netExamLesson } from './net-exam'
+import { dbExamLesson } from './db-exam'
+import { theoryExamLesson } from './theory-exam'
+import { aiExamLesson } from './ai-exam'
+import { secExamLesson } from './sec-exam'
+import { roboExamLesson } from './robo-exam'
+import { histExamLesson } from './hist-exam'
+import { chemExamLesson } from './chem-exam'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -95,4 +108,17 @@ export const lessons: Record<string, Lesson> = {
   'sec-threats': secThreatsLesson,
   'sec-crypto': secCryptoLesson,
   'sec-systems': secSystemsLesson,
+  'prog-exam': progExamLesson,
+  'math-exam': mathExamLesson,
+  'phys-exam': physExamLesson,
+  'algo-exam': algoExamLesson,
+  'os-exam': osExamLesson,
+  'net-exam': netExamLesson,
+  'db-exam': dbExamLesson,
+  'theory-exam': theoryExamLesson,
+  'ai-exam': aiExamLesson,
+  'sec-exam': secExamLesson,
+  'robo-exam': roboExamLesson,
+  'hist-exam': histExamLesson,
+  'chem-exam': chemExamLesson,
 }

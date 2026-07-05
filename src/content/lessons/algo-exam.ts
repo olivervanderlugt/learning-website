@@ -1,0 +1,165 @@
+import type { Lesson } from '../../types'
+
+export const algoExamLesson: Lesson = {
+  nodeId: 'algo-exam',
+  screens: [
+    {
+      kind: 'explain',
+      title: 'Module exam — think in growth',
+      body: [
+        'Ten questions covering the whole module, all NEW — no repeats from the lesson quizzes. No code runner, no notes: retrieval from memory is the point.',
+        'Score 80% and the module is sealed. Below that? You lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Classify this loop: `let i = n; while (i > 1) { print(i); i = i / 2 }`',
+      options: ['O(log n)', 'O(n)', 'O(1)', 'O(n²)'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: each pass halves i, so 1,000,000 → 1 takes only ~20 passes — halving is the signature of O(log n).',
+        'O(n) would print every value from n down to 1 (i = i - 1). Halving skips most of them — count the passes: n, n/2, n/4…',
+        'The loop clearly runs longer for bigger n — just VERY slowly longer. O(1) means the input size doesn’t matter at all.',
+        'O(n²) needs a loop inside a loop touching all pairs — here there’s one loop, and it’s racing to the exit.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'A function loops over all n readings once to find the max, then runs a SECOND separate loop over all n to count how many exceed it. Big-O of the whole function?',
+      options: ['O(n) — sequential loops add, and 2n is still O(n)', 'O(n²) — two loops multiply', 'O(2n) — a distinct, slower family', 'O(log n) — the second loop reuses the first’s work'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: one pass then another pass is n + n = 2n steps — and Big-O drops the constant. Loops multiply only when one runs INSIDE the other.',
+        'Nesting multiplies; sequence adds. The second loop never restarts per item of the first — it just runs after it.',
+        'O(2n) isn’t a family — constants are dropped, so 2n, 3n and n/2 are all written O(n). The shape is linear either way.',
+        'Reusing a result saves work but each loop still touches all n items — nothing here halves the problem.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'A teammate benchmarks two point-matchers on a 50-point test: the all-pairs O(n²) one wins, so they want to ship it over the O(n log n) one. What happens at 100,000 lidar points?',
+      options: [
+        'The O(n²) one falls thousands of times behind — small-n benchmarks measure constants, but at scale the growth family decides',
+        'The benchmark holds — whichever is faster at 50 stays faster at any size',
+        'Both slow down by the same factor, so the ranking never changes',
+        'O(n log n) is always slower because the log adds extra work at every size',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: at n = 100,000, n² ≈ 10 billion pair-checks vs n log n ≈ 1.7 million — a ~6000× gap that no friendly constant survives. Benchmarks at toy sizes hide growth.',
+        'That’s exactly the trap: at 50 points the constant factor dominates, so the benchmark says nothing about 100,000. Growth compounds; constants don’t.',
+        'They scale by DIFFERENT factors — that’s the whole meaning of different growth families. 2000× more points is 2000× work for one and 4,000,000× for the other.',
+        'The log is a tiny multiplier (~17 at 100,000) glued to n — vastly cheaper than multiplying by n itself. n log n beats n² at every serious size.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Classify this: `for (let i = 0; i < n; i++) { for (let j = 0; j < i; j++) { check(i, j) } }` — the inner loop only runs up to i.',
+      options: ['O(n²)', 'O(n log n)', 'O(n)', 'O(n²/2) — its own, smaller family'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the inner loop runs 0 + 1 + 2 + … + (n−1) = n(n−1)/2 times — about half of n², and Big-O drops the half. Still quadratic.',
+        'A shrinking inner loop feels log-ish, but it shrinks LINEARLY (by one), not by halving — the total is a triangle of n², not n stacks of log n.',
+        'O(n) would be a single pass; here the inner loop’s total work grows with the SQUARE — double n and check() runs ~4× as often.',
+        'There is no O(n²/2) family — constants like the ½ are exactly what Big-O ignores. Doubling n still quadruples the work.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'A logger inserts each new reading at the FRONT of an array (index 0, everything else slides right). Why does it get slower as the log grows?',
+      options: [
+        'Front-insertion shifts every existing element over — O(n) per insert, so the millionth insert moves a million items',
+        'Arrays have a hard size limit that inserts approach',
+        'Reading index 0 gets slower as the array grows',
+        'The array must re-sort itself after every insert',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: arrays are contiguous boxes, so making room at position 0 means sliding ALL n items. Append at the END instead (O(1)) — or use a queue/ring buffer if you need oldest-first.',
+        'Growth isn’t the issue — dynamic arrays grow fine. The cost is the SHIFT: every front-insert pays for every element already stored.',
+        'Access by index stays O(1) at any size — that’s the array’s superpower. It’s the insert doing the sliding that hurts.',
+        'Arrays don’t sort themselves — order is wherever you put things. No sorting happens here, just mass relocation.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Your robot wanders into a dead-end corridor, recording each move as it goes. To back out, it must undo the moves in exactly reverse order. Which container for the recorded moves?',
+      options: ['A stack — pop returns the moves newest-first, reversing the path', 'A queue — fairness gets it out', 'A hash map keyed by move name', 'A sorted array of moves'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: LIFO is literally “reverse order” — the last move in is the first to undo. Backtracking IS a stack, which is also why depth-first search uses one.',
+        'A queue replays moves oldest-first — the robot would re-drive INTO the dead end, not out of it.',
+        'A map answers “what’s the value for this key?” — it has no notion of sequence, and the whole problem here is sequence.',
+        'Sorted by what? Alphabetical “forward, left, right” isn’t the escape route — you need arrival order reversed, not any sorted order.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Landmark positions live in a hash map. Which request does the map handle POORLY, forcing a full scan or a different structure?',
+      options: [
+        '“List the landmarks nearest-to-farthest” — hash maps keep no useful order among entries',
+        '“What’s the position of landmark ‘dock’?”',
+        '“Add landmark ‘shelf’ at position 40”',
+        '“Update ‘door’ to position 15”',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: hashing SCATTERS keys to slots on purpose — great for jumping straight to one entry, useless for ranked or range queries. Sorting-by-distance means visiting everything.',
+        'Lookup by key is the map’s entire superpower — the hash computes the slot in O(1).',
+        'Insert is the same trick as lookup: hash the key, drop the value in that slot — O(1).',
+        'An update is a lookup followed by a write — hash to the slot, overwrite. Still O(1).',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'A warehouse robot plans on a grid where some cells are slippery (cost 5) and the rest normal (cost 1). Plain BFS returns a route straight through the slippery zone. Why?',
+      options: [
+        'BFS minimizes the COUNT of steps and is blind to weights — the fewest-cells route wins even if each cell is expensive',
+        'BFS misread the map — with a correct map it handles costs fine',
+        'BFS explores randomly, so it sometimes picks bad routes',
+        'The slippery cells should have been deleted from the graph first',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: BFS’s guarantee is fewest EDGES, full stop. Five slippery steps beat seven normal ones by its count (5 < 7) while costing 25 vs 7. Weighted terrain is Dijkstra’s job — cheapest total, not fewest steps.',
+        'The map is fine — BFS simply has no input for weights. No amount of map accuracy adds a cost column to an algorithm that never sums costs.',
+        'BFS is fully deterministic: level by level from the start. Its choice here is systematic, which is exactly why it’s reliably wrong on weighted ground.',
+        'Deleting them forbids the zone entirely — but slippery is EXPENSIVE, not impassable. Sometimes crossing it truly is the best plan; costs express that, deletion can’t.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'After a teammate “optimized” your A* planner, it runs faster but occasionally returns paths LONGER than optimal. What did they most plausibly change?',
+      options: [
+        'They inflated the heuristic so it overestimates — the search got greedier and lost admissibility, and with it the shortest-path guarantee',
+        'They set the heuristic to zero',
+        'They swapped the priority queue for a plain FIFO queue',
+        'They enlarged the visited set so fewer cells are re-explored',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: an overestimating heuristic makes truly-cheap routes look expensive, so A* commits elsewhere before checking them. Classic speed-for-correctness trade — faster AND occasionally wrong is its fingerprint.',
+        'Zero makes A* SLOWER (it becomes Dijkstra) but still exactly optimal — the opposite of what you observed on both counts.',
+        'A FIFO queue ignores costs like BFS — but on this weighted grid that changes behavior systematically, not “occasionally”, and it doesn’t make the search meaningfully faster.',
+        'Skipping already-visited cells is standard and safe — it’s how these searches avoid loops, not a source of longer paths.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Your robot’s charger got walled off — no path exists. What does BFS do when you ask it for a route?',
+      options: [
+        'It visits every reachable cell, runs its queue empty, and reports “no path” — the visited set guarantees it stops',
+        'It loops forever, re-checking the same cells',
+        'It returns the path that gets closest to the charger',
+        'It crashes when the queue overflows',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: each cell enters the queue at most once (visited set), so the queue must eventually drain. Empty queue + goal never touched = provably unreachable — a definite answer, not a timeout.',
+        'That’s what WOULD happen without a visited set — marking cells on first visit is precisely the loop-prevention that makes graph search terminate.',
+        'Plain BFS reports reachability, not consolation prizes — “nearest reachable cell” is a sensible fallback, but you’d have to build it on top.',
+        'The queue holds at most every cell once — bounded by the grid size. Nothing grows without limit; it shrinks to empty and exits cleanly.',
+      ],
+    },
+  ],
+}
