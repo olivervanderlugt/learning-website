@@ -7,7 +7,7 @@ export const mathExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — math that moves robots',
       body: [
-        'Ten questions spanning logic, vectors, probability and calculus — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
+        'Fourteen questions spanning logic, vectors, matrices, probability and calculus — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
         'Score 80% and the module is sealed. Below that? You lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -161,6 +161,63 @@ export const mathExamLesson: Lesson = {
         '7 adds speed and time, but their units don’t even match — the area multiplies height by width: 3 × 4 = 12 m.',
         '0.75 divides speed by time, which gives an acceleration-flavored number — accumulating velocity means multiplying by time.',
         'You already know it: steady speed means zero acceleration. Velocity at every instant is all the integral needs — 12 m.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Using the power rule, what is the derivative of x³ (a term that shows up when you model a joint’s position over time)?',
+      options: ['3x²', 'x²', '3x', '¼x⁴'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the power rule drops the exponent down as a multiplier and subtracts one — d/dx of xⁿ = n·xⁿ⁻¹, so x³ becomes 3x².',
+        'You subtracted one from the exponent but forgot to bring the 3 down out front — the old power multiplies the term.',
+        'That’s the derivative of a squared term (x² → 2x flavour), not a cubic — cubing means the exponent 3 leads the answer: 3x².',
+        '¼x⁴ is the INTEGRAL of x³ (raise the power, divide by it). Differentiating goes the other way — down to 3x².',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A rover holds a steady 6 m/s for 5 seconds. Reading distance as the area under the velocity-time graph, how far does it go?',
+      options: ['30 m', '11 m', '1.2 m', '0.83 m'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: constant velocity is a rectangle on the graph — 6 m/s tall by 5 s wide — so the area (distance) is 6 × 5 = 30 m.',
+        '11 adds the speed and the time, but you accumulate by MULTIPLYING height by width, not summing them: 6 × 5 = 30 m.',
+        '1.2 divides speed by time (6/5), which points toward acceleration — distance multiplies velocity by time instead.',
+        '0.83 is time over speed (5/6) — upside down. The rectangle’s area is height × width = 30 m.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A 2×2 matrix has determinant 0. Geometrically, what does the transformation it represents do to a shape?',
+      options: [
+        'Collapses it flat onto a line (or a point) — area becomes zero, and it can’t be undone',
+        'Rotates it while keeping its area exactly the same',
+        'Doubles its area but keeps the same shape',
+        'Leaves it completely unchanged — a determinant of 0 is the “do nothing” matrix',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the determinant is the area-scaling factor, so det 0 squashes all of space onto a lower dimension — the map is singular and has no inverse, so the original can’t be recovered.',
+        'Rotations preserve area, so their determinant is 1, not 0 — a zero determinant means area is destroyed, not preserved.',
+        'Any nonzero area-scaling (like doubling) gives a nonzero determinant. Zero specifically means the area is crushed to nothing.',
+        'The “do nothing” map is the identity, whose determinant is 1. Determinant 0 is the opposite of harmless — it flattens space irreversibly.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A robot gripper picks up 0, 1, or 2 parts per cycle with probabilities 0.5, 0.3, and 0.2. What is the expected number of parts per cycle, E[X]?',
+      options: ['0.7', '1.0', '1.5', '3.0'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: E[X] = Σ x·p = 0(0.5) + 1(0.3) + 2(0.2) = 0 + 0.3 + 0.4 = 0.7 parts per cycle.',
+        '1.0 is the plain average of the outcomes 0, 1, 2 — but expected value WEIGHTS each outcome by its probability, and the low counts are more likely here.',
+        '1.5 splits the difference between 1 and 2, ignoring that grabbing 0 parts (probability 0.5) drags the average down.',
+        '3.0 sums the three probabilities (0.5+0.3+0.2=1), which just confirms they’re a valid distribution — it isn’t the expected value.',
       ],
     },
   ],

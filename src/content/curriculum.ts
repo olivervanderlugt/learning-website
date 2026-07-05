@@ -215,18 +215,115 @@ export const nodes: KnowledgeNode[] = [
     y: 0,
     hasLesson: true,
   },
+  // Depth chains (Stage 1): each robotics-critical math topic is a 3-lesson
+  // column — intro (y0) → rules/worked (y190) → independent (y380).
+  {
+    id: 'math-linalg-2',
+    title: 'Matrices as Transformations',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'A matrix is a function that moves space — rotating, scaling, shearing. Multiplying matrices composes transformations, the operation behind every change of frame.',
+    whyItMatters:
+      'Rotating a sensor reading into the robot’s own frame is one matrix multiply; chaining joint rotations is several in a row.',
+    prereqIds: ['math-linalg'],
+    x: 1000,
+    y: 190,
+    hasLesson: true,
+  },
+  {
+    id: 'math-linalg-3',
+    title: 'Determinants & Eigenvectors',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'The determinant says how much a matrix scales area; zero means space collapses and the map can’t be undone. Eigenvectors are the directions a transform only stretches.',
+    whyItMatters:
+      'A singular (determinant-0) configuration is a robot arm losing a degree of freedom — gimbal lock captured in a single number.',
+    prereqIds: ['math-linalg-2'],
+    x: 1000,
+    y: 380,
+    hasLesson: true,
+  },
+  {
+    id: 'math-prob-2',
+    title: 'Distributions & Expected Value',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Describe a whole random variable: its distribution, its expected value E[X] = Σ x·p, and its spread. The average outcome, and how far reality strays from it.',
+    whyItMatters:
+      'The expected reading of a noisy sensor is its mean; its variance IS the noise you have to engineer around.',
+    prereqIds: ['math-prob'],
+    x: 1240,
+    y: 190,
+    hasLesson: true,
+  },
+  {
+    id: 'math-prob-3',
+    title: 'Bayes’ Rule',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Update a belief with evidence: prior → posterior. Why a 99%-accurate test for a rare event still mostly false-alarms, and how a robot fuses noisy sensors into one estimate.',
+    whyItMatters:
+      'Localization and sensor fusion are Bayes’ rule run hundreds of times a second.',
+    prereqIds: ['math-prob-2'],
+    x: 1240,
+    y: 380,
+    hasLesson: true,
+  },
+  {
+    id: 'math-calculus-2',
+    title: 'Derivative Rules & the Chain Rule',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'From intuition to computation: the power rule, the sum and constant rules, and the chain rule for functions nested inside functions.',
+    whyItMatters:
+      'Velocity is the derivative of position, acceleration the derivative of velocity — every layer of motion is one more derivative.',
+    prereqIds: ['math-calculus'],
+    x: 1480,
+    y: 190,
+    hasLesson: true,
+  },
+  {
+    id: 'math-calculus-3',
+    title: 'Integrals & Accumulation',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Add a rate up to get a total: Riemann sums sharpen into integrals, and integration undoes differentiation — the Fundamental Theorem of Calculus.',
+    whyItMatters:
+      'Odometry integrates wheel speed into distance travelled; the I in a PID controller integrates accumulated error.',
+    prereqIds: ['math-calculus-2'],
+    x: 1480,
+    y: 380,
+    hasLesson: true,
+  },
   {
     id: 'math-exam',
     title: 'Module Exam: Math',
     subject: 'math',
     domainId: 'math',
     description:
-      'Ten fresh questions across logic, vectors & matrices, probability and calculus — small numbers, real computation, from memory. 80% to pass.',
+      'Fresh mixed questions across logic, vectors & matrices, probability and calculus — now including the deeper rules, integrals, determinants and Bayes. From memory. 80% to pass.',
     whyItMatters:
-      'Robotics runs on all four of these at once; the exam checks they coexist in your head, not just in separate lessons.',
-    prereqIds: ['math-logic', 'math-linalg', 'math-prob', 'math-calculus'],
-    x: 860,
-    y: 280,
+      'Robotics runs on all of these at once; the exam checks they coexist in your head, not just in separate lessons.',
+    prereqIds: [
+      'math-logic',
+      'math-linalg',
+      'math-linalg-2',
+      'math-linalg-3',
+      'math-prob',
+      'math-prob-2',
+      'math-prob-3',
+      'math-calculus',
+      'math-calculus-2',
+      'math-calculus-3',
+    ],
+    x: 900,
+    y: 600,
     hasLesson: true,
     isExam: true,
   },
@@ -696,8 +793,12 @@ export const nodes: KnowledgeNode[] = [
       'Instead of writing rules, show examples: loss functions, gradient descent, and the honest limits of fitted models.',
     whyItMatters:
       'You can’t hand-code “what a pedestrian looks like” — perception is learned from data.',
-    prereqIds: ['math-prob', 'math-linalg'],
-    x: 1240,
+    // Depends on the DEEP ends of the prob/linalg chains (Bayes, determinants) —
+    // gradient descent needs distributions and matrix math. Pointing at the
+    // chain bottoms also keeps the long down-edges below the depth nodes rather
+    // than piercing them, and clears algo-graphs (nudged x 1240→1300).
+    prereqIds: ['math-prob-3', 'math-linalg-3'],
+    x: 1300,
     y: 1400,
     hasLesson: true,
   },

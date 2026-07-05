@@ -5,9 +5,15 @@ import { adderLesson } from './adder'
 import { cpuLesson } from './cpu'
 import { hcwExamLesson } from './hcw-exam'
 import { mathLinalgLesson } from './math-linalg'
+import { mathLinalg2Lesson } from './math-linalg-2'
+import { mathLinalg3Lesson } from './math-linalg-3'
 import { mathCalculusLesson } from './math-calculus'
+import { mathCalculus2Lesson } from './math-calculus-2'
+import { mathCalculus3Lesson } from './math-calculus-3'
 import { progVariablesLesson } from './prog-variables'
 import { mathProbLesson } from './math-prob'
+import { mathProb2Lesson } from './math-prob-2'
+import { mathProb3Lesson } from './math-prob-3'
 import { physForcesLesson } from './phys-forces'
 import { physElectricityLesson } from './phys-electricity'
 import { roboSensingLesson } from './robo-sensing'
@@ -67,9 +73,15 @@ export const lessons: Record<string, Lesson> = {
   cpu: cpuLesson,
   'hcw-exam': hcwExamLesson,
   'math-linalg': mathLinalgLesson,
+  'math-linalg-2': mathLinalg2Lesson,
+  'math-linalg-3': mathLinalg3Lesson,
   'math-calculus': mathCalculusLesson,
+  'math-calculus-2': mathCalculus2Lesson,
+  'math-calculus-3': mathCalculus3Lesson,
   'prog-variables': progVariablesLesson,
   'math-prob': mathProbLesson,
+  'math-prob-2': mathProb2Lesson,
+  'math-prob-3': mathProb3Lesson,
   'phys-forces': physForcesLesson,
   'phys-electricity': physElectricityLesson,
   'robo-sensing': roboSensingLesson,
