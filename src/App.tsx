@@ -1,7 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import SkillTreeView from './components/SkillTreeView'
 import LessonPlayer from './components/LessonPlayer'
 import SettingsPanel from './components/SettingsPanel'
+import RoadmapView from './components/RoadmapView'
 import { useStore } from './store'
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
   const theme = useStore((s) => s.theme)
   const toggleTheme = useStore((s) => s.toggleTheme)
   const backToMap = useStore((s) => s.backToMap)
+  const [roadmapOpen, setRoadmapOpen] = useState(false)
 
   // Apply theme class to <html> so the light-mode CSS variables take effect.
   useEffect(() => {
@@ -36,6 +38,13 @@ function App() {
               ← Map
             </button>
           )}
+          <button
+            onClick={() => setRoadmapOpen(true)}
+            title="Roadmap & coming soon"
+            className="rounded-lg border border-slate-700 px-3 py-1.5 text-sm text-slate-300 hover:bg-slate-800"
+          >
+            🧭 Roadmap
+          </button>
           <div className="rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-semibold text-amber-300">
             ⚡ {xp} XP
           </div>
@@ -51,12 +60,13 @@ function App() {
         </div>
       </header>
 
-      <main className="min-h-0 flex-1">
+      <main className="relative min-h-0 flex-1">
         {view.name === 'map' || !view.nodeId ? (
           <SkillTreeView />
         ) : (
           <LessonPlayer key={view.nodeId} nodeId={view.nodeId} />
         )}
+        {roadmapOpen && <RoadmapView onClose={() => setRoadmapOpen(false)} />}
       </main>
     </div>
   )
