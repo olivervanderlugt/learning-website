@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -33,6 +33,24 @@ const subjectHex: Record<Subject, string> = {
 
 const NODE_W = 192
 const NODE_H = 80
+
+/** Which subject each domain label belongs to (labels lack a subject field). */
+const labelSubject: Record<string, Subject> = {
+  'label-hcw': 'cs',
+  'label-prog': 'cs',
+  'label-math': 'math',
+  'label-phys': 'physics',
+  'label-os': 'cs',
+  'label-algo': 'cs',
+  'label-net': 'cs',
+  'label-db': 'cs',
+  'label-robo': 'robotics',
+  'label-theory': 'cs',
+  'label-ai': 'cs',
+  'label-sec': 'cs',
+  'label-hist': 'history',
+  'label-chem': 'chemistry',
+}
 
 /**
  * Prereq edges that are transitively implied by another prereq of the same node
@@ -90,7 +108,12 @@ function SkillTreeInner() {
   const openLesson = useStore((s) => s.openLesson)
   const theme = useStore((s) => s.theme)
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  /** Empty = show every subject; otherwise only the chosen subjects are visible. */
+  const [activeSubjects, setActiveSubjects] = useState<Set<Subject>>(new Set())
   const { fitBounds, fitView } = useReactFlow()
+
+  const showAll = activeSubjects.size === 0
+  const isVisible = (subj: Subject) => showAll || activeSubjects.has(subj)
 
   const flowNodes = useMemo(() => {
     const skillNodes: (SkillFlowNode | LabelFlowNode)[] = curriculum.map((n) => ({
@@ -107,6 +130,7 @@ function SkillTreeInner() {
       width: NODE_W,
       height: NODE_H,
       draggable: false,
+      hidden: !isVisible(n.subject),
     }))
     const labels: LabelFlowNode[] = domainLabels.map((l) => ({
       id: l.id,
@@ -117,9 +141,16 @@ function SkillTreeInner() {
       height: 24,
       draggable: false,
       selectable: false,
+      hidden: !isVisible(labelSubject[l.id] ?? 'cs'),
     }))
     return [...skillNodes, ...labels]
-  }, [masteredNodeIds])
+  }, [masteredNodeIds, activeSubjects])
+
+  /** Nodes filtered out — their edges are hidden too. */
+  const hiddenNodeIds = useMemo(
+    () => new Set(curriculum.filter((n) => !isVisible(n.subject)).map((n) => n.id)),
+    [activeSubjects],
+  )
 
   const flowEdges = useMemo<Edge[]>(
     () =>
@@ -137,11 +168,31 @@ function SkillTreeInner() {
                 strokeWidth: active ? 2 : 1.5,
               },
               animated: active && !masteredNodeIds.includes(n.id),
+              hidden: hiddenNodeIds.has(p) || hiddenNodeIds.has(n.id),
             }
           }),
       ),
-    [masteredNodeIds],
+    [masteredNodeIds, hiddenNodeIds],
   )
+
+  const toggleSubject = (s: Subject) =>
+    setActiveSubjects((prev) => {
+      const next = new Set(prev)
+      next.has(s) ? next.delete(s) : next.add(s)
+      return next
+    })
+
+  // Re-fit the view to whatever subjects are visible when the filter changes
+  // (skip the very first render so the initial "How Computers Work" focus stays).
+  const firstRun = useRef(true)
+  useEffect(() => {
+    if (firstRun.current) {
+      firstRun.current = false
+      return
+    }
+    const t = setTimeout(() => fitView({ padding: 0.2, duration: 400 }), 60)
+    return () => clearTimeout(t)
+  }, [activeSubjects, fitView])
 
   const selected: KnowledgeNode | undefined = selectedId ? nodeById.get(selectedId) : undefined
 
@@ -204,12 +255,33 @@ function SkillTreeInner() {
           🗺 Whole map
         </button>
         <span className="mx-1 h-4 w-px bg-slate-700" />
-        {(Object.keys(subjectHex) as Subject[]).map((s) => (
-          <span key={s} className="flex items-center gap-1 text-[10px] text-slate-400">
-            <span className="h-2 w-2 rounded-full" style={{ background: subjectHex[s] }} />
-            {subjectNames[s]}
-          </span>
-        ))}
+        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Filter</span>
+        {(Object.keys(subjectHex) as Subject[]).map((s) => {
+          const on = showAll || activeSubjects.has(s)
+          return (
+            <button
+              key={s}
+              onClick={() => toggleSubject(s)}
+              title={showAll ? `Show only ${subjectNames[s]}` : on ? `Hide ${subjectNames[s]}` : `Add ${subjectNames[s]}`}
+              className={`flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] transition ${
+                on
+                  ? 'border-slate-600 bg-slate-800 text-slate-200'
+                  : 'border-transparent text-slate-500 opacity-50 hover:opacity-100'
+              }`}
+            >
+              <span className="h-2 w-2 rounded-full" style={{ background: subjectHex[s] }} />
+              {subjectNames[s]}
+            </button>
+          )
+        })}
+        {!showAll && (
+          <button
+            onClick={() => setActiveSubjects(new Set())}
+            className="rounded-full border border-cyan-500/40 bg-cyan-500/10 px-2 py-0.5 text-[10px] text-cyan-300 hover:bg-cyan-500/20"
+          >
+            ✕ Clear
+          </button>
+        )}
       </div>
 
       {selected && (
