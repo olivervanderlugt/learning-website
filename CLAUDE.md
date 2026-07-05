@@ -69,7 +69,7 @@ The graph is a solid skeleton, NOT yet a bachelor's. To get there, per domain: ~
 5. The rest of CS breadth
 Missing domains to add eventually: electromagnetism, signals & systems, mechanical design/CAD, software engineering practice (git, testing), business/entrepreneurship track for the startup.
 
-## Playable lessons so far (29 nodes — 8 domains COMPLETE)
+## Playable lessons so far (32 nodes — 9 domains COMPLETE)
 - How Computers Work: bits, gates, adder, cpu, hcw-exam (module exam).
 - Math: math-linalg (vector playground), math-calculus (slope/derivative explorer), math-prob (law-of-large-numbers coin sim).
 - Programming: prog-variables (live code runner).
@@ -82,7 +82,8 @@ COMPLETE domains (all nodes have lessons): How Computers Work, Programming, Math
 - History (COMPLETE): hist-scientific-revolution, hist-computing (computing-timeline game), hist-industrial. All prereq-free entry points. Subject color fuchsia.
 - Chemistry (COMPLETE): chem-atoms (atom-builder game) → chem-reactions → chem-materials (prereq chain). Subject color teal.
 - Algorithms (COMPLETE): algo-bigo (big-o-race game + code screens) → algo-structures (3 code screens) → algo-graphs (pathfinder-sim game: BFS vs A* on a wall-drawing grid; verified BFS explores ~80 cells vs A* ~11 for the same shortest path).
-REMAINING domains needing lessons (18 nodes): os, networks, databases, theory, ai-ml, security.
+- AI & ML (COMPLETE): ai-search (state-space planning, no game — predict-rich), ai-learning (gradient-descent game: converge/diverge/precision challenges on L(x)=x²), ai-neural (neural-playground game: perceptron sliders separate clusters, then hit the XOR wall — the give-up button IS the win, reveals hidden-layer fix).
+REMAINING domains needing lessons (15 nodes): os, networks, databases, theory, security.
 The full vertical slice Physics → Robotics → tuned PID controller is playable. robo-control unlocks once robo-sensing + phys-forces are mastered (chain: phys-forces + phys-electricity → robo-sensing → robo-control).
 Games live in src/components/games/, all implement `{ onComplete(score) }`.
 - PID sim (PidSim.tsx): simulation is deterministic; constants (STEPS=400, DRAG=0.8, GRAVITY=2.5, TOL=0.5) were numerically tuned so P-only and PI-without-D FAIL but P≈4/I≈2/D≈4 settles — verify any change to these still leaves it winnable (quick node script simulating the loop).
@@ -95,13 +96,15 @@ Gotchas learned:
 - Light mode: never use `text-white` in games — use `text-slate-100` (the html.light block reverses the slate ramp, white stays white on light cards). Older games (ProbabilitySim etc.) still violate this; fix opportunistically.
 
 ## Next (resume here)
-STATE as of last session: 29 playable lessons; 8 domains COMPLETE (+ Algorithms). All committed on `main`, working tree clean, build green, content validator clean, all new games browser-verified winnable. Quiz/predict option shuffling added app-wide.
+STATE as of last session: 32 playable lessons; 9 domains COMPLETE (+ Algorithms, AI & ML). All committed on `main`, working tree clean, build green, content validator clean, all new games browser-verified winnable. Quiz/predict option shuffling added app-wide.
 
 To restart the dev server: `export PATH="$HOME/.local/node/bin:$PATH"` then `cd ~/Claude/Projects/"Learning website"` then `npm run dev` → open the printed http://localhost:5173.
 
 Priority queue for next lessons (each = one lesson file + optional game + registry lines + hasLesson flag; then `npm run build` + check the browser console for `[content-validation] ✓`):
-1. AI & Machine Learning (ai-search, ai-learning, ai-neural) — builds on math + algorithms (both now complete). ai-learning pairs well with a gradient-descent explorer game; ai-neural with a tiny inference playground.
-2. Then OS, Networks, Databases, Theory, Security breadth.
+1. OS (os-processes, os-memory, os-io) — os-io is high robotics value (interrupts vs polling).
+2. Networks (net-stack, net-ip, net-protocols) — net-protocols covers MQTT, directly robotics-relevant.
+3. Databases (db-tables, db-sql, db-transactions), Theory (theory-automata…), Security last.
+4. Consider a module exam node per completed domain (like hcw-exam) — History, Chemistry, Algorithms, AI/ML all lack one.
 
 Bigger arc (see "Roadmap to bachelor depth" above): after breadth, deepen each node (Stage 1) → rigor/proofs (Stage 2) → labs/projects (Stage 3) → spaced-repetition retention (Stage 4) → cross-domain capstones + business track (Stage 5).
 

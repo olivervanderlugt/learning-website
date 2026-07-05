@@ -532,6 +532,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['algo-graphs'],
     x: 720,
     y: 910,
+    hasLesson: true,
   },
   {
     id: 'ai-learning',
@@ -545,6 +546,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['math-prob', 'math-linalg'],
     x: 720,
     y: 1010,
+    hasLesson: true,
   },
   {
     id: 'ai-neural',
@@ -558,6 +560,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['ai-learning'],
     x: 720,
     y: 1110,
+    hasLesson: true,
   },
 
   // ---- Security & Crypto (col 2, y 1340-1540) ----
@@ -729,9 +732,19 @@ const resourcesByNode: Record<string, Resource[]> = {
   'prog-variables': [
     { type: 'course', title: 'Harvard CS50x (free)', url: 'https://cs50.harvard.edu/x/', note: 'The world-famous intro-to-programming course — pairs perfectly with this track.' },
   ],
+  'ai-search': [
+    { type: 'video', title: 'Sebastian Lague — A* and beyond (Coding Adventures)', url: 'https://www.youtube.com/watch?v=-L-WgKMFuhE', note: 'Watch state-space search come alive with gorgeous visuals.' },
+    { type: 'course', title: 'CS50 AI — Search (lecture 0)', url: 'https://cs50.harvard.edu/ai/', note: 'Harvard’s free AI course opens with exactly this lesson: search, minimax, heuristics.' },
+  ],
+  'ai-learning': [
+    { type: 'video', title: '3Blue1Brown — Gradient descent (ch. 2)', url: 'https://www.youtube.com/watch?v=IHZwWFHWa-w', note: 'The descent-a-landscape picture from this lesson, animated beautifully.' },
+    { type: 'interactive', title: 'TensorFlow Playground', url: 'https://playground.tensorflow.org', note: 'Train tiny networks live in your browser — watch overfitting happen.' },
+    { type: 'course', title: 'Karpathy — Zero to Hero (micrograd)', url: 'https://karpathy.ai/zero-to-hero.html', note: 'Build gradient descent + backprop from scratch in Python, line by line.' },
+  ],
   'ai-neural': [
     { type: 'video', title: '3Blue1Brown — Neural networks', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi', note: 'What a neural net actually IS, visually.' },
     { type: 'course', title: 'Karpathy — Zero to Hero', url: 'https://karpathy.ai/zero-to-hero.html', note: 'Build neural nets from scratch in code, taught by an OpenAI founding member.' },
+    { type: 'interactive', title: 'TensorFlow Playground', url: 'https://playground.tensorflow.org', note: 'Solve XOR with a real hidden layer — the exact wall you just hit, then broke.' },
   ],
   'robo-sensing': [
     { type: 'video', title: 'Paul McWhorter — Arduino tutorials', url: 'https://www.youtube.com/playlist?list=PLGs0VKk2DiYw-L-RibttcvK-WBZm8WLEP', note: 'Hands-on: real sensors and motors on a €30 board. Do this alongside the theory.' },

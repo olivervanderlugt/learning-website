@@ -15,6 +15,8 @@ import ComputingTimeline from './ComputingTimeline'
 import AtomBuilder from './AtomBuilder'
 import BigORace from './BigORace'
 import PathfinderSim from './PathfinderSim'
+import GradientDescent from './GradientDescent'
+import NeuralPlayground from './NeuralPlayground'
 
 export interface GameProps {
   onComplete: (score: number) => void
@@ -38,4 +40,6 @@ export const games: Record<string, ComponentType<GameProps>> = {
   'atom-builder': AtomBuilder,
   'big-o-race': BigORace,
   'pathfinder-sim': PathfinderSim,
+  'gradient-descent': GradientDescent,
+  'neural-playground': NeuralPlayground,
 }

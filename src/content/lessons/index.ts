@@ -28,6 +28,9 @@ import { chemMaterialsLesson } from './chem-materials'
 import { algoBigoLesson } from './algo-bigo'
 import { algoStructuresLesson } from './algo-structures'
 import { algoGraphsLesson } from './algo-graphs'
+import { aiSearchLesson } from './ai-search'
+import { aiLearningLesson } from './ai-learning'
+import { aiNeuralLesson } from './ai-neural'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -59,4 +62,7 @@ export const lessons: Record<string, Lesson> = {
   'algo-bigo': algoBigoLesson,
   'algo-structures': algoStructuresLesson,
   'algo-graphs': algoGraphsLesson,
+  'ai-search': aiSearchLesson,
+  'ai-learning': aiLearningLesson,
+  'ai-neural': aiNeuralLesson,
 }
