@@ -1,5 +1,15 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { PredictScreen } from '../../types'
+
+/** Display order for options — shuffled so the correct answer's position carries no signal. */
+function shuffledIndices(n: number): number[] {
+  const idx = Array.from({ length: n }, (_, i) => i)
+  for (let i = idx.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[idx[i], idx[j]] = [idx[j], idx[i]]
+  }
+  return idx
+}
 
 export default function PredictScreenView({
   screen,
@@ -9,6 +19,7 @@ export default function PredictScreenView({
   onDone: () => void
 }) {
   const [choice, setChoice] = useState<number | null>(null)
+  const order = useMemo(() => shuffledIndices(screen.options.length), [screen])
 
   return (
     <div>
@@ -18,7 +29,8 @@ export default function PredictScreenView({
       <h2 className="text-xl font-bold leading-snug">{screen.question}</h2>
 
       <div className="mt-5 space-y-2">
-        {screen.options.map((opt, i) => {
+        {order.map((i) => {
+          const opt = screen.options[i]
           const committed = choice !== null
           const isChoice = choice === i
           const isCorrect = i === screen.correctIndex

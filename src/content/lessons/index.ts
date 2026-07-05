@@ -19,6 +19,12 @@ import { mathLogicLesson } from './math-logic'
 import { physEnergyLesson } from './phys-energy'
 import { roboEmbeddedLesson } from './robo-embedded'
 import { roboRosLesson } from './robo-ros'
+import { histComputingLesson } from './hist-computing'
+import { histScientificRevolutionLesson } from './hist-scientific-revolution'
+import { histIndustrialLesson } from './hist-industrial'
+import { chemAtomsLesson } from './chem-atoms'
+import { chemReactionsLesson } from './chem-reactions'
+import { chemMaterialsLesson } from './chem-materials'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -41,4 +47,10 @@ export const lessons: Record<string, Lesson> = {
   'phys-energy': physEnergyLesson,
   'robo-embedded': roboEmbeddedLesson,
   'robo-ros': roboRosLesson,
+  'hist-computing': histComputingLesson,
+  'hist-scientific-revolution': histScientificRevolutionLesson,
+  'hist-industrial': histIndustrialLesson,
+  'chem-atoms': chemAtomsLesson,
+  'chem-reactions': chemReactionsLesson,
+  'chem-materials': chemMaterialsLesson,
 }

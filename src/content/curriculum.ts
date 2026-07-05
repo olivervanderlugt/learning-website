@@ -598,7 +598,7 @@ export const nodes: KnowledgeNode[] = [
     y: 1540,
   },
 
-  // ---- History of Science & Technology (col 3, y 50-250) — coming soon ----
+  // ---- History of Science & Technology (col 3, y 50-250) ----
   {
     id: 'hist-scientific-revolution',
     title: 'The Scientific Revolution',
@@ -611,6 +611,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: [],
     x: 1080,
     y: 50,
+    hasLesson: true,
   },
   {
     id: 'hist-computing',
@@ -624,6 +625,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: [],
     x: 1080,
     y: 150,
+    hasLesson: true,
   },
   {
     id: 'hist-industrial',
@@ -637,9 +639,10 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: [],
     x: 1080,
     y: 250,
+    hasLesson: true,
   },
 
-  // ---- Chemistry (col 3, y 480-680) — coming soon ----
+  // ---- Chemistry (col 3, y 480-680) ----
   {
     id: 'chem-atoms',
     title: 'Atoms & the Periodic Table',
@@ -652,6 +655,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: [],
     x: 1080,
     y: 480,
+    hasLesson: true,
   },
   {
     id: 'chem-reactions',
@@ -662,9 +666,10 @@ export const nodes: KnowledgeNode[] = [
       'How bonds break and form, releasing or absorbing energy — the engine behind fuels, batteries and life itself.',
     whyItMatters:
       'A battery is a controlled chemical reaction; its energy density sets what your robot can carry and how long it runs.',
-    prereqIds: [],
+    prereqIds: ['chem-atoms'],
     x: 1080,
     y: 580,
+    hasLesson: true,
   },
   {
     id: 'chem-materials',
@@ -675,9 +680,10 @@ export const nodes: KnowledgeNode[] = [
       'Why metals conduct, why plastics don’t, and how electrochemistry turns chemical energy into the electricity that runs everything.',
     whyItMatters:
       'Choosing the right material — light, strong, conductive, cheap — is half of designing real robot hardware.',
-    prereqIds: [],
+    prereqIds: ['chem-reactions'],
     x: 1080,
     y: 680,
+    hasLesson: true,
   },
 ]
 
@@ -741,6 +747,33 @@ const resourcesByNode: Record<string, Resource[]> = {
   ],
   'robo-ros': [
     { type: 'course', title: 'ROS 2 official tutorials', url: 'https://docs.ros.org/en/rolling/Tutorials.html', note: 'The standard entry point once you can program.' },
+  ],
+  'hist-scientific-revolution': [
+    { type: 'video', title: 'Crash Course History of Science #1–14', url: 'https://www.youtube.com/playlist?list=PL8dPuuaLjXtNppY8ZHMPDH5TKK2UpU8Ng', note: 'The full arc from ancient knowledge to Newton, 12 minutes at a time.' },
+    { type: 'book', title: 'The Sleepwalkers — Arthur Koestler', url: 'https://en.wikipedia.org/wiki/The_Sleepwalkers_(Koestler_book)', note: 'Copernicus, Kepler and Galileo as flawed, stumbling humans — the best story version of this lesson.' },
+  ],
+  'hist-computing': [
+    { type: 'video', title: 'Crash Course Computer Science #1–10', url: 'https://www.youtube.com/playlist?list=PL8dPuuaLjXtNlUrzyH5r6jN9ulIgZBpdo', note: 'Babbage to microprocessors with great visuals — pairs exactly with this lesson.' },
+    { type: 'book', title: 'The Innovators — Walter Isaacson', url: 'https://en.wikipedia.org/wiki/The_Innovators_(book)', note: 'Lovelace to Google as one connected story of teams, not lone geniuses.' },
+    { type: 'article', title: 'Computer History Museum timeline', url: 'https://www.computerhistory.org/timeline/', note: 'Browsable year-by-year timeline with photos of the actual machines.' },
+  ],
+  'hist-industrial': [
+    { type: 'video', title: 'Crash Course European History — Industrial Revolution', url: 'https://www.youtube.com/watch?v=zjK7PWmRRyg', note: 'The first wave in 15 minutes: steam, factories, cities.' },
+    { type: 'video', title: 'CGP Grey — Humans Need Not Apply', url: 'https://www.youtube.com/watch?v=7Pq-S557XQU', note: 'The provocative "wave 4" argument — watch critically after this lesson.' },
+  ],
+  'chem-atoms': [
+    { type: 'interactive', title: 'PhET — Build an Atom', url: 'https://phet.colorado.edu/en/simulations/build-an-atom', note: 'The deluxe version of this lesson’s atom builder, with neutrons and isotope notation.' },
+    { type: 'interactive', title: 'Ptable — interactive periodic table', url: 'https://ptable.com', note: 'Live periodic table: click any element for shells, properties and uses.' },
+    { type: 'video', title: 'Crash Course Chemistry #1 (The Nucleus)', url: 'https://www.youtube.com/watch?v=FSyAehMdpyI', note: 'Fast, funny 10-minute reinforcement of atoms, isotopes and ions.' },
+  ],
+  'chem-reactions': [
+    { type: 'video', title: 'Crash Course Chemistry #16–17 (energy & enthalpy)', url: 'https://www.youtube.com/watch?v=SV7U4yAXL5I', note: 'Exothermic/endothermic and the energy bookkeeping, one level more formal.' },
+    { type: 'interactive', title: 'PhET — Reactions & Rates', url: 'https://phet.colorado.edu/en/simulations/reactions-and-rates', note: 'Fire molecules at each other and SEE activation energy decide what reacts.' },
+  ],
+  'chem-materials': [
+    { type: 'video', title: 'Engineerguy — batteries series (Bill Hammack)', url: 'https://www.youtube.com/watch?v=9OVtk6G2TnQ', note: 'How real lithium-ion cells work, from an engineer who takes them apart.' },
+    { type: 'video', title: 'Real Engineering — The truth about carbon fiber', url: 'https://www.youtube.com/watch?v=QO9Ledxlx-c', note: 'Why composites dominate aerospace and drones — specific strength made visual.' },
+    { type: 'interactive', title: 'PhET — Battery-Resistor Circuit', url: 'https://phet.colorado.edu/en/simulations/battery-resistor-circuit', note: 'Connects this lesson’s electrochemistry to the circuits you already know.' },
   ],
 }
 

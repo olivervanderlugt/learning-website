@@ -11,6 +11,8 @@ import OhmsLawSim from './OhmsLawSim'
 import AdcSim from './AdcSim'
 import PidSim from './PidSim'
 import ArmSim from './ArmSim'
+import ComputingTimeline from './ComputingTimeline'
+import AtomBuilder from './AtomBuilder'
 
 export interface GameProps {
   onComplete: (score: number) => void
@@ -30,4 +32,6 @@ export const games: Record<string, ComponentType<GameProps>> = {
   'adc-sim': AdcSim,
   'pid-sim': PidSim,
   'arm-sim': ArmSim,
+  'computing-timeline': ComputingTimeline,
+  'atom-builder': AtomBuilder,
 }

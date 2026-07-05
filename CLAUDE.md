@@ -69,7 +69,7 @@ The graph is a solid skeleton, NOT yet a bachelor's. To get there, per domain: ~
 5. The rest of CS breadth
 Missing domains to add eventually: electromagnetism, signals & systems, mechanical design/CAD, software engineering practice (git, testing), business/entrepreneurship track for the startup.
 
-## Playable lessons so far (20 nodes — 5 domains COMPLETE)
+## Playable lessons so far (26 nodes — 7 domains COMPLETE)
 - How Computers Work: bits, gates, adder, cpu, hcw-exam (module exam).
 - Math: math-linalg (vector playground), math-calculus (slope/derivative explorer), math-prob (law-of-large-numbers coin sim).
 - Programming: prog-variables (live code runner).
@@ -78,9 +78,10 @@ Missing domains to add eventually: electromagnetism, signals & systems, mechanic
 - Math (COMPLETE): math-linalg, math-calculus, math-prob, math-logic.
 - Physics (COMPLETE): phys-forces, phys-electricity, phys-energy.
 - Robotics Bridge (COMPLETE): robo-sensing, robo-control, robo-kinematics, robo-embedded (reuses cpu-sim), robo-ros.
-COMPLETE domains (all nodes have lessons): How Computers Work, Programming, Math, Physics, Robotics Bridge.
-NEW subjects added as data (nodes visible, lessons TODO): History of Science & Tech (hist-scientific-revolution, hist-computing, hist-industrial), Chemistry (chem-atoms, chem-reactions, chem-materials). Subject colors: history=fuchsia, chemistry=teal.
-REMAINING domains needing lessons (21 nodes): algorithms, os, networks, databases, theory, ai-ml, security — plus the 6 history/chemistry nodes.
+COMPLETE domains (all nodes have lessons): How Computers Work, Programming, Math, Physics, Robotics Bridge, History of Science & Tech, Chemistry.
+- History (COMPLETE): hist-scientific-revolution, hist-computing (computing-timeline game), hist-industrial. All prereq-free entry points. Subject color fuchsia.
+- Chemistry (COMPLETE): chem-atoms (atom-builder game) → chem-reactions → chem-materials (prereq chain). Subject color teal.
+REMAINING domains needing lessons (21 nodes): algorithms, os, networks, databases, theory, ai-ml, security.
 The full vertical slice Physics → Robotics → tuned PID controller is playable. robo-control unlocks once robo-sensing + phys-forces are mastered (chain: phys-forces + phys-electricity → robo-sensing → robo-control).
 Games live in src/components/games/, all implement `{ onComplete(score) }`.
 - PID sim (PidSim.tsx): simulation is deterministic; constants (STEPS=400, DRAG=0.8, GRAVITY=2.5, TOL=0.5) were numerically tuned so P-only and PI-without-D FAIL but P≈4/I≈2/D≈4 settles — verify any change to these still leaves it winnable (quick node script simulating the loop).
@@ -89,17 +90,18 @@ Gotchas learned:
 - SVG-drag games (VectorPlayground, SlopeExplorer): wrap `setPointerCapture` in try/catch (some pointers/headless reject it and abort the drag). Drag works via the svg's onPointerMove + dragKey state.
 - Batch/rapid-click games (ProbabilitySim): use FUNCTIONAL setState (setX(prev=>...)) or rapid clicks race on stale closure state; fire onComplete from useEffect, not inside the updater.
 - `code` Screen kind runs learner JS in a Web Worker (blob URL) with a 2s terminate timeout — infinite-loop safe. Output captured via injected `print()`, compared line-normalized to `expected`.
+- Quiz/predict options are SHUFFLED at render (QuizScreenView/PredictScreenView useMemo keyed on screen) — authoring with correctIndex 0 everywhere is fine and convenient; the learner never sees a position pattern. Don't "fix" content by varying correctIndex.
+- Light mode: never use `text-white` in games — use `text-slate-100` (the html.light block reverses the slate ramp, white stays white on light cards). Older games (ProbabilitySim etc.) still violate this; fix opportunistically.
 
-## Next (resume here tomorrow)
-STATE as of last session: 20 playable lessons; 5 domains COMPLETE (How Computers Work, Programming, Math, Physics, Robotics Bridge). All committed on `main`, working tree clean, build green, content validator clean. History + Chemistry added as subjects (6 placeholder nodes, no lessons yet).
+## Next (resume here)
+STATE as of last session: 26 playable lessons; 7 domains COMPLETE (How Computers Work, Programming, Math, Physics, Robotics Bridge, History, Chemistry). All committed on `main`, working tree clean, build green, content validator clean, both new games browser-verified winnable. Quiz/predict option shuffling added app-wide.
 
 To restart the dev server: `export PATH="$HOME/.local/node/bin:$PATH"` then `cd ~/Claude/Projects/"Learning website"` then `npm run dev` → open the printed http://localhost:5173.
 
 Priority queue for next lessons (each = one lesson file + optional game + registry lines + hasLesson flag; then `npm run build` + check the browser console for `[content-validation] ✓`):
-1. First real History + Chemistry lessons (hist-computing is a great, low-prereq start; chem-atoms too). Ollie explicitly asked for these subjects.
-2. Algorithms & Data Structures (algo-bigo → algo-structures → algo-graphs) — algo-graphs pairs with a pathfinding interactive; high robotics value (A*).
-3. AI & Machine Learning (ai-search, ai-learning, ai-neural) — builds on math + algorithms.
-4. Then OS, Networks, Databases, Theory, Security breadth.
+1. Algorithms & Data Structures (algo-bigo → algo-structures → algo-graphs) — algo-graphs pairs with a pathfinding interactive; high robotics value (A*).
+2. AI & Machine Learning (ai-search, ai-learning, ai-neural) — builds on math + algorithms.
+3. Then OS, Networks, Databases, Theory, Security breadth.
 
 Bigger arc (see "Roadmap to bachelor depth" above): after breadth, deepen each node (Stage 1) → rigor/proofs (Stage 2) → labs/projects (Stage 3) → spaced-repetition retention (Stage 4) → cross-domain capstones + business track (Stage 5).
 
