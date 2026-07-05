@@ -17,8 +17,14 @@ export const domains: Domain[] = [
   { id: 'chemistry', title: 'Chemistry', prereqDomainIds: [] },
 ]
 
-// Layout: three depth columns (x = 0 / 360 / 720), domain blocks stacked
-// vertically, nodes top-to-bottom by prereq depth within each block.
+// Layout: three horizontal BANDS by dependency depth — band 0 (y 0-480)
+// foundations (HCW, Programming, Math-as-row, Physics, History/Chemistry islands),
+// band 1 (y 760-1180) first derivatives (OS, Algorithms staircase, Robotics tree),
+// band 2 (y 1400+) second derivatives (Networks, Theory, AI, Databases, Security).
+// Rules that keep edges readable: no edge between same-x nodes that aren't
+// vertically adjacent (offset branches sideways instead); long band-skipping
+// edges run through reserved empty corridors (x~1240 math→AI, x~960 graphs→AI).
+// Redundant transitive edges are hidden in SkillTreeView (visual only).
 export const nodes: KnowledgeNode[] = [
   // ---- How Computers Work (col 0, y 50-350) — the playable MVP module ----
   {
@@ -32,7 +38,7 @@ export const nodes: KnowledgeNode[] = [
       'Every sensor reading your future robot takes arrives as raw bits — this is the native language of every machine you will ever build.',
     prereqIds: [],
     x: 0,
-    y: 50,
+    y: 0,
     hasLesson: true,
   },
   {
@@ -46,7 +52,7 @@ export const nodes: KnowledgeNode[] = [
       'An H-bridge motor driver is four transistor switches — the exact same switches you build gates from here.',
     prereqIds: ['bits'],
     x: 0,
-    y: 150,
+    y: 120,
     hasLesson: true,
   },
   {
@@ -60,7 +66,7 @@ export const nodes: KnowledgeNode[] = [
       'When your robot computes “turn 3° left”, this circuit — etched a billion times smaller — is doing the math.',
     prereqIds: ['gates'],
     x: 0,
-    y: 250,
+    y: 240,
     hasLesson: true,
   },
   {
@@ -74,7 +80,7 @@ export const nodes: KnowledgeNode[] = [
       'A microcontroller on a robot is this exact machine, just small and cheap enough to glue onto a motor.',
     prereqIds: ['adder'],
     x: 0,
-    y: 350,
+    y: 360,
     hasLesson: true,
   },
   {
@@ -87,8 +93,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Retrieval days after learning is what converts lessons into permanent knowledge — an exam is a learning event, not just a measurement.',
     prereqIds: ['bits', 'gates', 'adder', 'cpu'],
-    x: 0,
-    y: 450,
+    x: -260,
+    y: 480,
     hasLesson: true,
     isExam: true,
   },
@@ -104,8 +110,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       '“If obstacle closer than 20 cm, turn” is one variable and one if-statement — robot behavior starts exactly here.',
     prereqIds: [],
-    x: 0,
-    y: 680,
+    x: 480,
+    y: 0,
     hasLesson: true,
   },
   {
@@ -118,8 +124,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Abstraction is how a two-million-line robot codebase stays understandable by humans.',
     prereqIds: ['prog-variables'],
-    x: 0,
-    y: 780,
+    x: 480,
+    y: 120,
     hasLesson: true,
   },
   {
@@ -132,8 +138,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A lidar scan is an array of 360 distances — you need data structures the moment your robot opens its eyes.',
     prereqIds: ['prog-functions'],
-    x: 0,
-    y: 880,
+    x: 480,
+    y: 240,
     hasLesson: true,
   },
 
@@ -148,8 +154,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'The gates you build in “The Logic of Gates” are this algebra made of silicon — one idea, two subjects.',
     prereqIds: [],
-    x: 0,
-    y: 1110,
+    x: 760,
+    y: 0,
     hasLesson: true,
   },
   {
@@ -162,8 +168,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robot arm’s position is a chain of matrix multiplications — kinematics IS linear algebra.',
     prereqIds: [],
-    x: 0,
-    y: 1210,
+    x: 1000,
+    y: 0,
     hasLesson: true,
   },
   {
@@ -176,8 +182,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Real sensors are noisy — a robot that can’t reason about uncertainty walks into walls it “saw”.',
     prereqIds: [],
-    x: 0,
-    y: 1310,
+    x: 1240,
+    y: 0,
     hasLesson: true,
   },
   {
@@ -190,8 +196,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A PID controller is literally a Proportional term plus an Integral plus a Derivative — you cannot read robotics without calculus.',
     prereqIds: [],
-    x: 0,
-    y: 1410,
+    x: 1480,
+    y: 0,
     hasLesson: true,
   },
 
@@ -206,8 +212,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Torque, friction and inertia decide whether your robot climbs the ramp or tips over on it.',
     prereqIds: [],
-    x: 360,
-    y: -380,
+    x: 1980,
+    y: 0,
     hasLesson: true,
   },
   {
@@ -220,8 +226,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Battery capacity vs. motor power is THE central budget of every mobile robot design.',
     prereqIds: ['phys-forces'],
-    x: 360,
-    y: -280,
+    x: 2200,
+    y: 140,
     hasLesson: true,
   },
   {
@@ -234,8 +240,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Your logic gates, sensors and motors all live on the same physics: moving charge through circuits.',
     prereqIds: ['phys-forces'],
-    x: 360,
-    y: -180,
+    x: 1760,
+    y: 140,
     hasLesson: true,
   },
 
@@ -250,8 +256,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robot reads sensors, plans and drives motors “simultaneously” — that illusion is scheduling.',
     prereqIds: ['cpu', 'prog-data'],
-    x: 360,
-    y: 50,
+    x: 0,
+    y: 760,
     hasLesson: true,
   },
   {
@@ -264,8 +270,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'When your robot’s vision process crashes, memory isolation is why the motor controller keeps running.',
     prereqIds: ['os-processes'],
-    x: 360,
-    y: 150,
+    x: -420,
+    y: 880,
     hasLesson: true,
   },
   {
@@ -278,8 +284,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       '“Bumper pressed!” reaching your code in microseconds instead of milliseconds is an interrupt at work.',
     prereqIds: ['os-processes'],
-    x: 360,
-    y: 250,
+    x: -180,
+    y: 880,
     hasLesson: true,
   },
 
@@ -294,8 +300,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A path planner that is O(n²) on map size freezes your robot the moment it leaves the living room.',
     prereqIds: ['prog-data', 'math-logic'],
-    x: 360,
-    y: 480,
+    x: 480,
+    y: 760,
     hasLesson: true,
   },
   {
@@ -308,8 +314,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robot’s task queue, sensor buffer and landmark lookup are a stack, a ring buffer and a hash map.',
     prereqIds: ['algo-bigo'],
-    x: 360,
-    y: 580,
+    x: 720,
+    y: 880,
     hasLesson: true,
   },
   {
@@ -322,8 +328,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A* over a grid map is literally how vacuum robots and Mars rovers decide where to roll next.',
     prereqIds: ['algo-structures'],
-    x: 360,
-    y: 680,
+    x: 960,
+    y: 1000,
     hasLesson: true,
   },
 
@@ -338,8 +344,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Teleoperating a robot means your joystick command survives every one of these layers, twice.',
     prereqIds: ['prog-data'],
-    x: 360,
-    y: 910,
+    x: 0,
+    y: 1400,
     hasLesson: true,
   },
   {
@@ -352,8 +358,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A drone video feed drops packets constantly; designing for loss is what keeps the picture moving.',
     prereqIds: ['net-stack'],
-    x: 360,
-    y: 1010,
+    x: 0,
+    y: 1520,
     hasLesson: true,
   },
   {
@@ -366,8 +372,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'MQTT — the IoT protocol — is how a fleet of warehouse robots gossips about where the boxes are.',
     prereqIds: ['net-packets'],
-    x: 360,
-    y: 1110,
+    x: 0,
+    y: 1640,
     hasLesson: true,
   },
 
@@ -382,8 +388,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Your robot’s map, mission log and battery history all want to be tables the moment they must survive a reboot.',
     prereqIds: ['prog-data'],
-    x: 360,
-    y: 1340,
+    x: 1760,
+    y: 1400,
     hasLesson: true,
   },
   {
@@ -396,8 +402,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       '“Which rooms had obstacles this week?” is one SQL query over your robot’s log tables.',
     prereqIds: ['db-relational'],
-    x: 360,
-    y: 1440,
+    x: 1760,
+    y: 1520,
     hasLesson: true,
   },
   {
@@ -410,8 +416,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robot that loses power mid-save must not wake up with half a map — that guarantee is a transaction.',
     prereqIds: ['db-sql'],
-    x: 360,
-    y: 1540,
+    x: 1760,
+    y: 1640,
     hasLesson: true,
   },
 
@@ -426,8 +432,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Sense → decide → act is the eternal loop of robotics; this node is the “sense” and “act”.',
     prereqIds: ['cpu', 'phys-electricity'],
-    x: 720,
-    y: -280,
+    x: 1760,
+    y: 760,
     hasLesson: true,
   },
   {
@@ -440,8 +446,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Every drone hovering perfectly still is running this exact loop hundreds of times per second.',
     prereqIds: ['robo-sensing', 'phys-forces'],
-    x: 720,
-    y: -180,
+    x: 1520,
+    y: 880,
     hasLesson: true,
   },
   {
@@ -454,8 +460,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'The CPU you studied, shrunk to €2 and strapped to a motor: this is where your whole skill tree converges.',
     prereqIds: ['robo-sensing'],
-    x: 720,
-    y: -80,
+    x: 1760,
+    y: 920,
     hasLesson: true,
   },
   {
@@ -468,8 +474,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Every pick-and-place robot solves inverse kinematics dozens of times per second just to reach for an object.',
     prereqIds: ['math-linalg', 'robo-sensing'],
-    x: 720,
-    y: 20,
+    x: 2000,
+    y: 880,
     hasLesson: true,
   },
   {
@@ -482,8 +488,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Your future startup will almost certainly prototype on ROS — it is the lingua franca of modern robotics.',
     prereqIds: ['robo-embedded', 'prog-data'],
-    x: 720,
-    y: 120,
+    x: 1880,
+    y: 1180,
     hasLesson: true,
   },
 
@@ -498,8 +504,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       '“Patrolling → obstacle seen → avoiding → patrolling” — robot behavior controllers are literally FSMs.',
     prereqIds: ['math-logic', 'algo-bigo'],
-    x: 720,
-    y: 480,
+    x: 480,
+    y: 1400,
     hasLesson: true,
   },
   {
@@ -512,8 +518,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Knowing what NO robot can ever compute saves you from burning months on an impossible feature.',
     prereqIds: ['theory-fsm'],
-    x: 720,
-    y: 580,
+    x: 480,
+    y: 1520,
     hasLesson: true,
   },
   {
@@ -526,8 +532,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Optimal multi-robot task assignment is NP-hard — pros approximate it, and now you’ll know why.',
     prereqIds: ['theory-turing'],
-    x: 720,
-    y: 680,
+    x: 480,
+    y: 1640,
     hasLesson: true,
   },
 
@@ -542,8 +548,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A chess engine and a warehouse robot planning its route are running the same idea.',
     prereqIds: ['algo-graphs'],
-    x: 720,
-    y: 910,
+    x: 960,
+    y: 1400,
     hasLesson: true,
   },
   {
@@ -556,8 +562,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'You can’t hand-code “what a pedestrian looks like” — perception is learned from data.',
     prereqIds: ['math-prob', 'math-linalg'],
-    x: 720,
-    y: 1010,
+    x: 1240,
+    y: 1400,
     hasLesson: true,
   },
   {
@@ -570,8 +576,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'The network that lets a robot grasp unfamiliar objects is layers of the matrix math you already know.',
     prereqIds: ['ai-learning'],
-    x: 720,
-    y: 1110,
+    x: 1240,
+    y: 1520,
     hasLesson: true,
   },
 
@@ -586,8 +592,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robot is a computer that can push things — an insecure one is a physical hazard, not just a data leak.',
     prereqIds: ['net-protocols'],
-    x: 720,
-    y: 1340,
+    x: 260,
+    y: 1880,
     hasLesson: true,
   },
   {
@@ -600,8 +606,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'The command channel to your drone is encrypted — or someone else is flying it.',
     prereqIds: ['sec-threats'],
-    x: 720,
-    y: 1440,
+    x: 260,
+    y: 2000,
     hasLesson: true,
   },
   {
@@ -614,8 +620,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Fleets of IoT robots have been hijacked into botnets — hardening is part of shipping.',
     prereqIds: ['sec-crypto'],
-    x: 720,
-    y: 1540,
+    x: 260,
+    y: 2120,
     hasLesson: true,
   },
 
@@ -630,8 +636,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Knowing HOW knowledge is built — and how it was wrong before — makes you a sharper builder and a harder person to fool.',
     prereqIds: [],
-    x: 1080,
-    y: 50,
+    x: 2600,
+    y: 0,
     hasLesson: true,
   },
   {
@@ -644,8 +650,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Every “new” idea in tech rhymes with an old one; history is a founder’s cheat sheet for what tends to work.',
     prereqIds: [],
-    x: 1080,
-    y: 150,
+    x: 2600,
+    y: 120,
     hasLesson: true,
   },
   {
@@ -658,8 +664,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robotics startup changes how people work; understanding past automation waves is understanding your own impact.',
     prereqIds: [],
-    x: 1080,
-    y: 250,
+    x: 2600,
+    y: 240,
     hasLesson: true,
   },
 
@@ -674,7 +680,7 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Silicon chips, copper wires and lithium batteries are all just clever uses of particular elements’ chemistry.',
     prereqIds: [],
-    x: 1080,
+    x: 2600,
     y: 480,
     hasLesson: true,
   },
@@ -688,8 +694,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A battery is a controlled chemical reaction; its energy density sets what your robot can carry and how long it runs.',
     prereqIds: ['chem-atoms'],
-    x: 1080,
-    y: 580,
+    x: 2600,
+    y: 600,
     hasLesson: true,
   },
   {
@@ -702,8 +708,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Choosing the right material — light, strong, conductive, cheap — is half of designing real robot hardware.',
     prereqIds: ['chem-reactions'],
-    x: 1080,
-    y: 680,
+    x: 2600,
+    y: 720,
     hasLesson: true,
   },
 ]
@@ -886,20 +892,20 @@ export const nodeById: Map<string, KnowledgeNode> = new Map(nodes.map((n) => [n.
 
 /** Domain title blocks rendered on the map above each cluster. */
 export const domainLabels: { id: string; title: string; x: number; y: number }[] = [
-  { id: 'label-hcw', title: 'How Computers Work', x: 0, y: 0 },
-  { id: 'label-prog', title: 'Programming Fundamentals', x: 0, y: 630 },
-  { id: 'label-math', title: 'Math for CS & Robotics', x: 0, y: 1060 },
-  { id: 'label-phys', title: 'Physics Foundations', x: 360, y: -430 },
-  { id: 'label-os', title: 'Operating Systems', x: 360, y: 0 },
-  { id: 'label-algo', title: 'Algorithms & Data Structures', x: 360, y: 430 },
-  { id: 'label-net', title: 'Networks', x: 360, y: 860 },
-  { id: 'label-db', title: 'Databases', x: 360, y: 1290 },
-  { id: 'label-robo', title: 'Robotics Bridge', x: 720, y: -330 },
-  { id: 'label-theory', title: 'Theory of Computation', x: 720, y: 430 },
-  { id: 'label-ai', title: 'AI & Machine Learning', x: 720, y: 860 },
-  { id: 'label-sec', title: 'Security & Crypto', x: 720, y: 1290 },
-  { id: 'label-hist', title: 'History of Science & Tech', x: 1080, y: 0 },
-  { id: 'label-chem', title: 'Chemistry', x: 1080, y: 430 },
+  { id: 'label-hcw', title: 'How Computers Work', x: 0, y: -60 },
+  { id: 'label-prog', title: 'Programming Fundamentals', x: 480, y: -60 },
+  { id: 'label-math', title: 'Math for CS & Robotics', x: 760, y: -60 },
+  { id: 'label-phys', title: 'Physics Foundations', x: 1760, y: -60 },
+  { id: 'label-os', title: 'Operating Systems', x: -420, y: 700 },
+  { id: 'label-algo', title: 'Algorithms & Data Structures', x: 480, y: 700 },
+  { id: 'label-net', title: 'Networks', x: 0, y: 1340 },
+  { id: 'label-db', title: 'Databases', x: 1760, y: 1340 },
+  { id: 'label-robo', title: 'Robotics Bridge', x: 1520, y: 700 },
+  { id: 'label-theory', title: 'Theory of Computation', x: 480, y: 1340 },
+  { id: 'label-ai', title: 'AI & Machine Learning', x: 960, y: 1340 },
+  { id: 'label-sec', title: 'Security & Crypto', x: 260, y: 1820 },
+  { id: 'label-hist', title: 'History of Science & Tech', x: 2600, y: -60 },
+  { id: 'label-chem', title: 'Chemistry', x: 2600, y: 420 },
 ]
 
 export const XP_PER_NODE = 100

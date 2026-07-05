@@ -34,6 +34,34 @@ const subjectHex: Record<Subject, string> = {
 const NODE_W = 192
 const NODE_H = 80
 
+/**
+ * Prereq edges that are transitively implied by another prereq of the same node
+ * (e.g. bits→exam when cpu→exam exists and cpu already requires bits). These are
+ * hidden on the MAP only — unlock logic and the detail panel use the full list.
+ */
+const redundantEdges: Set<string> = (() => {
+  const ancestors = new Map<string, Set<string>>()
+  const ancestorsOf = (id: string): Set<string> => {
+    const cached = ancestors.get(id)
+    if (cached) return cached
+    const set = new Set<string>()
+    ancestors.set(id, set) // seed before recursing (prereq graph is a DAG)
+    for (const p of nodeById.get(id)?.prereqIds ?? []) {
+      set.add(p)
+      for (const a of ancestorsOf(p)) set.add(a)
+    }
+    return set
+  }
+  const redundant = new Set<string>()
+  for (const n of curriculum) {
+    for (const p of n.prereqIds) {
+      const implied = n.prereqIds.some((q) => q !== p && ancestorsOf(q).has(p))
+      if (implied) redundant.add(`${p}->${n.id}`)
+    }
+  }
+  return redundant
+})()
+
 /** Bounding box of a domain's nodes (plus its label above). */
 function domainBounds(domainId: string) {
   const ns = curriculum.filter((n) => n.domainId === domainId)
@@ -96,19 +124,21 @@ function SkillTreeInner() {
   const flowEdges = useMemo<Edge[]>(
     () =>
       curriculum.flatMap((n) =>
-        n.prereqIds.map((p) => {
-          const active = masteredNodeIds.includes(p)
-          return {
-            id: `${p}->${n.id}`,
-            source: p,
-            target: n.id,
-            style: {
-              stroke: active ? '#38bdf8' : '#334155',
-              strokeWidth: active ? 2 : 1.5,
-            },
-            animated: active && !masteredNodeIds.includes(n.id),
-          }
-        }),
+        n.prereqIds
+          .filter((p) => !redundantEdges.has(`${p}->${n.id}`))
+          .map((p) => {
+            const active = masteredNodeIds.includes(p)
+            return {
+              id: `${p}->${n.id}`,
+              source: p,
+              target: n.id,
+              style: {
+                stroke: active ? '#38bdf8' : '#334155',
+                strokeWidth: active ? 2 : 1.5,
+              },
+              animated: active && !masteredNodeIds.includes(n.id),
+            }
+          }),
       ),
     [masteredNodeIds],
   )
