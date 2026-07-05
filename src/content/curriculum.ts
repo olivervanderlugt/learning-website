@@ -293,6 +293,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['prog-data', 'math-logic'],
     x: 360,
     y: 480,
+    hasLesson: true,
   },
   {
     id: 'algo-structures',
@@ -306,6 +307,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['algo-bigo'],
     x: 360,
     y: 580,
+    hasLesson: true,
   },
   {
     id: 'algo-graphs',
@@ -319,6 +321,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['algo-structures'],
     x: 360,
     y: 680,
+    hasLesson: true,
   },
 
   // ---- Networks (col 1, y 910-1110) ----
@@ -726,10 +729,6 @@ const resourcesByNode: Record<string, Resource[]> = {
   'prog-variables': [
     { type: 'course', title: 'Harvard CS50x (free)', url: 'https://cs50.harvard.edu/x/', note: 'The world-famous intro-to-programming course — pairs perfectly with this track.' },
   ],
-  'algo-graphs': [
-    { type: 'interactive', title: 'Red Blob Games — A* pathfinding', url: 'https://www.redblobgames.com/pathfinding/a-star/introduction.html', note: 'The best interactive explanation on the internet, period. Robot navigation in your browser.' },
-    { type: 'interactive', title: 'VisuAlgo', url: 'https://visualgo.net', note: 'Animated visualizations of every classic algorithm and data structure.' },
-  ],
   'ai-neural': [
     { type: 'video', title: '3Blue1Brown — Neural networks', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi', note: 'What a neural net actually IS, visually.' },
     { type: 'course', title: 'Karpathy — Zero to Hero', url: 'https://karpathy.ai/zero-to-hero.html', note: 'Build neural nets from scratch in code, taught by an OpenAI founding member.' },
@@ -747,6 +746,19 @@ const resourcesByNode: Record<string, Resource[]> = {
   ],
   'robo-ros': [
     { type: 'course', title: 'ROS 2 official tutorials', url: 'https://docs.ros.org/en/rolling/Tutorials.html', note: 'The standard entry point once you can program.' },
+  ],
+  'algo-bigo': [
+    { type: 'video', title: 'CS50 — Algorithms (week 3)', url: 'https://cs50.harvard.edu/x/weeks/3/', note: 'Harvard’s free intro: search, sort and Big-O with brilliant live demos.' },
+    { type: 'interactive', title: 'VisuAlgo — sorting visualizations', url: 'https://visualgo.net/en/sorting', note: 'Watch O(n²) vs O(n log n) sorts race on the same array.' },
+  ],
+  'algo-structures': [
+    { type: 'video', title: 'CS50 — Data Structures (week 5)', url: 'https://cs50.harvard.edu/x/weeks/5/', note: 'Stacks, queues, hash tables — built live in C so you see the memory.' },
+    { type: 'interactive', title: 'VisuAlgo — hash table', url: 'https://visualgo.net/en/hashtable', note: 'Watch keys hash into slots (and collide) interactively.' },
+  ],
+  'algo-graphs': [
+    { type: 'article', title: 'Red Blob Games — Introduction to A*', url: 'https://www.redblobgames.com/pathfinding/a-star/introduction.html', note: 'THE interactive A* tutorial — beautiful, gentle, definitive.' },
+    { type: 'video', title: 'Computerphile — A* search', url: 'https://www.youtube.com/watch?v=ySN5Wnu88nE', note: 'A* explained on a whiteboard in 14 minutes — ideal right after the sim.' },
+    { type: 'interactive', title: 'PathFinding.js visualizer', url: 'https://qiao.github.io/PathFinding.js/visual/', note: 'The deluxe version of this lesson’s game: BFS, Dijkstra, A* and more on big grids.' },
   ],
   'hist-scientific-revolution': [
     { type: 'video', title: 'Crash Course History of Science #1–14', url: 'https://www.youtube.com/playlist?list=PL8dPuuaLjXtNppY8ZHMPDH5TKK2UpU8Ng', note: 'The full arc from ancient knowledge to Newton, 12 minutes at a time.' },
