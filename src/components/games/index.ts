@@ -17,6 +17,7 @@ import BigORace from './BigORace'
 import PathfinderSim from './PathfinderSim'
 import GradientDescent from './GradientDescent'
 import NeuralPlayground from './NeuralPlayground'
+import FsmLab from './FsmLab'
 
 export interface GameProps {
   onComplete: (score: number) => void
@@ -42,4 +43,5 @@ export const games: Record<string, ComponentType<GameProps>> = {
   'pathfinder-sim': PathfinderSim,
   'gradient-descent': GradientDescent,
   'neural-playground': NeuralPlayground,
+  'fsm-lab': FsmLab,
 }

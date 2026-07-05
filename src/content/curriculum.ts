@@ -252,6 +252,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['cpu', 'prog-data'],
     x: 360,
     y: 50,
+    hasLesson: true,
   },
   {
     id: 'os-memory',
@@ -265,6 +266,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['os-processes'],
     x: 360,
     y: 150,
+    hasLesson: true,
   },
   {
     id: 'os-io',
@@ -278,6 +280,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['os-processes'],
     x: 360,
     y: 250,
+    hasLesson: true,
   },
 
   // ---- Algorithms & Data Structures (col 1, y 480-680) ----
@@ -337,6 +340,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['prog-data'],
     x: 360,
     y: 910,
+    hasLesson: true,
   },
   {
     id: 'net-packets',
@@ -350,6 +354,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['net-stack'],
     x: 360,
     y: 1010,
+    hasLesson: true,
   },
   {
     id: 'net-protocols',
@@ -363,6 +368,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['net-packets'],
     x: 360,
     y: 1110,
+    hasLesson: true,
   },
 
   // ---- Databases (col 1, y 1340-1540) ----
@@ -378,6 +384,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['prog-data'],
     x: 360,
     y: 1340,
+    hasLesson: true,
   },
   {
     id: 'db-sql',
@@ -391,6 +398,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['db-relational'],
     x: 360,
     y: 1440,
+    hasLesson: true,
   },
   {
     id: 'db-transactions',
@@ -404,6 +412,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['db-sql'],
     x: 360,
     y: 1540,
+    hasLesson: true,
   },
 
   // ---- Robotics Bridge (col 2, y -280..-80) ----
@@ -491,6 +500,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['math-logic', 'algo-bigo'],
     x: 720,
     y: 480,
+    hasLesson: true,
   },
   {
     id: 'theory-turing',
@@ -504,6 +514,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['theory-fsm'],
     x: 720,
     y: 580,
+    hasLesson: true,
   },
   {
     id: 'theory-complexity',
@@ -517,6 +528,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['theory-turing'],
     x: 720,
     y: 680,
+    hasLesson: true,
   },
 
   // ---- AI & Machine Learning (col 2, y 910-1110) ----
@@ -576,6 +588,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['net-protocols'],
     x: 720,
     y: 1340,
+    hasLesson: true,
   },
   {
     id: 'sec-crypto',
@@ -589,6 +602,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['sec-threats'],
     x: 720,
     y: 1440,
+    hasLesson: true,
   },
   {
     id: 'sec-systems',
@@ -602,6 +616,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['sec-crypto'],
     x: 720,
     y: 1540,
+    hasLesson: true,
   },
 
   // ---- History of Science & Technology (col 3, y 50-250) ----
@@ -732,6 +747,66 @@ const resourcesByNode: Record<string, Resource[]> = {
   'prog-variables': [
     { type: 'course', title: 'Harvard CS50x (free)', url: 'https://cs50.harvard.edu/x/', note: 'The world-famous intro-to-programming course — pairs perfectly with this track.' },
   ],
+  'os-processes': [
+    { type: 'video', title: 'CS50 — Operating Systems concepts', url: 'https://cs50.harvard.edu/x/', note: 'Context for how the OS sits between your code and the hardware.' },
+    { type: 'book', title: 'OSTEP — Three Easy Pieces (free)', url: 'https://pages.cs.wisc.edu/~remzi/OSTEP/', note: 'THE free OS textbook — the scheduling chapters read like a story.' },
+  ],
+  'os-memory': [
+    { type: 'book', title: 'OSTEP — Virtual memory chapters', url: 'https://pages.cs.wisc.edu/~remzi/OSTEP/', note: 'Address translation, TLBs and paging, one gentle chapter at a time.' },
+    { type: 'video', title: 'Computerphile — Virtual memory', url: 'https://www.youtube.com/watch?v=5lFnKYCZT5o', note: '10-minute whiteboard version of exactly this lesson.' },
+  ],
+  'os-io': [
+    { type: 'video', title: 'Ben Eater — Interrupts (6502 series)', url: 'https://eater.net/6502', note: 'Watch real interrupt hardware wired on a breadboard — polling vs interrupts made physical.' },
+    { type: 'book', title: 'OSTEP — I/O devices chapter', url: 'https://pages.cs.wisc.edu/~remzi/OSTEP/', note: 'Polling, interrupts and DMA formalized.' },
+  ],
+  'net-stack': [
+    { type: 'video', title: 'Practical Networking — OSI/TCP-IP model', url: 'https://www.youtube.com/watch?v=E5bSumTAHZE', note: 'The layer model with concrete packet examples.' },
+    { type: 'article', title: 'High Performance Browser Networking (free book)', url: 'https://hpbn.co', note: 'How TCP/UDP actually behave in the wild — skim chapters 1-3.' },
+  ],
+  'net-packets': [
+    { type: 'video', title: 'Computerphile — Internet routing', url: 'https://www.youtube.com/watch?v=AkxqkoxErRk', note: 'How packets find their way with no map of the whole internet.' },
+    { type: 'interactive', title: 'Wireshark', url: 'https://www.wireshark.org', note: 'Capture YOUR packets and see the headers from this lesson, live. Free.' },
+  ],
+  'net-protocols': [
+    { type: 'article', title: 'MQTT Essentials (HiveMQ series)', url: 'https://www.hivemq.com/mqtt-essentials/', note: 'The standard pub/sub-for-IoT tutorial series — QoS, last will, all of it.' },
+    { type: 'video', title: 'Computerphile — HTTP & the web', url: 'https://www.youtube.com/watch?v=tb8gHvYlCFs', note: 'Request/response from first principles.' },
+  ],
+  'db-relational': [
+    { type: 'course', title: 'SQLBolt — interactive lessons', url: 'https://sqlbolt.com', note: 'Learn tables and queries by typing real SQL in the browser — start here.' },
+    { type: 'article', title: 'SQLite — When to use', url: 'https://www.sqlite.org/whentouse.html', note: 'Why a single-file database powers phones, planes and (soon) your robot logs.' },
+  ],
+  'db-sql': [
+    { type: 'course', title: 'SQLBolt — SELECT/WHERE/JOIN drills', url: 'https://sqlbolt.com', note: 'Interactive practice for every verb in this lesson.' },
+    { type: 'interactive', title: 'DB Fiddle', url: 'https://www.db-fiddle.com', note: 'A scratchpad database in your browser — paste schemas, try queries.' },
+  ],
+  'db-transactions': [
+    { type: 'article', title: 'Use The Index, Luke!', url: 'https://use-the-index-luke.com', note: 'The classic free guide to what indexes do and when they don’t.' },
+    { type: 'video', title: 'Hussein Nasser — ACID explained', url: 'https://www.youtube.com/watch?v=pomxJOFVcQs', note: 'Transactions, isolation levels and WAL by a database engineer.' },
+  ],
+  'theory-fsm': [
+    { type: 'video', title: 'Computerphile — Finite State Machines', url: 'https://www.youtube.com/watch?v=vhiiia1_hC4', note: 'FSMs and what regular languages can’t do.' },
+    { type: 'article', title: 'Behavior Trees in robotics (intro)', url: 'https://arxiv.org/abs/1709.00084', note: 'The free survey paper — how industry upgrades FSMs for real robots.' },
+  ],
+  'theory-turing': [
+    { type: 'video', title: 'Computerphile — Turing Machines', url: 'https://www.youtube.com/watch?v=dNRDvLACg5Q', note: 'The tape machine explained by Professor Brailsford — a treasure.' },
+    { type: 'video', title: 'Computerphile — The Halting Problem', url: 'https://www.youtube.com/watch?v=macM_MtS_w4', note: 'The self-reference proof from this lesson, drawn out step by step.' },
+  ],
+  'theory-complexity': [
+    { type: 'video', title: 'Up and Atom — P vs NP', url: 'https://www.youtube.com/watch?v=EHp4FPyajKQ', note: 'The clearest gentle intro to the million-dollar question.' },
+    { type: 'book', title: 'The Golden Ticket — Lance Fortnow', url: 'https://goldenticket.fortnow.com', note: 'A whole popular-science book on P vs NP and what P=NP would mean.' },
+  ],
+  'sec-threats': [
+    { type: 'video', title: 'Computerphile — security interviews (Mirai etc.)', url: 'https://www.youtube.com/playlist?list=PLzH6n4zXuckpfMu_4Ff8E7Z1behQks5ba', note: 'Real attacks dissected — botnets, injections, social engineering.' },
+    { type: 'article', title: 'OWASP Top 10', url: 'https://owasp.org/www-project-top-ten/', note: 'The canonical list of what actually gets systems breached.' },
+  ],
+  'sec-crypto': [
+    { type: 'video', title: 'Computerphile — Public key cryptography', url: 'https://www.youtube.com/watch?v=GSIDS_lvRv4', note: 'The padlock/key intuition made rigorous.' },
+    { type: 'interactive', title: 'CryptoHack', url: 'https://cryptohack.org', note: 'Learn crypto by breaking it — free capture-the-flag puzzles.' },
+  ],
+  'sec-systems': [
+    { type: 'article', title: 'NIST IoT security guidance', url: 'https://www.nist.gov/itl/applied-cybersecurity/nist-cybersecurity-iot-program', note: 'What “secure networked device” officially means — skim the core baseline.' },
+    { type: 'video', title: 'Computerphile — Secure boot & trust', url: 'https://www.youtube.com/watch?v=0FVUKVwWSNs', note: 'Chains of trust from hardware upward.' },
+  ],
   'ai-search': [
     { type: 'video', title: 'Sebastian Lague — A* and beyond (Coding Adventures)', url: 'https://www.youtube.com/watch?v=-L-WgKMFuhE', note: 'Watch state-space search come alive with gorgeous visuals.' },
     { type: 'course', title: 'CS50 AI — Search (lecture 0)', url: 'https://cs50.harvard.edu/ai/', note: 'Harvard’s free AI course opens with exactly this lesson: search, minimax, heuristics.' },
@@ -823,8 +898,8 @@ export const domainLabels: { id: string; title: string; x: number; y: number }[]
   { id: 'label-theory', title: 'Theory of Computation', x: 720, y: 430 },
   { id: 'label-ai', title: 'AI & Machine Learning', x: 720, y: 860 },
   { id: 'label-sec', title: 'Security & Crypto', x: 720, y: 1290 },
-  { id: 'label-hist', title: 'History of Science & Tech · coming soon', x: 1080, y: 0 },
-  { id: 'label-chem', title: 'Chemistry · coming soon', x: 1080, y: 430 },
+  { id: 'label-hist', title: 'History of Science & Tech', x: 1080, y: 0 },
+  { id: 'label-chem', title: 'Chemistry', x: 1080, y: 430 },
 ]
 
 export const XP_PER_NODE = 100

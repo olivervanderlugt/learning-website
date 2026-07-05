@@ -69,7 +69,7 @@ The graph is a solid skeleton, NOT yet a bachelor's. To get there, per domain: ~
 5. The rest of CS breadth
 Missing domains to add eventually: electromagnetism, signals & systems, mechanical design/CAD, software engineering practice (git, testing), business/entrepreneurship track for the startup.
 
-## Playable lessons so far (32 nodes — 9 domains COMPLETE)
+## Playable lessons so far (47 nodes — ALL 14 domains COMPLETE)
 - How Computers Work: bits, gates, adder, cpu, hcw-exam (module exam).
 - Math: math-linalg (vector playground), math-calculus (slope/derivative explorer), math-prob (law-of-large-numbers coin sim).
 - Programming: prog-variables (live code runner).
@@ -83,7 +83,12 @@ COMPLETE domains (all nodes have lessons): How Computers Work, Programming, Math
 - Chemistry (COMPLETE): chem-atoms (atom-builder game) → chem-reactions → chem-materials (prereq chain). Subject color teal.
 - Algorithms (COMPLETE): algo-bigo (big-o-race game + code screens) → algo-structures (3 code screens) → algo-graphs (pathfinder-sim game: BFS vs A* on a wall-drawing grid; verified BFS explores ~80 cells vs A* ~11 for the same shortest path).
 - AI & ML (COMPLETE): ai-search (state-space planning, no game — predict-rich), ai-learning (gradient-descent game: converge/diverge/precision challenges on L(x)=x²), ai-neural (neural-playground game: perceptron sliders separate clusters, then hit the XOR wall — the give-up button IS the win, reveals hidden-layer fix).
-REMAINING domains needing lessons (15 nodes): os, networks, databases, theory, security.
+- OS (COMPLETE): os-processes (round-robin code screen), os-memory (page-table translation code screen), os-io (polling vs interrupts, predict-rich).
+- Networks (COMPLETE): net-stack (envelope-wrapping code screen), net-packets (routing/TTL/head-of-line predicts), net-protocols (HTTP vs MQTT pub/sub — mirrors the polling/interrupt pattern).
+- Databases (COMPLETE): db-relational (foreign-key lookup code screen), db-sql (SELECT/WHERE + JOIN as loops, 2 code screens), db-transactions (indexes + ACID + lost-update race).
+- Theory (COMPLETE): theory-fsm (fsm-lab game: drive a 4-state robot behavior FSM, incl. proving ignored events do nothing), theory-turing (halting problem, ties to the code-runner's 2s timeout), theory-complexity (P vs NP, ties to crypto + ai-search).
+- Security (COMPLETE): sec-threats (threat models, Mirai, weakest link), sec-crypto (Caesar code screen → key space → public keys), sec-systems (least privilege, signed updates, secure boot).
+ALL code-screen expected outputs are Node-verified (run the completed solution, compare to `expected`) — do this for every new code screen.
 The full vertical slice Physics → Robotics → tuned PID controller is playable. robo-control unlocks once robo-sensing + phys-forces are mastered (chain: phys-forces + phys-electricity → robo-sensing → robo-control).
 Games live in src/components/games/, all implement `{ onComplete(score) }`.
 - PID sim (PidSim.tsx): simulation is deterministic; constants (STEPS=400, DRAG=0.8, GRAVITY=2.5, TOL=0.5) were numerically tuned so P-only and PI-without-D FAIL but P≈4/I≈2/D≈4 settles — verify any change to these still leaves it winnable (quick node script simulating the loop).
@@ -96,15 +101,15 @@ Gotchas learned:
 - Light mode: never use `text-white` in games — use `text-slate-100` (the html.light block reverses the slate ramp, white stays white on light cards). Older games (ProbabilitySim etc.) still violate this; fix opportunistically.
 
 ## Next (resume here)
-STATE as of last session: 32 playable lessons; 9 domains COMPLETE (+ Algorithms, AI & ML). All committed on `main`, working tree clean, build green, content validator clean, all new games browser-verified winnable. Quiz/predict option shuffling added app-wide.
+STATE as of last session: 47 playable lessons; ALL 14 domains COMPLETE — full breadth reached. All committed on `main`, working tree clean, build green, content validator clean, all 7 new games browser-verified winnable, all code screens Node-verified. Quiz/predict option shuffling added app-wide.
 
 To restart the dev server: `export PATH="$HOME/.local/node/bin:$PATH"` then `cd ~/Claude/Projects/"Learning website"` then `npm run dev` → open the printed http://localhost:5173.
 
-Priority queue for next lessons (each = one lesson file + optional game + registry lines + hasLesson flag; then `npm run build` + check the browser console for `[content-validation] ✓`):
-1. OS (os-processes, os-memory, os-io) — os-io is high robotics value (interrupts vs polling).
-2. Networks (net-stack, net-ip, net-protocols) — net-protocols covers MQTT, directly robotics-relevant.
-3. Databases (db-tables, db-sql, db-transactions), Theory (theory-automata…), Security last.
-4. Consider a module exam node per completed domain (like hcw-exam) — History, Chemistry, Algorithms, AI/ML all lack one.
+Breadth is DONE. Next priorities (Stage 1+ of the bachelor-depth roadmap):
+1. Module exams per domain (like hcw-exam: FRESH mixed retrieval questions, prereqs = all domain nodes, isExam: true) — History, Chemistry, Algorithms, AI/ML, OS, Networks, Databases, Theory, Security all lack one. Highest learning-science value per effort.
+2. Spaced repetition: resurface mastered nodes' extraPractice after N days (needs a lastMastered timestamp in Progress).
+3. Deepen high-value nodes toward bachelor rigor (calculus limits/chain rule, linalg determinants/eigen, prob distributions/Bayes as full lessons).
+4. Deploy to Vercel (manual steps above) for a permanent/mobile URL.
 
 Bigger arc (see "Roadmap to bachelor depth" above): after breadth, deepen each node (Stage 1) → rigor/proofs (Stage 2) → labs/projects (Stage 3) → spaced-repetition retention (Stage 4) → cross-domain capstones + business track (Stage 5).
 

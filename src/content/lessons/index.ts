@@ -31,6 +31,21 @@ import { algoGraphsLesson } from './algo-graphs'
 import { aiSearchLesson } from './ai-search'
 import { aiLearningLesson } from './ai-learning'
 import { aiNeuralLesson } from './ai-neural'
+import { osProcessesLesson } from './os-processes'
+import { osMemoryLesson } from './os-memory'
+import { osIoLesson } from './os-io'
+import { netStackLesson } from './net-stack'
+import { netPacketsLesson } from './net-packets'
+import { netProtocolsLesson } from './net-protocols'
+import { dbRelationalLesson } from './db-relational'
+import { dbSqlLesson } from './db-sql'
+import { dbTransactionsLesson } from './db-transactions'
+import { theoryFsmLesson } from './theory-fsm'
+import { theoryTuringLesson } from './theory-turing'
+import { theoryComplexityLesson } from './theory-complexity'
+import { secThreatsLesson } from './sec-threats'
+import { secCryptoLesson } from './sec-crypto'
+import { secSystemsLesson } from './sec-systems'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -65,4 +80,19 @@ export const lessons: Record<string, Lesson> = {
   'ai-search': aiSearchLesson,
   'ai-learning': aiLearningLesson,
   'ai-neural': aiNeuralLesson,
+  'os-processes': osProcessesLesson,
+  'os-memory': osMemoryLesson,
+  'os-io': osIoLesson,
+  'net-stack': netStackLesson,
+  'net-packets': netPacketsLesson,
+  'net-protocols': netProtocolsLesson,
+  'db-relational': dbRelationalLesson,
+  'db-sql': dbSqlLesson,
+  'db-transactions': dbTransactionsLesson,
+  'theory-fsm': theoryFsmLesson,
+  'theory-turing': theoryTuringLesson,
+  'theory-complexity': theoryComplexityLesson,
+  'sec-threats': secThreatsLesson,
+  'sec-crypto': secCryptoLesson,
+  'sec-systems': secSystemsLesson,
 }
