@@ -81,31 +81,40 @@ export type SkillFlowNode = Node<SkillNodeData, 'skill'>
 
 export function SkillNode({ data, selected }: NodeProps<SkillFlowNode>) {
   const s = subjectStyles[data.subject]
-  const locked = data.status === 'locked'
+  const later = data.status === 'later'
+  const known = data.status === 'known'
   const mastered = data.status === 'mastered'
 
   return (
     <div
       className={[
         'w-48 rounded-xl border-2 px-3 py-2.5 transition-all duration-200',
-        locked
+        later
           ? 'border-slate-700 bg-slate-900/80 opacity-60'
-          : `${s.border} bg-slate-900 ${data.status === 'available' && data.hasLesson ? s.glow : ''}`,
+          : `${s.border} bg-slate-900 ${known ? 'border-dashed' : ''} ${data.status === 'available' && data.hasLesson ? s.glow : ''}`,
         selected ? 'ring-2 ring-white/60' : mastered && data.due ? 'ring-2 ring-amber-400/70' : '',
         'cursor-pointer hover:opacity-100',
       ].join(' ')}
-      title={mastered && data.due ? 'Due for review — re-pass the quiz to keep it fresh' : undefined}
+      title={
+        mastered && data.due
+          ? 'Due for review — re-pass the quiz to keep it fresh'
+          : later
+            ? 'Playable now — but we suggest its prerequisites first'
+            : known
+              ? 'Marked as already known (no XP) — take the quiz anytime to truly master it'
+              : undefined
+      }
     >
       <Handle type="target" position={Position.Top} className="!bg-slate-600 !border-0 !h-1.5 !w-1.5" />
       <div className="flex items-start gap-2">
         <span className="mt-0.5 text-sm leading-none">
-          {mastered ? (data.due ? '🔁' : '✅') : locked ? '🔒' : data.isExam ? '🏅' : data.hasLesson ? '▶️' : '✨'}
+          {mastered ? (data.due ? '🔁' : '✅') : known ? '⏩' : later ? '🕒' : data.isExam ? '🏅' : data.hasLesson ? '▶️' : '✨'}
         </span>
         <div className="min-w-0">
-          <div className={`text-[13px] font-semibold leading-tight ${locked ? 'text-slate-400' : 'text-slate-100'}`}>
+          <div className={`text-[13px] font-semibold leading-tight ${later ? 'text-slate-400' : 'text-slate-100'}`}>
             {data.title}
           </div>
-          <div className={`mt-1 inline-block rounded px-1.5 py-0.5 text-[10px] font-medium ${locked ? 'bg-slate-800 text-slate-500' : s.badge}`}>
+          <div className={`mt-1 inline-block rounded px-1.5 py-0.5 text-[10px] font-medium ${later ? 'bg-slate-800 text-slate-500' : s.badge}`}>
             {subjectNames[data.subject]}
           </div>
         </div>

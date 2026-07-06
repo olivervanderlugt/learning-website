@@ -105,6 +105,7 @@ export default function SkillTreeView() {
 
 function SkillTreeInner() {
   const masteredNodeIds = useStore((s) => s.masteredNodeIds)
+  const knownNodeIds = useStore((s) => s.knownNodeIds)
   const reviews = useStore((s) => s.reviews)
   const openLesson = useStore((s) => s.openLesson)
   const theme = useStore((s) => s.theme)
@@ -125,7 +126,7 @@ function SkillTreeInner() {
       data: {
         title: n.title,
         subject: n.subject,
-        status: nodeStatus(n.id, n.prereqIds, masteredNodeIds),
+        status: nodeStatus(n.id, n.prereqIds, masteredNodeIds, knownNodeIds),
         hasLesson: !!n.hasLesson,
         isExam: !!n.isExam,
         due: due.has(n.id),
@@ -147,7 +148,7 @@ function SkillTreeInner() {
       hidden: !isVisible(labelSubject[l.id] ?? 'cs'),
     }))
     return [...skillNodes, ...labels]
-  }, [masteredNodeIds, reviews, activeSubjects])
+  }, [masteredNodeIds, knownNodeIds, reviews, activeSubjects])
 
   /** Nodes filtered out — their edges are hidden too. */
   const hiddenNodeIds = useMemo(
@@ -230,8 +231,8 @@ function SkillTreeInner() {
           nodeColor={(n) => {
             const kn = nodeById.get(n.id)
             if (!kn) return 'transparent'
-            const st = nodeStatus(kn.id, kn.prereqIds, masteredNodeIds)
-            return st === 'locked' ? '#1e293b' : subjectHex[kn.subject]
+            const st = nodeStatus(kn.id, kn.prereqIds, masteredNodeIds, knownNodeIds)
+            return st === 'later' ? '#1e293b' : subjectHex[kn.subject]
           }}
           nodeStrokeWidth={0}
         />
@@ -312,8 +313,11 @@ function DetailPanel({
   onClose: () => void
 }) {
   const masteredNodeIds = useStore((s) => s.masteredNodeIds)
+  const knownNodeIds = useStore((s) => s.knownNodeIds)
+  const markKnown = useStore((s) => s.markKnown)
+  const unmarkKnown = useStore((s) => s.unmarkKnown)
   const quizScores = useStore((s) => s.quizScores)
-  const status = nodeStatus(node.id, node.prereqIds, masteredNodeIds)
+  const status = nodeStatus(node.id, node.prereqIds, masteredNodeIds, knownNodeIds)
   const s = subjectStyles[node.subject]
 
   return (
@@ -338,14 +342,39 @@ function DetailPanel({
 
       {node.prereqIds.length > 0 && (
         <div className="mt-4">
-          <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Requires</div>
+          <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            Suggested first
+          </div>
           <ul className="mt-1.5 space-y-1">
             {node.prereqIds.map((p) => {
               const pre = nodeById.get(p)
               const done = masteredNodeIds.includes(p)
+              const skipped = knownNodeIds.includes(p)
               return (
-                <li key={p} className={`text-sm ${done ? 'text-slate-300' : 'text-slate-500'}`}>
-                  {done ? '✅' : '🔒'} {pre?.title ?? p}
+                <li
+                  key={p}
+                  className={`flex items-center justify-between gap-2 text-sm ${done || skipped ? 'text-slate-300' : 'text-slate-500'}`}
+                >
+                  <span className="min-w-0 truncate">
+                    {done ? '✅' : skipped ? '⏩' : '○'} {pre?.title ?? p}
+                  </span>
+                  {!done && (
+                    <button
+                      onClick={() => (skipped ? unmarkKnown(p) : markKnown(p))}
+                      title={
+                        skipped
+                          ? 'Back to normal — suggest this lesson again'
+                          : 'Skip the suggestion: mark this as something you already know (no XP, reversible)'
+                      }
+                      className={`shrink-0 rounded border px-1.5 py-0.5 text-[10px] ${
+                        skipped
+                          ? 'border-slate-600 text-slate-400 hover:bg-slate-800'
+                          : 'border-slate-700 text-slate-500 hover:border-slate-500 hover:text-slate-300'
+                      }`}
+                    >
+                      {skipped ? '↩ undo' : 'know it'}
+                    </button>
+                  )}
                 </li>
               )
             })}
@@ -385,26 +414,56 @@ function DetailPanel({
       )}
 
       <div className="mt-auto pt-5">
-        {status === 'locked' ? (
-          <div className="rounded-lg bg-slate-800 px-4 py-2.5 text-center text-sm text-slate-400">
-            🔒 Master the prerequisites first
+        {status === 'known' && (
+          <div className="mb-3 flex items-center justify-between gap-2 rounded-lg border border-slate-700 bg-slate-800/60 px-3 py-2">
+            <span className="text-xs text-slate-300">⏩ Marked as already known (no XP)</span>
+            <button
+              onClick={() => unmarkKnown(node.id)}
+              className="shrink-0 rounded border border-slate-600 px-2 py-0.5 text-[11px] text-slate-300 hover:bg-slate-700"
+            >
+              ↩ back to normal
+            </button>
           </div>
-        ) : node.hasLesson ? (
-          <button
-            onClick={onStart}
-            className="w-full rounded-lg bg-cyan-500 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-400 active:scale-[0.98]"
-          >
-            {status === 'mastered'
-              ? node.isExam
-                ? 'Retake exam'
-                : 'Review lesson'
-              : node.isExam
-                ? 'Take the exam →'
-                : 'Start lesson →'}
-          </button>
-        ) : (
+        )}
+        {!node.hasLesson ? (
           <div className="rounded-lg bg-slate-800 px-4 py-2.5 text-center text-sm text-slate-400">
             ✨ Lesson coming soon — use the resources above meanwhile
+          </div>
+        ) : status === 'later' ? (
+          <div className="space-y-2">
+            <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs leading-relaxed text-amber-200">
+              🕒 Nothing is locked — but this builds on the suggested lessons above. Do those first,
+              tap “know it” on any you’ve already got, or dive straight in.
+            </div>
+            <button
+              onClick={onStart}
+              className="w-full rounded-lg border border-slate-600 px-4 py-2.5 text-sm font-bold text-slate-200 transition hover:bg-slate-800 active:scale-[0.98]"
+            >
+              {node.isExam ? 'Take the exam anyway →' : 'Start anyway →'}
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <button
+              onClick={onStart}
+              className="w-full rounded-lg bg-cyan-500 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-400 active:scale-[0.98]"
+            >
+              {status === 'mastered'
+                ? node.isExam
+                  ? 'Retake exam'
+                  : 'Review lesson'
+                : node.isExam
+                  ? 'Take the exam →'
+                  : 'Start lesson →'}
+            </button>
+            {status === 'available' && (
+              <button
+                onClick={() => markKnown(node.id)}
+                className="w-full rounded-lg border border-slate-700 px-4 py-1.5 text-xs text-slate-400 transition hover:border-slate-500 hover:text-slate-200"
+              >
+                ⏩ Too easy? Mark as already known (no XP, reversible)
+              </button>
+            )}
           </div>
         )}
       </div>

@@ -46,8 +46,14 @@ export interface Domain {
   prereqDomainIds: string[]
 }
 
-/** Computed from Progress — never stored on the node. */
-export type NodeStatus = 'locked' | 'available' | 'mastered'
+/**
+ * Computed from Progress — never stored on the node.
+ * Soft gating: nothing is ever locked. 'later' = playable, but prerequisites
+ * aren't satisfied yet so we SUGGEST doing those first. 'known' = the learner
+ * marked it "I already know this" (reversible, no XP) — satisfies downstream
+ * suggestions like mastery does.
+ */
+export type NodeStatus = 'later' | 'available' | 'known' | 'mastered'
 
 // ---------- Lessons ----------
 
@@ -187,6 +193,8 @@ export interface Progress {
   /** `${nodeId}:${screenIndex}` */
   completedScreens: string[]
   masteredNodeIds: string[]
+  /** Nodes marked "I already know this" — count toward suggestions, earn no XP, reversible. */
+  knownNodeIds: string[]
   /** nodeId → best quiz score as fraction 0..1 */
   quizScores: Record<string, number>
   /** nodeId → last screen index reached, so a lesson resumes mid-session. */

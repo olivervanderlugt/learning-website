@@ -29,6 +29,10 @@ interface AppState extends Progress {
   completeScreen: (nodeId: string, screenIndex: number) => void
   recordQuizScore: (nodeId: string, score: number) => void
   masterNode: (nodeId: string, xpGain: number) => void
+  /** Mark "I already know this" — satisfies downstream suggestions, no XP. */
+  markKnown: (nodeId: string) => void
+  /** Undo an "I already know this" mark (back to normal). */
+  unmarkKnown: (nodeId: string) => void
   /** Finish a review: success doubles the interval, failure resets it to the start. */
   completeReview: (nodeId: string, success: boolean) => void
   /** Backfill review schedules for nodes mastered before this feature existed. */
@@ -43,6 +47,7 @@ const initialProgress: Progress = {
   xp: 0,
   completedScreens: [],
   masteredNodeIds: [],
+  knownNodeIds: [],
   quizScores: {},
   lessonProgress: {},
   navStack: [],
@@ -100,6 +105,8 @@ export const useStore = create<AppState>()(
             ? s
             : {
                 masteredNodeIds: [...s.masteredNodeIds, nodeId],
+                // Real mastery supersedes an "I already know this" mark.
+                knownNodeIds: s.knownNodeIds.filter((id) => id !== nodeId),
                 xp: s.xp + xpGain,
                 reviews: {
                   ...s.reviews,
@@ -107,6 +114,16 @@ export const useStore = create<AppState>()(
                 },
               },
         ),
+
+      markKnown: (nodeId) =>
+        set((s) =>
+          s.knownNodeIds.includes(nodeId) || s.masteredNodeIds.includes(nodeId)
+            ? s
+            : { knownNodeIds: [...s.knownNodeIds, nodeId] },
+        ),
+
+      unmarkKnown: (nodeId) =>
+        set((s) => ({ knownNodeIds: s.knownNodeIds.filter((id) => id !== nodeId) })),
 
       completeReview: (nodeId, success) =>
         set((s) => {
@@ -137,6 +154,7 @@ export const useStore = create<AppState>()(
           xp: data.xp ?? 0,
           completedScreens: data.completedScreens ?? [],
           masteredNodeIds: data.masteredNodeIds ?? [],
+          knownNodeIds: data.knownNodeIds ?? [],
           quizScores: data.quizScores ?? {},
           lessonProgress: data.lessonProgress ?? {},
           navStack: [],
@@ -151,6 +169,7 @@ export const useStore = create<AppState>()(
         xp: s.xp,
         completedScreens: s.completedScreens,
         masteredNodeIds: s.masteredNodeIds,
+        knownNodeIds: s.knownNodeIds,
         quizScores: s.quizScores,
         lessonProgress: s.lessonProgress,
         navStack: s.navStack,
@@ -173,12 +192,18 @@ export function dueReviewIds(
   })
 }
 
-/** Node status is computed, never stored. */
+/**
+ * Node status is computed, never stored. Soft gating: 'later' nodes are fully
+ * playable — the status only drives what the UI SUGGESTS doing first.
+ */
 export function nodeStatus(
   nodeId: string,
   prereqIds: string[],
   masteredNodeIds: string[],
+  knownNodeIds: string[] = [],
 ): NodeStatus {
   if (masteredNodeIds.includes(nodeId)) return 'mastered'
-  return prereqIds.every((p) => masteredNodeIds.includes(p)) ? 'available' : 'locked'
+  if (knownNodeIds.includes(nodeId)) return 'known'
+  const satisfied = (p: string) => masteredNodeIds.includes(p) || knownNodeIds.includes(p)
+  return prereqIds.every(satisfied) ? 'available' : 'later'
 }

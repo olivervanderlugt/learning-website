@@ -16,6 +16,7 @@ export default function SettingsPanel() {
       xp: s.xp,
       completedScreens: s.completedScreens,
       masteredNodeIds: s.masteredNodeIds,
+      knownNodeIds: s.knownNodeIds,
       quizScores: s.quizScores,
       lessonProgress: s.lessonProgress,
       navStack: s.navStack,

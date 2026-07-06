@@ -223,16 +223,18 @@ function ResultsScreen({
   if (before.current === null) before.current = useStore.getState().masteredNodeIds
   const alreadyMastered = before.current.includes(nodeId)
 
+  // Nodes that just became RECOMMENDED (soft gating — they were always playable).
   const newlyUnlocked = useMemo(() => {
     if (!passed) return []
-    const prior = before.current ?? []
+    const known = useStore.getState().knownNodeIds
+    const prior = new Set([...(before.current ?? []), ...known])
     const after = new Set([...prior, nodeId])
     return curriculum.filter(
       (n) =>
         n.prereqIds.includes(nodeId) &&
         !after.has(n.id) &&
         n.prereqIds.every((p) => after.has(p)) &&
-        !n.prereqIds.every((p) => prior.includes(p)),
+        !n.prereqIds.every((p) => prior.has(p)),
     )
   }, [passed, nodeId])
 
@@ -288,7 +290,7 @@ function ResultsScreen({
             </p>
             {newlyUnlocked.length > 0 && (
               <div className="mt-5 space-y-2">
-                <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Unlocked</p>
+                <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Up next on your path</p>
                 {newlyUnlocked.map((n, i) => (
                   <motion.div
                     key={n.id}
