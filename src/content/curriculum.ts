@@ -322,8 +322,8 @@ export const nodes: KnowledgeNode[] = [
       'math-calculus-2',
       'math-calculus-3',
     ],
-    x: 900,
-    y: 600,
+    x: 800,
+    y: 780,
     hasLesson: true,
     isExam: true,
   },
@@ -652,6 +652,36 @@ export const nodes: KnowledgeNode[] = [
     y: 880,
     hasLesson: true,
   },
+  // Depth chain (Stage 1): robo-control deepens into a 3-lesson column,
+  // offset left (x1440) so the long robo-kinematics→robo-exam edge clears it.
+  {
+    id: 'robo-control-2',
+    title: 'Tuning PID: Reading the Response',
+    subject: 'robotics',
+    domainId: 'robotics-bridge',
+    description:
+      'The step response and its four numbers — rise time, overshoot, settling time, steady-state error — and the symptom→gain table engineers use to tune real controllers.',
+    whyItMatters:
+      'Every robot you ever ship will be tuned by staring at this exact curve and knowing which knob its shape is pointing at.',
+    prereqIds: ['robo-control'],
+    x: 1400,
+    y: 1060,
+    hasLesson: true,
+  },
+  {
+    id: 'robo-control-3',
+    title: 'Beyond PID: Feedforward & State Space',
+    subject: 'robotics',
+    domainId: 'robotics-bridge',
+    description:
+      'Feedback’s blind spot and the model-based fix: feedforward, the state vector, x′ = A·x + B·u, full-state feedback u = −K·x, and why estimating the state (Kalman) is Bayes’ rule on vectors.',
+    whyItMatters:
+      'This is the doorway from hobby PID to the control theory that flies rockets, balances Segways and runs every serious robot startup.',
+    prereqIds: ['robo-control-2'],
+    x: 1440,
+    y: 1240,
+    hasLesson: true,
+  },
   {
     id: 'robo-embedded',
     title: 'Embedded Systems & Microcontrollers',
@@ -675,7 +705,7 @@ export const nodes: KnowledgeNode[] = [
       'Forward kinematics: from joint angles to hand position. Inverse kinematics: the (harder) reverse. Chains of rotations and translations — matrices in action.',
     whyItMatters:
       'Every pick-and-place robot solves inverse kinematics dozens of times per second just to reach for an object.',
-    prereqIds: ['math-linalg', 'robo-sensing'],
+    prereqIds: ['math-linalg-3', 'robo-sensing'],
     x: 2000,
     y: 880,
     hasLesson: true,
@@ -700,12 +730,20 @@ export const nodes: KnowledgeNode[] = [
     subject: 'robotics',
     domainId: 'robotics-bridge',
     description:
-      'Ten fresh questions across sensing, control, kinematics, embedded systems and ROS — the capstone check on the whole bridge. 80% to pass.',
+      'Fourteen fresh questions across sensing, control & tuning, state space, kinematics, embedded systems and ROS — the capstone check on the whole bridge. 80% to pass.',
     whyItMatters:
       'This module is where every other subject converges into an actual robot — passing it from memory means the convergence happened in your head too.',
-    prereqIds: ['robo-sensing', 'robo-control', 'robo-kinematics', 'robo-embedded', 'robo-ros'],
-    x: 1520,
-    y: 1300,
+    prereqIds: [
+      'robo-sensing',
+      'robo-control',
+      'robo-control-2',
+      'robo-control-3',
+      'robo-kinematics',
+      'robo-embedded',
+      'robo-ros',
+    ],
+    x: 2120,
+    y: 1400,
     hasLesson: true,
     isExam: true,
   },
@@ -1130,6 +1168,14 @@ const resourcesByNode: Record<string, Resource[]> = {
   'robo-control': [
     { type: 'video', title: 'Brian Douglas — Understanding PID (MATLAB)', url: 'https://www.youtube.com/watch?v=wkfEZmsQqiA', note: 'The classic PID explanation every robotics engineer has watched.' },
     { type: 'video', title: 'Brian Douglas — Control systems channel', url: 'https://www.youtube.com/user/ControlLectures', note: 'A whole free control-theory education, one animation at a time.' },
+  ],
+  'robo-control-2': [
+    { type: 'video', title: 'MATLAB Tech Talks — Understanding PID Control (series)', url: 'https://www.mathworks.com/videos/series/understanding-pid-control.html', note: 'Parts 2–3 cover exactly this lesson: reading responses and the tuning trade-offs, beautifully animated.' },
+    { type: 'article', title: 'Ziegler–Nichols method (Wikipedia)', url: 'https://en.wikipedia.org/wiki/Ziegler%E2%80%93Nichols_method', note: 'The 1942 recipe from the deeper-dive, with its full tuning table.' },
+  ],
+  'robo-control-3': [
+    { type: 'video', title: 'MATLAB Tech Talks — State Space (series)', url: 'https://www.mathworks.com/videos/series/state-space.html', note: 'Brian Douglas takes x′ = Ax + Bu from this lesson’s sketch to full working control.' },
+    { type: 'article', title: 'How a Kalman Filter Works, in Pictures', url: 'https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/', note: 'The legendary illustrated walkthrough of the predict-then-correct dance.' },
   ],
   'robo-embedded': [
     { type: 'video', title: 'Ben Eater — 6502 computer (series)', url: 'https://eater.net/6502', note: 'Build and program a real retro computer — embedded systems from first principles.' },

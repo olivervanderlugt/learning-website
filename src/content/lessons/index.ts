@@ -18,6 +18,8 @@ import { physForcesLesson } from './phys-forces'
 import { physElectricityLesson } from './phys-electricity'
 import { roboSensingLesson } from './robo-sensing'
 import { roboControlLesson } from './robo-control'
+import { roboControl2Lesson } from './robo-control-2'
+import { roboControl3Lesson } from './robo-control-3'
 import { roboKinematicsLesson } from './robo-kinematics'
 import { progFunctionsLesson } from './prog-functions'
 import { progDataLesson } from './prog-data'
@@ -86,6 +88,8 @@ export const lessons: Record<string, Lesson> = {
   'phys-electricity': physElectricityLesson,
   'robo-sensing': roboSensingLesson,
   'robo-control': roboControlLesson,
+  'robo-control-2': roboControl2Lesson,
+  'robo-control-3': roboControl3Lesson,
   'robo-kinematics': roboKinematicsLesson,
   'prog-functions': progFunctionsLesson,
   'prog-data': progDataLesson,

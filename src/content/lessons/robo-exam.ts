@@ -7,7 +7,7 @@ export const roboExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — close the loop',
       body: [
-        'This is the capstone domain — sense, control, kinematics, embedded brains and robot software, tied into one exam. Ten NEW questions, no repeats from the lessons, answered from memory.',
+        'This is the capstone domain — sense, control & tuning, state space, kinematics, embedded brains and robot software, tied into one exam. Fourteen NEW questions, no repeats from the lessons, answered from memory.',
         'Score 80% and the bridge to robotics is sealed. Miss it? Costs nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -189,6 +189,78 @@ export const roboExamLesson: Lesson = {
         'Direct calls are exactly what pub/sub replaces — if the lidar had to call each consumer, every new tool would mean editing sensor code.',
         'Publishers hold no subscriber list in their code — the framework routes messages by topic name, which is why adding listeners is free.',
         'Merging kills the modularity: separate nodes let you swap, test and crash pieces independently — one giant program is what ROS exists to avoid.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A rescue-robot spec demands: reach a commanded arm pose within 0.3 s and NEVER swing past it (the arm works next to casualties). Which two step-response numbers does the spec constrain?',
+      options: [
+        'Rise time and overshoot',
+        'Settling time and steady-state error',
+        'Loop rate and steady-state error',
+        'Overshoot and steady-state error',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: “within 0.3 s” bounds the rise time; “never swing past” demands (near-)zero overshoot. Spec language maps straight onto response metrics.',
+        'Settling and final accuracy matter too, but the two quoted requirements are speed-to-target (rise time) and no-swing-past (overshoot).',
+        'Loop rate is an implementation choice, not a response metric — the spec constrains the visible behavior, not the code.',
+        'Overshoot yes — but the 0.3 s requirement is about how FAST the arm approaches, which is rise time, not the final leftover gap.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A delivery drone’s weight is known to the gram. The BEST way to handle gravity is…',
+      options: [
+        'Feedforward the exact hover thrust from the model, and let feedback trim the leftovers',
+        'A large integral gain, to accumulate the droop away quickly',
+        'A large proportional gain, to overpower gravity',
+        'Oversized motors, so gravity becomes negligible',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: a perfectly predictable force is feedforward’s home turf — command it up front with no error needed, and feedback only fights gusts and model error.',
+        'The I term eventually learns the same thrust, but only by integrating real error first — slower, and a big Ki invites overshoot and windup.',
+        'Huge Kp shrinks the droop but never zeroes it (P needs a standing error to produce a standing thrust) — and it buys oscillation on the way.',
+        'Gravity scales with the drone’s own mass — you can’t out-motor it into irrelevance, and the hover would be brutally inefficient.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Two identical drones are both at exactly 5 m altitude, but drone A is climbing and drone B is falling. A controller reading ONLY altitude treats them identically. Which concept names what’s missing?',
+      options: [
+        'The state — the minimal set of variables (here altitude AND vertical speed) that determines the future',
+        'The steady-state error',
+        'The feedforward term',
+        'The loop rate',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: altitude alone is an incomplete state — the two drones share it yet have opposite futures. Add vertical velocity and the future is pinned down; that completeness is what “state” means.',
+        'Steady-state error is the leftover gap after settling — nothing to do with distinguishing rising from falling.',
+        'Feedforward supplies predictable commands from a model; it doesn’t define what information the controller must read.',
+        'A faster loop reads the same incomplete number more often — fresher timestamps on the same blindness.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Your rover’s GPS is noisy — each fix jumps metres around the true spot — yet the navigation stack outputs a smooth, accurate position. What is it almost certainly doing?',
+      options: [
+        'Fusing a motion-model prediction with each noisy fix, weighted by trust — a Kalman-style estimator',
+        'Displaying the raw GPS fixes directly',
+        'Averaging the last 1000 fixes, so the position is minutes old',
+        'Ignoring the GPS and trusting the wheel odometry alone',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: predict with the model, correct with the measurement, weight by uncertainty — the Kalman recipe every real rover runs.',
+        'The raw fixes ARE the jumpy input — a smooth output proves something is filtering between the GPS and the screen.',
+        'A long flat average is smooth but laggy — the rover would be reading its position from minutes in the past while driving.',
+        'Pure dead-reckoning drifts without bound — wheels slip, so model-only navigation degrades within metres. The GPS data must keep coming back in.',
       ],
     },
   ],
