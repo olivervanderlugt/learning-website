@@ -3,6 +3,7 @@ import SkillTreeView from './components/SkillTreeView'
 import LessonPlayer from './components/LessonPlayer'
 import SettingsPanel from './components/SettingsPanel'
 import RoadmapView from './components/RoadmapView'
+import ReviewQueue from './components/ReviewQueue'
 import { useStore } from './store'
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
               ← Map
             </button>
           )}
+          <ReviewQueue />
           <button
             onClick={() => setRoadmapOpen(true)}
             title="Roadmap & coming soon"

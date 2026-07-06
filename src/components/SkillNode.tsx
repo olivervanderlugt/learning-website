@@ -73,6 +73,8 @@ export type SkillNodeData = {
   status: NodeStatus
   hasLesson: boolean
   isExam?: boolean
+  /** Mastered but due for a spaced-repetition review. */
+  due?: boolean
 }
 
 export type SkillFlowNode = Node<SkillNodeData, 'skill'>
@@ -89,14 +91,15 @@ export function SkillNode({ data, selected }: NodeProps<SkillFlowNode>) {
         locked
           ? 'border-slate-700 bg-slate-900/80 opacity-60'
           : `${s.border} bg-slate-900 ${data.status === 'available' && data.hasLesson ? s.glow : ''}`,
-        selected ? 'ring-2 ring-white/60' : '',
+        selected ? 'ring-2 ring-white/60' : mastered && data.due ? 'ring-2 ring-amber-400/70' : '',
         'cursor-pointer hover:opacity-100',
       ].join(' ')}
+      title={mastered && data.due ? 'Due for review — re-pass the quiz to keep it fresh' : undefined}
     >
       <Handle type="target" position={Position.Top} className="!bg-slate-600 !border-0 !h-1.5 !w-1.5" />
       <div className="flex items-start gap-2">
         <span className="mt-0.5 text-sm leading-none">
-          {mastered ? '✅' : locked ? '🔒' : data.isExam ? '🏅' : data.hasLesson ? '▶️' : '✨'}
+          {mastered ? (data.due ? '🔁' : '✅') : locked ? '🔒' : data.isExam ? '🏅' : data.hasLesson ? '▶️' : '✨'}
         </span>
         <div className="min-w-0">
           <div className={`text-[13px] font-semibold leading-tight ${locked ? 'text-slate-400' : 'text-slate-100'}`}>

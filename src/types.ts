@@ -173,6 +173,14 @@ export interface NavEntry {
   screenIndex: number
 }
 
+/** Spaced-repetition state for one mastered node (Stage 4). */
+export interface ReviewState {
+  /** Epoch ms of mastery or the last completed review. */
+  lastSeen: number
+  /** Days until the node is due again (doubles per successful review, resets on a failed retake). */
+  intervalDays: number
+}
+
 export interface Progress {
   version: 1
   xp: number
@@ -185,5 +193,7 @@ export interface Progress {
   lessonProgress: Record<string, number>
   /** Return-stack for interlink detours (jump to a prereq lesson, come back). */
   navStack: NavEntry[]
+  /** nodeId → spaced-repetition schedule; seeded at mastery. */
+  reviews: Record<string, ReviewState>
   theme: Theme
 }

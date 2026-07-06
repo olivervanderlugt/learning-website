@@ -209,6 +209,7 @@ function ResultsScreen({
   const exitLesson = useStore((s) => s.exitLesson)
   const recordQuizScore = useStore((s) => s.recordQuizScore)
   const masterNode = useStore((s) => s.masterNode)
+  const completeReview = useStore((s) => s.completeReview)
   const navStack = useStore((s) => s.navStack)
   const score = total > 0 ? correct / total : 1
   const passed = score >= 0.8
@@ -241,10 +242,23 @@ function ResultsScreen({
     committed.current = true
     recordQuizScore(nodeId, score)
     if (passed) masterNode(nodeId, XP_PER_NODE)
-  }, [nodeId, score, passed, recordQuizScore, masterNode])
+    // Retaking an already-mastered node's quiz IS a spaced-repetition review:
+    // passing pushes the next review out, failing pulls it back to the start.
+    if (alreadyMastered) completeReview(nodeId, passed)
+  }, [nodeId, score, passed, alreadyMastered, recordQuizScore, masterNode, completeReview])
 
   if (practicing && lesson?.extraPractice?.length) {
-    return <ExtraPractice questions={lesson.extraPractice} onDone={() => setPracticing(false)} />
+    return (
+      <ExtraPractice
+        questions={lesson.extraPractice}
+        onExit={() => setPracticing(false)}
+        onFinish={() => {
+          // Finishing the whole pool counts as a successful review too.
+          completeReview(nodeId, true)
+          setPracticing(false)
+        }}
+      />
+    )
   }
 
   const exitLabel = parentTitle ? `↩ Back to “${parentTitle}”` : 'Back to the map'
@@ -334,7 +348,17 @@ function ResultsScreen({
 }
 
 /** Optional extra-practice quiz run (adaptive tempo — not graded, just reinforcement). */
-function ExtraPractice({ questions, onDone }: { questions: QuizQuestion[]; onDone: () => void }) {
+function ExtraPractice({
+  questions,
+  onExit,
+  onFinish,
+}: {
+  questions: QuizQuestion[]
+  /** Bail out early — does NOT count as a completed review. */
+  onExit: () => void
+  /** Reached the end of the pool — counts as a completed review. */
+  onFinish: () => void
+}) {
   const [i, setI] = useState(0)
   const q = questions[i]
   const last = i === questions.length - 1
@@ -344,7 +368,7 @@ function ExtraPractice({ questions, onDone }: { questions: QuizQuestion[]; onDon
         <p className="text-xs font-bold uppercase tracking-wider text-emerald-400">
           Extra practice {i + 1}/{questions.length}
         </p>
-        <button onClick={onDone} className="text-xs text-slate-500 hover:text-slate-300">
+        <button onClick={onExit} className="text-xs text-slate-500 hover:text-slate-300">
           exit practice
         </button>
       </div>
@@ -355,7 +379,7 @@ function ExtraPractice({ questions, onDone }: { questions: QuizQuestion[]; onDon
           questionNumber={i + 1}
           totalQuestions={questions.length}
           onAnswer={() => {}}
-          onDone={() => (last ? onDone() : setI(i + 1))}
+          onDone={() => (last ? onFinish() : setI(i + 1))}
         />
       </div>
     </div>

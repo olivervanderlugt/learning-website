@@ -11,7 +11,7 @@ import {
 import type { Edge, NodeTypes } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import { domains, domainLabels, nodeById, nodes as curriculum } from '../content/curriculum'
-import { useStore, nodeStatus } from '../store'
+import { useStore, nodeStatus, dueReviewIds } from '../store'
 import { SkillNode, DomainLabelNode, subjectStyles, subjectNames } from './SkillNode'
 import type { SkillFlowNode, LabelFlowNode } from './SkillNode'
 import type { KnowledgeNode, Subject } from '../types'
@@ -105,6 +105,7 @@ export default function SkillTreeView() {
 
 function SkillTreeInner() {
   const masteredNodeIds = useStore((s) => s.masteredNodeIds)
+  const reviews = useStore((s) => s.reviews)
   const openLesson = useStore((s) => s.openLesson)
   const theme = useStore((s) => s.theme)
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -116,6 +117,7 @@ function SkillTreeInner() {
   const isVisible = (subj: Subject) => showAll || activeSubjects.has(subj)
 
   const flowNodes = useMemo(() => {
+    const due = new Set(dueReviewIds(reviews, masteredNodeIds))
     const skillNodes: (SkillFlowNode | LabelFlowNode)[] = curriculum.map((n) => ({
       id: n.id,
       type: 'skill' as const,
@@ -126,6 +128,7 @@ function SkillTreeInner() {
         status: nodeStatus(n.id, n.prereqIds, masteredNodeIds),
         hasLesson: !!n.hasLesson,
         isExam: !!n.isExam,
+        due: due.has(n.id),
       },
       width: NODE_W,
       height: NODE_H,
@@ -144,7 +147,7 @@ function SkillTreeInner() {
       hidden: !isVisible(labelSubject[l.id] ?? 'cs'),
     }))
     return [...skillNodes, ...labels]
-  }, [masteredNodeIds, activeSubjects])
+  }, [masteredNodeIds, reviews, activeSubjects])
 
   /** Nodes filtered out — their edges are hidden too. */
   const hiddenNodeIds = useMemo(

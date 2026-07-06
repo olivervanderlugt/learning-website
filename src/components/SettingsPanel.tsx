@@ -19,6 +19,7 @@ export default function SettingsPanel() {
       quizScores: s.quizScores,
       lessonProgress: s.lessonProgress,
       navStack: s.navStack,
+      reviews: s.reviews,
       theme: s.theme,
     }
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })

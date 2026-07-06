@@ -32,10 +32,11 @@ Vite + React + TS · Tailwind v4 (@tailwindcss/vite, no config file) · zustand+
 3. For any new interactive game/sim, browser-verify it actually completes (drive it via preview). For sims with a win condition, also confirm it's WINNABLE (e.g. PID: numeric node script).
 4. Fact-check technical claims by hand (validator can't). All current lessons hand-verified.
 
-## Feature notes (adaptive tempo, interlinking, theming)
+## Feature notes (adaptive tempo, interlinking, theming, spaced repetition)
 - **Interlinking + mid-session save**: any Screen can carry `links: LessonLink[]`. Clicking a link calls `jumpToLesson` (pushes a return entry onto `navStack`, persisted), opens the target lesson; a "↩ return" banner + the results "Back to X" button call `exitLesson` which pops the stack. Lesson position is saved per node in `lessonProgress` (persisted) and resumed on reopen (quiz section restarts fresh to keep scoring whole).
 - **Adaptive tempo**: `ExplainScreen.deeper?: string[]` → "Go deeper" toggle. `Lesson.extraPractice?: QuizQuestion[]` → "Extra practice" button on the results screen (ungraded reinforcement).
 - **Light/dark mode**: `store.theme` toggled in header; App applies `light`/`dark` class to `<html>`. Light mode = `html.light` block in index.css that REVERSES the slate ramp + darkens accent-300 text (Tailwind v4 emits `var(--color-*)`, so this re-themes with zero component edits). React Flow `colorMode` follows theme.
+- **Spaced repetition (Stage 4 MVP)**: `Progress.reviews: Record<nodeId, {lastSeen, intervalDays}>` — seeded at mastery (3 days), interval DOUBLES per successful review (cap 60d), RESETS to 3 on a failed retake. A review = reopening the mastered lesson and re-passing its quiz (ResultsScreen fires `completeReview(nodeId, passed)` when `alreadyMastered`) OR finishing the whole extraPractice pool (early "exit practice" does NOT count — ExtraPractice has separate onExit/onFinish). Due = now ≥ lastSeen + intervalDays (selector `dueReviewIds` in store.ts). UI: amber "🔁 N due" header chip (ReviewQueue.tsx, dropdown → openLesson) + due map nodes swap ✅→🔁 with an amber ring. Legacy blobs (no `reviews` key): zustand shallow-merge defaults to {}, and `seedMissingReviews()` (called on ReviewQueue mount) backfills mastered nodes at lastSeen=now — no persist migration needed. Reviews earn no XP (XP only for mastery). Browser-verified: backdated review → chip+badge appear → replay quiz 5/5 → interval 3→6d, chip clears.
 
 ## Conventions
 - Extend working files; small targeted diffs; one game = one file with `{ onComplete(score) }`.
@@ -128,13 +129,13 @@ Gotchas learned:
 - Light mode: never use `text-white` in games — use `text-slate-100` (the html.light block reverses the slate ramp, white stays white on light cards). Older games (ProbabilitySim etc.) still violate this; fix opportunistically.
 
 ## Next (resume here)
-STATE as of last session: 68 playable nodes; ALL 14 domains COMPLETE + a module exam each; math (linalg/prob/calculus) AND robo-control deepened into 3-lesson mini-course chains. Build green, content validator clean, whole-map ZERO edge/node crossings verified with the geometric checker (except the documented pre-existing prog-data→robo-ros offender, follow-up task spawned), robo-control-2 played end-to-end incl. its live code screen. Committed on `main`.
+STATE as of last session: 68 playable nodes; ALL 14 domains COMPLETE + a module exam each; math (linalg/prob/calculus) AND robo-control deepened into 3-lesson mini-course chains; SPACED REPETITION shipped (due chip + map badges + interval doubling — see Feature notes). Build green, content validator clean, whole-map ZERO edge/node crossings verified with the geometric checker (except the documented pre-existing prog-data→robo-ros offender, follow-up task spawned), robo-control-2 played end-to-end incl. its live code screen, review loop browser-verified. Committed on `main`.
 
 To restart the dev server: `export PATH="$HOME/.local/node/bin:$PATH"` then `cd ~/Claude/Projects/"Learning website"` then `npm run dev` → open the printed http://localhost:5173.
 
-Next priorities (finish Stage 1's depth pass → Stage 4 preview):
+Next priorities:
 1. Deepen **programming** (variables/functions/data each could gain worked-problem depth + bigger extraPractice pools — maybe one depth chain off prog-data, e.g. recursion/algorithms-thinking → debugging/testing). Follow the chain pattern: intro→-2→-3, repoint long downstream corridors to chain bottoms, and RUN THE GEOMETRIC CROSSING CHECKER (see Playable-lessons section) instead of trusting screenshots.
-2. Spaced repetition: resurface mastered nodes' extraPractice after N days (needs a lastMastered timestamp in Progress + a due-review queue on the map).
+2. Spaced repetition → DONE this session (see Feature notes). Possible follow-ups: cumulative cross-domain review exams, gentle mastery-decay visuals on the map, review streak-free stats in Settings.
 3. Deploy to Vercel (manual steps above) for a permanent/mobile URL.
 
 Bigger arc (see "Roadmap to bachelor depth" above): after breadth, deepen each node (Stage 1) → rigor/proofs (Stage 2) → labs/projects (Stage 3) → spaced-repetition retention (Stage 4) → cross-domain capstones + business track (Stage 5).

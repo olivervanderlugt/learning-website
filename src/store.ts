@@ -1,6 +1,13 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { NodeStatus, Progress } from './types'
+import type { NodeStatus, Progress, ReviewState } from './types'
+
+// ---- Spaced repetition (Stage 4) ----
+export const DAY_MS = 24 * 60 * 60 * 1000
+/** First review comes this many days after mastery. */
+export const REVIEW_FIRST_INTERVAL_DAYS = 3
+/** Interval doubles per successful review, up to this cap. */
+export const REVIEW_MAX_INTERVAL_DAYS = 60
 
 interface View {
   name: 'map' | 'lesson'
@@ -22,6 +29,10 @@ interface AppState extends Progress {
   completeScreen: (nodeId: string, screenIndex: number) => void
   recordQuizScore: (nodeId: string, score: number) => void
   masterNode: (nodeId: string, xpGain: number) => void
+  /** Finish a review: success doubles the interval, failure resets it to the start. */
+  completeReview: (nodeId: string, success: boolean) => void
+  /** Backfill review schedules for nodes mastered before this feature existed. */
+  seedMissingReviews: () => void
   toggleTheme: () => void
   resetProgress: () => void
   importProgress: (data: Partial<Progress>) => void
@@ -35,6 +46,7 @@ const initialProgress: Progress = {
   quizScores: {},
   lessonProgress: {},
   navStack: [],
+  reviews: {},
   theme: 'dark',
 }
 
@@ -86,8 +98,34 @@ export const useStore = create<AppState>()(
         set((s) =>
           s.masteredNodeIds.includes(nodeId)
             ? s
-            : { masteredNodeIds: [...s.masteredNodeIds, nodeId], xp: s.xp + xpGain },
+            : {
+                masteredNodeIds: [...s.masteredNodeIds, nodeId],
+                xp: s.xp + xpGain,
+                reviews: {
+                  ...s.reviews,
+                  [nodeId]: { lastSeen: Date.now(), intervalDays: REVIEW_FIRST_INTERVAL_DAYS },
+                },
+              },
         ),
+
+      completeReview: (nodeId, success) =>
+        set((s) => {
+          const prev = s.reviews[nodeId]
+          const intervalDays = success
+            ? Math.min((prev?.intervalDays ?? REVIEW_FIRST_INTERVAL_DAYS) * 2, REVIEW_MAX_INTERVAL_DAYS)
+            : REVIEW_FIRST_INTERVAL_DAYS
+          return { reviews: { ...s.reviews, [nodeId]: { lastSeen: Date.now(), intervalDays } } }
+        }),
+
+      seedMissingReviews: () =>
+        set((s) => {
+          const missing = s.masteredNodeIds.filter((id) => !s.reviews[id])
+          if (missing.length === 0) return s
+          const seeded = { ...s.reviews }
+          for (const id of missing)
+            seeded[id] = { lastSeen: Date.now(), intervalDays: REVIEW_FIRST_INTERVAL_DAYS }
+          return { reviews: seeded }
+        }),
 
       toggleTheme: () => set((s) => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
 
@@ -102,6 +140,7 @@ export const useStore = create<AppState>()(
           quizScores: data.quizScores ?? {},
           lessonProgress: data.lessonProgress ?? {},
           navStack: [],
+          reviews: data.reviews ?? {},
           theme: data.theme ?? s.theme,
         })),
     }),
@@ -115,11 +154,24 @@ export const useStore = create<AppState>()(
         quizScores: s.quizScores,
         lessonProgress: s.lessonProgress,
         navStack: s.navStack,
+        reviews: s.reviews,
         theme: s.theme,
       }),
     },
   ),
 )
+
+/** Mastered nodes whose review is due (computed, never stored). */
+export function dueReviewIds(
+  reviews: Record<string, ReviewState>,
+  masteredNodeIds: string[],
+  now = Date.now(),
+): string[] {
+  return masteredNodeIds.filter((id) => {
+    const r = reviews[id]
+    return r !== undefined && now >= r.lastSeen + r.intervalDays * DAY_MS
+  })
+}
 
 /** Node status is computed, never stored. */
 export function nodeStatus(
