@@ -7,7 +7,7 @@ export const progExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — think like the interpreter',
       body: [
-        'Ten questions across the whole module — variables, loops, functions, arrays — all NEW, no repeats from the lesson quizzes. No code runner this time: trace every snippet in your head, the way the machine would.',
+        'Fourteen questions across the whole module — variables, loops, functions, arrays, recursion, debugging — all NEW, no repeats from the lesson quizzes. No code runner this time: trace every snippet in your head, the way the machine would.',
         'Score 80% and Programming Fundamentals is sealed. Below that costs nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -149,6 +149,71 @@ export const progExamLesson: Lesson = {
         '[2] counts from 1 — natural, but arrays don’t: [2] is the THIRD waypoint. Second means index 1.',
         'That reverses the layers — the array holds objects, not the other way round, so you must pick a waypoint BEFORE you can ask for its x.',
         '[0] overcorrects the off-by-one — index 0 is the FIRST waypoint. Shift everything down by exactly one, not two.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'g(n) = 2 × g(n − 1), with base case g(0) = 1. What is g(3)?',
+      options: ['8', '6', '2', '16'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: g(3) = 2 × g(2) = 2 × 2 × g(1) = 2 × 2 × 2 × g(0) = 8 — three doublings of 1.',
+        '6 is 2 × 3 — you multiplied by n instead of doubling the recursive result.',
+        '2 is just the first doubling — the recursion keeps going until it hits g(0).',
+        '16 would be four doublings (g(4)) — count the steps from 3 down to the base case: exactly three.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Inside a recursive function, why must the base-case check come BEFORE the recursive call, not after it?',
+      options: [
+        'Code after a recursive call only runs once that call returns — a base case placed there can never stop the dive',
+        'It is only a style convention',
+        'Base cases run faster at the top of a function',
+        'The language refuses to compile it otherwise',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: execution reaches the recursive call and dives immediately — anything below waits for the dive to finish. If the stop-check lives below, nothing ever stops the dive in the first place.',
+        'It’s correctness, not style: check-after-call means infinite recursion, because the check is never reached on the way down.',
+        'Position doesn’t change speed — it changes whether the check EVER executes before the next call fires.',
+        'It compiles fine — that’s the danger. The mistake only reveals itself at runtime, as a stack overflow.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'You found the bug and edited one line. What must happen before you call it fixed?',
+      options: [
+        'Re-run the failing case to confirm it passes AND the other tests to confirm nothing else broke',
+        'Nothing — the fix is obvious from reading the code',
+        'Delete the test that was failing',
+        'Rewrite the surrounding code while you are in there',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: a fix is a hypothesis until the failing input passes — and edits can break neighbors, so the rest of the suite must stay green too.',
+        '“Obvious” fixes fail constantly — the same misreading that wrote the bug can misread the fix. Evidence over confidence.',
+        'That silences the alarm instead of putting out the fire — the test is the proof your fix works, and the guard that keeps it working.',
+        'Bundling extra changes destroys your evidence: if something now fails, you can’t tell whether the fix or the “improvements” did it.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'countdown(1000000) with a CORRECT base case still crashes with a stack error, while the loop version runs fine. Why?',
+      options: [
+        'Each unfinished recursive call holds a stack frame — a million frames exhaust the stack; the loop reuses one variable',
+        'The base case is secretly wrong',
+        'Loops can count higher than recursion can',
+        'The computer ran out of disk space',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: correctness isn’t the issue — DEPTH is. A million nested calls means a million frames alive at once; the loop keeps one counter and constant memory.',
+        'The base case is fine — it would stop the recursion at 0. The program dies of memory exhaustion long before arriving there.',
+        'Both can count arbitrarily high — the difference is memory per step: constant for the loop, linear in depth for recursion.',
+        'The call stack lives in RAM and has a fixed size — disk never enters the picture.',
       ],
     },
   ],

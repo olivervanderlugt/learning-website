@@ -142,18 +142,49 @@ export const nodes: KnowledgeNode[] = [
     y: 240,
     hasLesson: true,
   },
+  // Depth chain (Stage 1): programming deepens below-LEFT of prog-data (x360) —
+  // prog-data's east-bound corridors (→db-relational etc.) funnel through
+  // x576-800 in the y400-700 band, so the chain must sit west of them.
+  {
+    id: 'prog-data-2',
+    title: 'Recursion: Functions That Call Themselves',
+    subject: 'cs',
+    domainId: 'programming',
+    description:
+      'The base case, the shrinking recursive case, the dive-and-return rhythm, and the call stack that powers it — including what happens when you forget to stop.',
+    whyItMatters:
+      'Robot planners search branching trees of possible futures — recursion is the shape of code that walks self-similar structure.',
+    prereqIds: ['prog-data'],
+    x: 360,
+    y: 420,
+    hasLesson: true,
+  },
+  {
+    id: 'prog-data-3',
+    title: 'Debugging & Testing: Code You Can Trust',
+    subject: 'cs',
+    domainId: 'programming',
+    description:
+      'Debugging as the scientific method: minimal reproductions, hypotheses, print evidence, bisection — then tests that check edge cases and keep fixed bugs fixed.',
+    whyItMatters:
+      'On a robot a bug can bend metal — professional teams test in simulation first, and this lesson is where that habit starts.',
+    prereqIds: ['prog-data-2'],
+    x: 360,
+    y: 620,
+    hasLesson: true,
+  },
   {
     id: 'prog-exam',
     title: 'Module Exam: Programming',
     subject: 'cs',
     domainId: 'programming',
     description:
-      'Ten fresh questions across variables, control flow, functions and data structures — including code you trace in your head. 80% to pass.',
+      'Fourteen fresh questions across variables, control flow, functions, data structures, recursion and debugging — including code you trace in your head. 80% to pass.',
     whyItMatters:
       'If you can predict what code does without running it, you actually speak the language — that is what this exam checks.',
-    prereqIds: ['prog-variables', 'prog-functions', 'prog-data'],
-    x: 240,
-    y: 400,
+    prereqIds: ['prog-variables', 'prog-functions', 'prog-data', 'prog-data-2', 'prog-data-3'],
+    x: 160,
+    y: 880,
     hasLesson: true,
     isExam: true,
   },
@@ -323,7 +354,7 @@ export const nodes: KnowledgeNode[] = [
       'math-calculus-3',
     ],
     x: 800,
-    y: 780,
+    y: 770,
     hasLesson: true,
     isExam: true,
   },
@@ -397,7 +428,7 @@ export const nodes: KnowledgeNode[] = [
       'How one CPU pretends to run a hundred programs at once by slicing time and switching fast.',
     whyItMatters:
       'A robot reads sensors, plans and drives motors “simultaneously” — that illusion is scheduling.',
-    prereqIds: ['cpu', 'prog-data'],
+    prereqIds: ['cpu', 'prog-data-3'],
     x: 0,
     y: 760,
     hasLesson: true,
@@ -456,9 +487,9 @@ export const nodes: KnowledgeNode[] = [
       'Some solutions stay fast as the problem grows; others explode. Big-O is the language for telling them apart before you build.',
     whyItMatters:
       'A path planner that is O(n²) on map size freezes your robot the moment it leaves the living room.',
-    prereqIds: ['prog-data', 'math-logic'],
-    x: 480,
-    y: 760,
+    prereqIds: ['prog-data-3', 'math-logic'],
+    x: 600,
+    y: 710,
     hasLesson: true,
   },
   {
@@ -472,7 +503,7 @@ export const nodes: KnowledgeNode[] = [
       'A robot’s task queue, sensor buffer and landmark lookup are a stack, a ring buffer and a hash map.',
     prereqIds: ['algo-bigo'],
     x: 720,
-    y: 880,
+    y: 910,
     hasLesson: true,
   },
   {
@@ -515,7 +546,7 @@ export const nodes: KnowledgeNode[] = [
       'Layers upon layers: how a message is wrapped, shipped, and unwrapped as it crosses the world.',
     whyItMatters:
       'Teleoperating a robot means your joystick command survives every one of these layers, twice.',
-    prereqIds: ['prog-data'],
+    prereqIds: ['prog-data-3'],
     x: 0,
     y: 1400,
     hasLesson: true,
@@ -719,7 +750,7 @@ export const nodes: KnowledgeNode[] = [
       'Real robots run dozens of cooperating programs — perception, planning, control — glued together by frameworks like ROS 2 with publish/subscribe messaging.',
     whyItMatters:
       'Your future startup will almost certainly prototype on ROS — it is the lingua franca of modern robotics.',
-    prereqIds: ['robo-embedded', 'prog-data'],
+    prereqIds: ['robo-embedded', 'prog-data-3'],
     x: 1880,
     y: 1180,
     hasLesson: true,
@@ -1086,6 +1117,14 @@ const resourcesByNode: Record<string, Resource[]> = {
   ],
   'prog-variables': [
     { type: 'course', title: 'Harvard CS50x (free)', url: 'https://cs50.harvard.edu/x/', note: 'The world-famous intro-to-programming course — pairs perfectly with this track.' },
+  ],
+  'prog-data-2': [
+    { type: 'interactive', title: 'Python Tutor — visualize the call stack', url: 'https://pythontutor.com', note: 'Paste a recursive function and WATCH the frames stack up and unwind, step by step. Works for JavaScript too.' },
+    { type: 'course', title: 'CS50x — Recursion (week 3)', url: 'https://cs50.harvard.edu/x/', note: 'David Malan’s recursion segment — the pyramid example is a classic.' },
+  ],
+  'prog-data-3': [
+    { type: 'article', title: 'Julia Evans — The Pocket Guide to Debugging', url: 'https://wizardzines.com/zines/debugging-guide/', note: 'The best modern zine on debugging as a systematic skill (sample pages free).' },
+    { type: 'course', title: 'CS50x — Debugging tools', url: 'https://cs50.harvard.edu/x/', note: 'printf debugging, debuggers and rubber ducks, from week 2 onward.' },
   ],
   'os-processes': [
     { type: 'video', title: 'CS50 — Operating Systems concepts', url: 'https://cs50.harvard.edu/x/', note: 'Context for how the OS sits between your code and the hardware.' },

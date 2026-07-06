@@ -23,6 +23,8 @@ import { roboControl3Lesson } from './robo-control-3'
 import { roboKinematicsLesson } from './robo-kinematics'
 import { progFunctionsLesson } from './prog-functions'
 import { progDataLesson } from './prog-data'
+import { progData2Lesson } from './prog-data-2'
+import { progData3Lesson } from './prog-data-3'
 import { mathLogicLesson } from './math-logic'
 import { physEnergyLesson } from './phys-energy'
 import { roboEmbeddedLesson } from './robo-embedded'
@@ -93,6 +95,8 @@ export const lessons: Record<string, Lesson> = {
   'robo-kinematics': roboKinematicsLesson,
   'prog-functions': progFunctionsLesson,
   'prog-data': progDataLesson,
+  'prog-data-2': progData2Lesson,
+  'prog-data-3': progData3Lesson,
   'math-logic': mathLogicLesson,
   'phys-energy': physEnergyLesson,
   'robo-embedded': roboEmbeddedLesson,
