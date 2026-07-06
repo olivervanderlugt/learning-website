@@ -98,8 +98,8 @@ export default function ForceSim({ onComplete }: { onComplete: (score: number) =
       </div>
 
       <div className="mt-3 flex items-center justify-center gap-6 font-mono text-sm">
-        <span className="text-slate-400">a = F/m = <span className="font-bold text-white">{a.toFixed(2)} m/s²</span></span>
-        <span className="text-slate-400">t = <span className="font-bold text-white">{t.toFixed(1)} s</span></span>
+        <span className="text-slate-400">a = F/m = <span className="font-bold text-slate-100">{a.toFixed(2)} m/s²</span></span>
+        <span className="text-slate-400">t = <span className="font-bold text-slate-100">{t.toFixed(1)} s</span></span>
         <span className="text-slate-400">speed = <span className={`font-bold ${solved ? 'text-emerald-300' : 'text-amber-300'}`}>{v.toFixed(2)} m/s</span></span>
       </div>
 

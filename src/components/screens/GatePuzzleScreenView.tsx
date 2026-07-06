@@ -44,7 +44,7 @@ export default function GatePuzzleScreenView({
     <div className="flex h-full flex-col gap-3">
       <div className="flex items-center justify-between gap-4">
         <p className="text-sm text-slate-300">
-          <span className="font-bold text-white">{puzzle.title}:</span> {puzzle.goal}
+          <span className="font-bold text-slate-100">{puzzle.title}:</span> {puzzle.goal}
         </p>
         {solved && (
           <button

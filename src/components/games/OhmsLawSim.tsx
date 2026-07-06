@@ -71,7 +71,7 @@ export default function OhmsLawSim({ onComplete }: { onComplete: (score: number)
 
       <div className="mt-3 flex items-center justify-center gap-6 font-mono text-sm">
         <span className="text-slate-400">I = V/R = <span className={`font-bold ${solved ? 'text-emerald-300' : 'text-cyan-300'}`}>{current.toFixed(2)} A</span></span>
-        <span className="text-slate-400">P = V·I = <span className="font-bold text-white">{power.toFixed(1)} W</span></span>
+        <span className="text-slate-400">P = V·I = <span className="font-bold text-slate-100">{power.toFixed(1)} W</span></span>
       </div>
 
       {solved ? (

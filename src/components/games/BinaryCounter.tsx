@@ -56,7 +56,7 @@ export default function BinaryCounter({ onComplete }: { onComplete: (score: numb
 
       <div className="mt-5 text-center">
         <span className="text-sm text-slate-400">These switches say: </span>
-        <span className="text-3xl font-black tabular-nums text-white">{value}</span>
+        <span className="text-3xl font-black tabular-nums text-slate-100">{value}</span>
       </div>
 
       <div className="mt-4 flex justify-center gap-2">

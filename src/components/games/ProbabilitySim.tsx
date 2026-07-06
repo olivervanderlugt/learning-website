@@ -69,8 +69,8 @@ export default function ProbabilitySim({ onComplete }: { onComplete: (score: num
       </svg>
 
       <div className="mt-3 flex items-center justify-center gap-6 font-mono text-sm">
-        <span className="text-slate-400">flips: <span className="font-bold text-white">{total}</span></span>
-        <span className="text-slate-400">heads: <span className="font-bold text-white">{heads}</span></span>
+        <span className="text-slate-400">flips: <span className="font-bold text-slate-100">{total}</span></span>
+        <span className="text-slate-400">heads: <span className="font-bold text-slate-100">{heads}</span></span>
         <span className="text-slate-400">
           proportion: <span className={`font-bold ${done ? 'text-emerald-300' : 'text-violet-300'}`}>{(prop * 100).toFixed(1)}%</span>
         </span>

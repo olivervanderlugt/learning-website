@@ -12,6 +12,7 @@ import {
 import type { Connection, Edge, Node, NodeProps, NodeTypes, IsValidConnection } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import { motion } from 'motion/react'
+import { useStore } from '../store'
 import type { GateKind, GatePuzzle } from '../types'
 
 // ---------- circuit evaluation ----------
@@ -192,6 +193,7 @@ export default function GateSandbox({
   puzzle: GatePuzzle
   onComplete: (score: number) => void
 }) {
+  const theme = useStore((s) => s.theme)
   const initialNodes = useMemo<GateFlowNode[]>(() => {
     const ins: GateFlowNode[] = puzzle.inputLabels.map((label, i) => ({
       id: `in-${i}`,
@@ -348,10 +350,10 @@ export default function GateSandbox({
             minZoom={0.4}
             maxZoom={1.6}
             proOptions={{ hideAttribution: true }}
-            colorMode="dark"
+            colorMode={theme}
             className="bg-slate-950"
           >
-            <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="#1e293b" />
+            <Background variant={BackgroundVariant.Dots} gap={20} size={1} color={theme === 'light' ? '#cbd5e1' : '#1e293b'} />
           </ReactFlow>
           {solved && (
             <motion.div

@@ -65,7 +65,7 @@ function NumberCheck({
           }}
           onKeyDown={(e) => e.key === 'Enter' && check()}
           placeholder={placeholder}
-          className="w-28 rounded-lg border border-slate-600 bg-slate-950 px-3 py-2 text-center text-lg font-bold text-white outline-none focus:border-cyan-400"
+          className="w-28 rounded-lg border border-slate-600 bg-slate-950 px-3 py-2 text-center text-lg font-bold text-slate-100 outline-none focus:border-cyan-400"
         />
         <button
           onClick={check}
@@ -209,7 +209,7 @@ function IndependentD2B({ onDone }: { onDone: () => void }) {
         ))}
       </div>
       <p className="mt-3 text-center text-sm text-slate-400">
-        Current value: <span className="font-bold text-white">{value}</span>
+        Current value: <span className="font-bold text-slate-100">{value}</span>
       </p>
       {solved && (
         <div className="mt-3 text-center">

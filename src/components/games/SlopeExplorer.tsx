@@ -131,7 +131,7 @@ function Curve({
       </svg>
 
       <div className="mt-2 flex items-center justify-center gap-6 font-mono text-sm">
-        <span className="text-slate-400">x = <span className="font-bold text-white">{x}</span></span>
+        <span className="text-slate-400">x = <span className="font-bold text-slate-100">{x}</span></span>
         <span className="text-slate-400">
           slope = <span className={`font-bold ${solved ? 'text-emerald-300' : 'text-cyan-300'}`}>{slope.toFixed(2)}</span>
         </span>
