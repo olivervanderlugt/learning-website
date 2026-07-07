@@ -143,15 +143,20 @@ Gotchas learned:
 - Quiz/predict options are SHUFFLED at render (QuizScreenView/PredictScreenView useMemo keyed on screen) — authoring with correctIndex 0 everywhere is fine and convenient; the learner never sees a position pattern. Don't "fix" content by varying correctIndex.
 - Light mode: never use `text-white` in games — use `text-slate-100` (the html.light block reverses the slate ramp, white stays white on light cards). Older games (ProbabilitySim etc.) still violate this; fix opportunistically.
 
+## HANDOFF — read this first (written at end of the soft-gating session)
+1. **Cowork research is running IN THIS FOLDER** (bachelor-curriculum gap analysis for the Depth stage: canonical syllabi per domain, gap rankings, problem sources, resource shortlists, suggested build order). When its report appears (expect new .md file(s) in the project root — do NOT confuse them with this file or README), the next session's job is to fold it into the "Stage 1 — structure & backlog" section above: re-rank the backlog, add missing topics as concrete chain entries, and adopt its problem sources into `extraPractice` pools and `resourcesByNode`. Don't start implementing curriculum content before reading the report.
+2. **Engineering breadth — considered recommendation (Ollie asked; Claude agrees, scoped)**: "Engineering" is currently just a subject color on 2 robotics-bridge nodes (robo-embedded, robo-ros) — it looks like a covered subject in the legend/filter but isn't. The intro-level prereqs for real engineering content ALREADY exist (phys-forces→statics, phys-electricity→circuits/transistors, phys-energy→motors, chem-materials→materials), so this does NOT have to wait for later stages — only engineering DEPTH does. For a robotics founder it's the map's biggest blind spot (machines, not just code+science). Plan: AFTER integrating the Cowork research, and after the phys-electricity depth chain (the natural bridge): add an **Electronics & Circuit Design** domain (~3 intro nodes: components&circuits → transistors&op-amps → motor drivers/H-bridge) and a **Mechanical Engineering basics** domain (~3 intro nodes: statics&loads → gears/linkages/mechanisms → materials&making), following the "new subject" checklist in the brainstorm section. Do NOT pad the current 2-node tag with filler before then.
+
 ## Next (resume here)
 STATE as of last session: **Stage 0 (foundations) FINALIZED** — 70 playable nodes, ALL 14 domains complete + a module exam each, light-mode text fixed everywhere, GateSandbox themed, whole-map ZERO edge/node crossings (math checker, incl. the former prog-data→robo-ros offender — fixed via the prog-data-3 repoint). **Stage 1 (depth) STRUCTURED and underway** — see "Stage 1 — structure & backlog" above: chains done for math×3, robo-control and programming; spaced repetition shipped. **Gating switched to SOFT** (suggested order, never locked, reversible "I already know this" — see pedagogy #4 + Feature notes). Build green, validator clean, prog-data-2 + the soft-gating flow browser-verified end-to-end. Committed on `main`.
 
 To restart the dev server: `export PATH="$HOME/.local/node/bin:$PATH"` then `cd ~/Claude/Projects/"Learning website"` then `npm run dev` → open the printed http://localhost:5173.
 
 Next priorities:
-1. Work down the **Stage 1 backlog** (see structure section above) — next up: the phys-forces chain (kinematics equations → energy/momentum problem sets), then robo-kinematics (FK worked problems → IK & workspace).
-2. Deploy to Vercel (manual steps above) for a permanent/mobile URL.
-3. Spaced-repetition follow-ups when bored of content: cumulative cross-domain review exams, gentle mastery-decay visuals.
+1. **Integrate the Cowork research report** into the Stage 1 backlog (see HANDOFF above — wait for/read the report first).
+2. Work down the **Stage 1 backlog** (see structure section above) — next up: the phys-forces chain (kinematics equations → energy/momentum problem sets), then robo-kinematics (FK worked problems → IK & workspace), then phys-electricity (which bridges into the planned Electronics domain — see HANDOFF item 2).
+3. Deploy to Vercel (manual steps above) for a permanent/mobile URL.
+4. Spaced-repetition follow-ups when bored of content: cumulative cross-domain review exams, gentle mastery-decay visuals.
 
 Bigger arc (see "Roadmap to bachelor depth" above): after breadth, deepen each node (Stage 1) → rigor/proofs (Stage 2) → labs/projects (Stage 3) → spaced-repetition retention (Stage 4) → cross-domain capstones + business track (Stage 5).
 
