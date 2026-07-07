@@ -23,17 +23,20 @@ export const domains: Domain[] = [
 //   band 0 (y 0-1100):  foundations — Programming (x0-750), Math (x1120-2430),
 //                       HCW (x2720-3190), Physics (x3500-4570),
 //                       History/Chemistry islands (x4950+).
-//   street S1 (y~1100-1400): sweep lane for prog-data-3→{os,ros} and cpu→os.
-//                       Only math-exam (1500,1560) sits below it, threaded
-//                       between the two vertical math→AI lanes.
+//   street S1 (y~1100-1400): sweep lane for cpu→os and the long honest
+//                       prog-data→{os,net,algo,ros} edges. Only math-exam
+//                       (1500,1560) sits below it, threaded between the two
+//                       vertical math→AI lanes.
 //   band 1 (y 1400-2200): Networks (x0), Algorithms staircase (x620-1310),
 //                       Theory (x1360), Robotics — the convergence cell —
-//                       (x2280-3910), OS (x3960-4430).
+//                       (x2280-3910), OS (x3760-4230, y1300-1800).
 //   band 2 (y 2300-3400): Security (x0), Databases (x300), AI (x1120-1870),
 //                       Robotics estimation chain + exam (bottom-right).
 // KEY structural choice: HCW lives NEXT TO Physics so cpu→robo-sensing is
-// short; the only cross-map corridors are prog-data-3→{os-processes,robo-ros}
-// (both sweep street S1, verified clear in BOTH view tiers).
+// short. Downstream nodes hang off HONEST prereqs (prog-data, not the depth
+// chain bottom prog-data-3 — the 2026-07-07 cleanup), so a few long
+// prog-data→{os,net,algo,ros} edges sweep street S1; OS was lowered to
+// (3900,1300) so cpu→os clears the robotics cell. Verified clear in BOTH tiers.
 // RESERVED SLOTS for queued chains (keep empty; re-run the checker on use):
 //   math-linalg-4/-5  → col x1400, y620/820 (left of linalg col)
 //   math-mv chain     → col x2520, y0-400   (right of calculus col)
@@ -179,7 +182,7 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Robot planners search branching trees of possible futures — recursion is the shape of code that walks self-similar structure.',
     prereqIds: ['prog-data'],
-    x: 300,
+    x: 240,
     y: 620,
     hasLesson: true,
   },
@@ -193,7 +196,7 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'On a robot a bug can bend metal — professional teams test in simulation first, and this lesson is where that habit starts.',
     prereqIds: ['prog-data-2'],
-    x: 300,
+    x: 240,
     y: 820,
     hasLesson: true,
   },
@@ -546,7 +549,7 @@ export const nodes: KnowledgeNode[] = [
     isExam: true,
   },
 
-  // ---- Operating Systems (x3960-4430, band 1, below Physics-right; cpu + prog-data-3 fan in) ----
+  // ---- Operating Systems (x3960-4430, band 1, below Physics-right; cpu + prog-data fan in) ----
   {
     id: 'os-processes',
     title: 'Processes & Scheduling',
@@ -556,9 +559,13 @@ export const nodes: KnowledgeNode[] = [
       'How one CPU pretends to run a hundred programs at once by slicing time and switching fast.',
     whyItMatters:
       'A robot reads sensors, plans and drives motors “simultaneously” — that illusion is scheduling.',
-    prereqIds: ['cpu', 'prog-data-3'],
-    x: 4100,
-    y: 1500,
+    // Honest prereq is the intro-programming endpoint prog-data, NOT the depth
+    // chain bottom prog-data-3 (recursion/debugging aren't needed to grasp
+    // scheduling) — the old -3 pointer was a layout-routing artifact, removed
+    // in the 2026-07-07 cleanup. Essentials view already projected it here.
+    prereqIds: ['cpu', 'prog-data'],
+    x: 3900,
+    y: 1300,
     hasLesson: true,
   },
   {
@@ -571,8 +578,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'When your robot’s vision process crashes, memory isolation is why the motor controller keeps running.',
     prereqIds: ['os-processes'],
-    x: 3960,
-    y: 1700,
+    x: 3760,
+    y: 1500,
     hasLesson: true,
   },
   {
@@ -585,8 +592,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       '“Bumper pressed!” reaching your code in microseconds instead of milliseconds is an interrupt at work.',
     prereqIds: ['os-processes'],
-    x: 4240,
-    y: 1700,
+    x: 4040,
+    y: 1500,
     hasLesson: true,
   },
   {
@@ -599,8 +606,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robot is a dozen processes sharing one small computer — the OS rules you retrieve here are what keep them from trampling each other.',
     prereqIds: ['os-processes', 'os-memory', 'os-io'],
-    x: 4100,
-    y: 1900,
+    x: 4060,
+    y: 1720,
     hasLesson: true,
     isExam: true,
   },
@@ -615,7 +622,7 @@ export const nodes: KnowledgeNode[] = [
       'Some solutions stay fast as the problem grows; others explode. Big-O is the language for telling them apart before you build.',
     whyItMatters:
       'A path planner that is O(n²) on map size freezes your robot the moment it leaves the living room.',
-    prereqIds: ['prog-data-3', 'math-logic'],
+    prereqIds: ['prog-data', 'math-logic'],
     x: 620,
     y: 1500,
     hasLesson: true,
@@ -674,7 +681,7 @@ export const nodes: KnowledgeNode[] = [
       'Layers upon layers: how a message is wrapped, shipped, and unwrapped as it crosses the world.',
     whyItMatters:
       'Teleoperating a robot means your joystick command survives every one of these layers, twice.',
-    prereqIds: ['prog-data-3'],
+    prereqIds: ['prog-data'],
     x: 0,
     y: 1500,
     hasLesson: true,
@@ -950,7 +957,7 @@ export const nodes: KnowledgeNode[] = [
       'Real robots run dozens of cooperating programs — perception, planning, control — glued together by frameworks like ROS 2 with publish/subscribe messaging.',
     whyItMatters:
       'Your future startup will almost certainly prototype on ROS — it is the lingua franca of modern robotics.',
-    prereqIds: ['robo-embedded', 'prog-data-3'],
+    prereqIds: ['robo-embedded', 'prog-data'],
     x: 3820,
     y: 1900,
     hasLesson: true,
@@ -1540,7 +1547,7 @@ export const domainLabels: { id: string; title: string; x: number; y: number }[]
   { id: 'label-prog', title: 'Programming Fundamentals', x: 560, y: -60 },
   { id: 'label-math', title: 'Math for CS & Robotics', x: 1120, y: -60 },
   { id: 'label-phys', title: 'Physics Foundations', x: 3800, y: -60 },
-  { id: 'label-os', title: 'Operating Systems', x: 4100, y: 1440 },
+  { id: 'label-os', title: 'Operating Systems', x: 3900, y: 1240 },
   { id: 'label-algo', title: 'Algorithms & Data Structures', x: 620, y: 1440 },
   { id: 'label-net', title: 'Networks', x: 0, y: 1440 },
   { id: 'label-db', title: 'Databases', x: 300, y: 2640 },
