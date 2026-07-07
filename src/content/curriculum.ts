@@ -815,6 +815,34 @@ export const nodes: KnowledgeNode[] = [
     hasLesson: true,
   },
   {
+    id: 'robo-kinematics-2',
+    title: 'Rotation Matrices & Homogeneous Transforms',
+    subject: 'robotics',
+    domainId: 'robotics-bridge',
+    description:
+      'Orientation IS a matrix; a joint that rotates AND shifts is a homogeneous transform. Chain them and forward kinematics of any arm is one matrix product.',
+    whyItMatters:
+      'Every joint of every robot arm is a transform; chaining them is how the software knows where the gripper is.',
+    prereqIds: ['robo-kinematics'],
+    x: 2260,
+    y: 1020,
+    hasLesson: true,
+  },
+  {
+    id: 'robo-kinematics-3',
+    title: 'The Jacobian, Singularities & Inverse Kinematics',
+    subject: 'robotics',
+    domainId: 'robotics-bridge',
+    description:
+      'The Jacobian maps joint speeds to hand velocity; where its determinant hits zero the arm is singular (gimbal lock). Inverse kinematics iterates the Jacobian to a target.',
+    whyItMatters:
+      'Singularities make real arms lurch and fault; every motion planner is built to see the det(J)→0 cliff coming.',
+    prereqIds: ['robo-kinematics-2'],
+    x: 2260,
+    y: 1200,
+    hasLesson: true,
+  },
+  {
     id: 'robo-ros',
     title: 'Robot Software Stacks (ROS)',
     subject: 'engineering',
@@ -834,7 +862,7 @@ export const nodes: KnowledgeNode[] = [
     subject: 'robotics',
     domainId: 'robotics-bridge',
     description:
-      'Fourteen fresh questions across sensing, control & tuning, state space, kinematics, embedded systems and ROS — the capstone check on the whole bridge. 80% to pass.',
+      'Eighteen fresh questions across sensing, control & tuning, state space, kinematics, transforms, the Jacobian, embedded systems and ROS — the capstone check on the whole bridge. 80% to pass.',
     whyItMatters:
       'This module is where every other subject converges into an actual robot — passing it from memory means the convergence happened in your head too.',
     prereqIds: [
@@ -843,6 +871,8 @@ export const nodes: KnowledgeNode[] = [
       'robo-control-2',
       'robo-control-3',
       'robo-kinematics',
+      'robo-kinematics-2',
+      'robo-kinematics-3',
       'robo-embedded',
       'robo-ros',
     ],
@@ -1305,6 +1335,16 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'video', title: '3Blue1Brown — Differential Equations (phase space & stability)', url: 'https://www.3blue1brown.com/topics/differential-equations', note: 'Phase portraits and the connection to eigenvalues, drawn out beautifully.' },
     { type: 'video', title: '3Blue1Brown — Essence of Linear Algebra (eigenvectors)', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab', note: 'Why eigenvalues are the natural axes of a matrix — the key to reading x′ = A·x.' },
     { type: 'course', title: 'MIT 18.03SC — Systems of ODEs', url: 'https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/', note: 'The matrix-exponential and phase-portrait units, free with solutions.' },
+  ],
+  'robo-kinematics-2': [
+    { type: 'course', title: 'Modern Robotics — Ch. 3 (Rigid-Body Motions)', url: 'https://hades.mech.northwestern.edu/index.php/Modern_Robotics', note: 'Lynch & Park’s free book + lightboard videos: rotations, transforms, the undergrad canon.' },
+    { type: 'interactive', title: 'Ben Eater — Visualizing quaternions/rotations', url: 'https://eater.net/quaternions', note: 'A gorgeous interactive explorable for how 3D rotations actually compose.' },
+    { type: 'video', title: '3Blue1Brown — Linear transformations & matrices', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab', note: 'The "matrix = where the basis vectors land" intuition that makes transforms click.' },
+  ],
+  'robo-kinematics-3': [
+    { type: 'course', title: 'Modern Robotics — Ch. 5 (Velocity Kinematics & the Jacobian)', url: 'https://hades.mech.northwestern.edu/index.php/Modern_Robotics', note: 'The canonical treatment of Jacobians, singularities and manipulability.' },
+    { type: 'article', title: 'Modern Robotics practice exercises (with solutions)', url: 'https://hades.mech.northwestern.edu/images/e/ef/MR_practice_exercises.pdf', note: 'Real problem sets — work the Jacobian and singularity exercises after this lesson.' },
+    { type: 'video', title: 'Brian Douglas — Robotics/control channel', url: 'https://engineeringmedia.com/', note: 'Clear animated intuition for Jacobians and why singularities wreck a controller.' },
   ],
   'robo-control-2': [
     { type: 'video', title: 'MATLAB Tech Talks — Understanding PID Control (series)', url: 'https://www.mathworks.com/videos/series/understanding-pid-control.html', note: 'Parts 2–3 cover exactly this lesson: reading responses and the tuning trade-offs, beautifully animated.' },

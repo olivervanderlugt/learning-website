@@ -7,7 +7,7 @@ export const roboExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — close the loop',
       body: [
-        'This is the capstone domain — sense, control & tuning, state space, kinematics, embedded brains and robot software, tied into one exam. Fourteen NEW questions, no repeats from the lessons, answered from memory.',
+        'This is the capstone domain — sense, control & tuning, state space, kinematics, transforms, the Jacobian, embedded brains and robot software, tied into one exam. Eighteen NEW questions, no repeats from the lessons, answered from memory.',
         'Score 80% and the bridge to robotics is sealed. Miss it? Costs nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -261,6 +261,73 @@ export const roboExamLesson: Lesson = {
         'The raw fixes ARE the jumpy input — a smooth output proves something is filtering between the GPS and the screen.',
         'A long flat average is smooth but laggy — the rover would be reading its position from minutes in the past while driving.',
         'Pure dead-reckoning drifts without bound — wheels slip, so model-only navigation degrades within metres. The GPS data must keep coming back in.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A 2-link arm has equal links L₁ = L₂ = 2, shoulder θ₁ = 0°, elbow θ₂ = 90°. Using x = L₁cosθ₁ + L₂cos(θ₁+θ₂), y = L₁sinθ₁ + L₂sin(θ₁+θ₂), where is the hand?',
+      options: ['(2, 2)', '(4, 0)', '(0, 4)', '(2, 0)'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: x = 2·cos0 + 2·cos90 = 2 + 0 = 2; y = 2·sin0 + 2·sin90 = 0 + 2 = 2. Upper arm reaches out 2, elbow sends the forearm 2 up.',
+        '(4, 0) is the fully-straight pose (θ₂ = 0°); here the elbow is bent 90°, folding the forearm upward.',
+        '(0, 4) would need the shoulder pointing straight up (θ₁ = 90°); here θ₁ = 0°.',
+        '(2, 0) forgets the forearm’s vertical contribution — the bent elbow adds 2 in y.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A robot arm reaches a configuration where the determinant of its Jacobian is zero. What is happening?',
+      options: [
+        'It is at a singularity — instantaneously it cannot move its hand in some direction',
+        'It is in its most dexterous, capable pose',
+        'Its forward kinematics has become undefined',
+        'It has reached maximum motor efficiency',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: det(J) = 0 means J is non-invertible, so a direction of hand motion is momentarily lost — a singularity (the same det = 0 idea as gimbal lock).',
+        'Capability is highest when det(J) is FAR from zero; at zero it is at its worst.',
+        'Forward kinematics (angles → position) always works fine; it is the inverse VELOCITY map that fails here.',
+        'Efficiency is unrelated — near a singularity the motors are asked for impossibly large speeds.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Why does chaining homogeneous transforms (rather than tracking positions by hand) scale to a 6-joint arm?',
+      options: [
+        'Forward kinematics is just the ordered product of each joint’s transform — the same rule for 2 joints or 20',
+        'Because 6 is a special number for robots',
+        'Because it removes the need to know link lengths',
+        'Because the joints can then be solved independently of each other',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: each joint contributes one rotation-plus-translation matrix, and multiplying them in order gives the end-effector pose regardless of joint count.',
+        'Nothing special about 6 — the matrix-product rule works for any number of joints.',
+        'Link lengths live inside the translation part of each transform; they are still essential.',
+        'The joints are coupled through the chain — joint 6’s world pose depends on all the joints before it.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Numerical inverse kinematics (for arms with no closed-form solution) most resembles which technique?',
+      options: [
+        'Gradient descent — iterate using a derivative (the Jacobian) to step joints toward the target',
+        'Bubble sort — repeatedly swap adjacent joints',
+        'Binary search — halve a sorted list of angles',
+        'Hashing — look the answer up in a table',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: IK nudges the joints along the Jacobian to shrink the hand-position error step by step — the same iterate-with-a-derivative idea as gradient descent.',
+        'Sorting swaps values in a list; it has nothing to do with converging on joint angles.',
+        'Binary search needs a sorted 1-D structure; IK explores a continuous multi-joint space via the Jacobian.',
+        'A lookup table can’t cover a continuous space of targets; IK computes the angles on the fly.',
       ],
     },
   ],
