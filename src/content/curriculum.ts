@@ -404,13 +404,60 @@ export const nodes: KnowledgeNode[] = [
     y: 940,
     hasLesson: true,
   },
+  // Multivariable chain (Stage 1, reserved slot x2520 right of the calculus/ODE
+  // column). Intro (math-mv) is tier-0/Essentials; -2/-3 are Depth. Forks off
+  // math-calculus-2 (partials ARE single-var derivatives). Cross-links the arm
+  // Jacobian (robo-kinematics-3), the EKF (robo-estimation-3) and ai-learning
+  // as LINKS not prereqs (avoids long cross-map edges), matching convention.
+  {
+    id: 'math-mv',
+    title: 'Partial Derivatives & the Gradient',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Slopes when a function has many inputs: hold the others still and differentiate one at a time, then stack the partials into the gradient — the vector that points straight uphill.',
+    whyItMatters:
+      'Gradient descent walks downhill on −∇f; this is the multivariable footing every ML model and optimizer stands on.',
+    prereqIds: ['math-calculus-2'],
+    x: 2520,
+    y: 400,
+    hasLesson: true,
+  },
+  {
+    id: 'math-mv-2',
+    title: 'The Multivariable Chain Rule & the Jacobian',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Sum over every path (df/dt = Σ ∂f/∂xᵢ · dxᵢ/dt), then package all the partials of a vector map into the Jacobian matrix — the same object as the arm Jacobian and the EKF linearization.',
+    whyItMatters:
+      'One matrix of partials, three hats: backprop, robot-arm velocity, and sensor-fusion linearization all run on it.',
+    prereqIds: ['math-mv'],
+    x: 2520,
+    y: 600,
+    hasLesson: true,
+  },
+  {
+    id: 'math-mv-3',
+    title: 'Optimization: Critical Points & Lagrange Multipliers',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Where ∇f = 0 (min, max or saddle), the eigenvalue test that tells them apart, constrained optimization via ∇f = λ∇g, and gradient descent watched crawling down a lopsided bowl.',
+    whyItMatters:
+      'Fitting a model, minimizing controller effort, hitting a target on a budget — all are this: optimize a multivariable function, maybe under a constraint.',
+    prereqIds: ['math-mv-2'],
+    x: 2520,
+    y: 800,
+    hasLesson: true,
+  },
   {
     id: 'math-exam',
     title: 'Module Exam: Math',
     subject: 'math',
     domainId: 'math',
     description:
-      'Fresh mixed questions across logic, vectors & matrices, probability, calculus and differential equations — the deeper rules, integrals, determinants, Bayes and stability. From memory. 80% to pass.',
+      'Fresh mixed questions across logic, vectors & matrices, probability, calculus, differential equations and multivariable calculus — the deeper rules, integrals, determinants, Bayes, stability, gradients and Jacobians. From memory. 80% to pass.',
     whyItMatters:
       'Robotics runs on all of these at once; the exam checks they coexist in your head, not just in separate lessons.',
     prereqIds: [
@@ -427,6 +474,9 @@ export const nodes: KnowledgeNode[] = [
       'math-ode',
       'math-ode-2',
       'math-ode-3',
+      'math-mv',
+      'math-mv-2',
+      'math-mv-3',
     ],
     x: 1500,
     y: 1560,
@@ -1444,6 +1494,21 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'video', title: '3Blue1Brown — Differential Equations (phase space & stability)', url: 'https://www.3blue1brown.com/topics/differential-equations', note: 'Phase portraits and the connection to eigenvalues, drawn out beautifully.' },
     { type: 'video', title: '3Blue1Brown — Essence of Linear Algebra (eigenvectors)', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab', note: 'Why eigenvalues are the natural axes of a matrix — the key to reading x′ = A·x.' },
     { type: 'course', title: 'MIT 18.03SC — Systems of ODEs', url: 'https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/', note: 'The matrix-exponential and phase-portrait units, free with solutions.' },
+  ],
+  'math-mv': [
+    { type: 'video', title: '3Blue1Brown — Gradient descent, how neural networks learn', url: 'https://www.youtube.com/watch?v=IHZwWFHWa-w', note: 'The gradient-as-steepest-ascent picture, animated — watch before or after this lesson.' },
+    { type: 'course', title: 'Khan Academy — Multivariable derivatives', url: 'https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives', note: 'Grant Sanderson’s own unit: partials, gradients and the directional derivative, with practice.' },
+    { type: 'course', title: 'MIT 18.02SC — Partial derivatives', url: 'https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/', note: 'The real multivariable-calculus course, free with problem sets and solutions.' },
+  ],
+  'math-mv-2': [
+    { type: 'video', title: '3Blue1Brown — The chain rule & multivariable calculus', url: 'https://www.youtube.com/playlist?list=PLSQl0a2vh4HC5feHa6Rc5c0wbRTx56nF7', note: 'Khan Academy multivariable series (by 3B1B): the chain rule and the Jacobian, visually.' },
+    { type: 'article', title: 'Jacobian matrix (Wikipedia)', url: 'https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant', note: 'Concise reference tying the Jacobian to linearization, area-scaling and the inverse function theorem.' },
+    { type: 'course', title: 'MIT 18.02SC — Chain rule & gradient', url: 'https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/', note: 'The multivariable chain rule unit, free with worked problem sets.' },
+  ],
+  'math-mv-3': [
+    { type: 'video', title: 'Khan Academy — Lagrange multipliers & optimization', url: 'https://www.khanacademy.org/math/multivariable-calculus/applications-of-multivariable-derivatives', note: 'Constrained optimization built up geometrically from tangent contours.' },
+    { type: 'video', title: '3Blue1Brown — Gradient descent revisited', url: 'https://www.youtube.com/watch?v=IHZwWFHWa-w', note: 'Descent as walking downhill on a loss surface — the code screen made visual.' },
+    { type: 'course', title: 'MIT 18.02SC — Lagrange multipliers', url: 'https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/', note: 'The constrained-optimization unit with exams and solutions.' },
   ],
   'robo-kinematics-2': [
     { type: 'course', title: 'Modern Robotics — Ch. 3 (Rigid-Body Motions)', url: 'https://hades.mech.northwestern.edu/index.php/Modern_Robotics', note: 'Lynch & Park’s free book + lightboard videos: rotations, transforms, the undergrad canon.' },

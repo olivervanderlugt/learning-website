@@ -7,7 +7,7 @@ export const mathExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — math that moves robots',
       body: [
-        'Eighteen questions spanning logic, vectors, matrices, probability, calculus and differential equations — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
+        'Twenty-two questions spanning logic, vectors, matrices, probability, calculus, differential equations and multivariable calculus — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
         'Score 80% and the module is sealed. Below that? You lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -285,6 +285,77 @@ export const mathExamLesson: Lesson = {
         'Gaining energy would spiral OUTWARD — inward is the opposite, energy bleeding away.',
         'Perfect energy conservation traces a fixed-radius closed loop, not an inward spiral.',
         'A system at rest is a single point at the origin; a spiral shows it actively moving and settling.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'For f(x, y) = x²y + y, what is the partial derivative ∂f/∂x?',
+      options: [
+        '2xy — hold y frozen; the +y term is constant in x and drops',
+        'x² + 1 — that’s ∂f/∂y, not ∂f/∂x',
+        '2xy + 1 — the +y term shouldn’t contribute to ∂f/∂x',
+        '2x — the frozen y must stay as a multiplier',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: freeze y. ∂/∂x of x²y is 2xy (y is a constant multiplier), and the bare +y term is constant in x, so it vanishes — leaving 2xy.',
+        'x² + 1 is ∂f/∂y (differentiating x²y and y with respect to y) — a different partial.',
+        'The +y term has no x in it, so its x-partial is 0, not 1 — the answer shouldn’t carry a +1.',
+        'Dropping the y multiplier is the classic error: ∂/∂x of x²y keeps the frozen y, giving 2xy, not 2x.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'At a point, a loss surface has gradient ∇L = [3, −4]. In which direction, and how steeply, does the loss increase fastest?',
+      options: [
+        'Along [3, −4], with steepest slope |∇L| = 5',
+        'Along [−3, 4], with slope 5',
+        'Along [3, −4], with slope 7',
+        'Along [4, 3], with slope 5',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the gradient itself points the steepest way UP, and its length √(3² + 4²) = 5 is that maximum slope.',
+        '[−3, 4] is the steepest DECREASE (−∇L); the question asks for the fastest increase.',
+        'The slope is the gradient’s magnitude, √(9 + 16) = 5, not the sum 3 + 4 = 7.',
+        'Swapping the components changes the direction; steepest ascent is along the gradient’s actual components [3, −4].',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A map sends (u, v) to (2u + v, u·v). What is its Jacobian J = [[∂p/∂u, ∂p/∂v], [∂q/∂u, ∂q/∂v]] at the point (u, v) = (1, 1)?',
+      options: [
+        '[[2, 1], [1, 1]]',
+        '[[2, 1], [1, 2]]',
+        '[[1, 1], [2, 1]]',
+        '[[3, 1], [1, 1]]',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: p = 2u + v gives ∂p/∂u = 2, ∂p/∂v = 1; q = u·v gives ∂q/∂u = v = 1, ∂q/∂v = u = 1 at (1, 1). So J = [[2, 1], [1, 1]].',
+        '∂q/∂v = u = 1 at (1, 1), not 2 — the lower-right entry is 1.',
+        'The rows are swapped: row 1 must be p’s partials (2, 1), not q’s.',
+        '∂p/∂u = 2 (from 2u + v), not 3 — the constant coefficient of u is 2.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'You minimize f(x, y) subject to a constraint g(x, y) = 0. Which condition characterizes the constrained optimum?',
+      options: [
+        '∇f = λ∇g — the gradients of objective and constraint are parallel',
+        '∇f = 0 — the free critical point, ignoring the constraint',
+        '∇g = 0 — the constraint’s own gradient must vanish',
+        'f(x, y) = 0 — the objective must be zero there',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: at the constrained optimum f’s contour is tangent to the constraint curve, so ∇f and ∇g point the same way — ∇f = λ∇g (Lagrange).',
+        '∇f = 0 finds the UNCONSTRAINED minimum, which usually violates g = 0.',
+        '∇g = 0 describes the constraint degenerating, not the optimization condition — Lagrange matches f’s gradient to g’s, not sets g’s to zero.',
+        'The objective value f need not be zero at the optimum; Lagrange is about gradient alignment, not function values.',
       ],
     },
   ],
