@@ -79,6 +79,8 @@ import { roboKinematics3Lesson } from './robo-kinematics-3'
 import { roboEstimationLesson } from './robo-estimation'
 import { roboEstimation2Lesson } from './robo-estimation-2'
 import { roboEstimation3Lesson } from './robo-estimation-3'
+import { physElectricity2Lesson } from './phys-electricity-2'
+import { physElectricity3Lesson } from './phys-electricity-3'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -161,4 +163,6 @@ export const lessons: Record<string, Lesson> = {
   'robo-estimation': roboEstimationLesson,
   'robo-estimation-2': roboEstimation2Lesson,
   'robo-estimation-3': roboEstimation3Lesson,
+  'phys-electricity-2': physElectricity2Lesson,
+  'phys-electricity-3': physElectricity3Lesson,
 }

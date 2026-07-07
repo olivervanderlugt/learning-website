@@ -448,6 +448,34 @@ export const nodes: KnowledgeNode[] = [
     hasLesson: true,
   },
   {
+    id: 'phys-electricity-2',
+    title: 'Kirchhoff’s Laws & the Voltage Divider',
+    subject: 'physics',
+    domainId: 'physics',
+    description:
+      'The two laws (KCL, KVL) that solve any circuit, plus the voltage divider and series/parallel rules — how every resistive sensor talks to a microcontroller.',
+    whyItMatters:
+      'Reading a thermistor, potentiometer or photoresistor is a voltage divider; sizing any passive circuit is Kirchhoff.',
+    prereqIds: ['phys-electricity'],
+    x: 1760,
+    y: 320,
+    hasLesson: true,
+  },
+  {
+    id: 'phys-electricity-3',
+    title: 'RC Transients, Induction & the Transistor',
+    subject: 'physics',
+    domainId: 'physics',
+    description:
+      'Capacitors charge on an RC exponential; changing magnetic fields drive motors and encoders (Faraday); transistors switch big loads from tiny signals — the bridge to real electronics.',
+    whyItMatters:
+      'Motor inrush, back-EMF, PWM filtering and the H-bridge that drives your wheels all live here.',
+    prereqIds: ['phys-electricity-2'],
+    x: 1760,
+    y: 500,
+    hasLesson: true,
+  },
+  {
     id: 'phys-forces-2',
     title: 'Kinematics: suvat, Projectiles & Circles',
     subject: 'physics',
@@ -481,10 +509,10 @@ export const nodes: KnowledgeNode[] = [
     subject: 'physics',
     domainId: 'physics',
     description:
-      'Fourteen fresh questions across forces, kinematics, momentum, rotation, energy and circuits — with numbers, units and the classic traps. From memory. 80% to pass.',
+      'Eighteen fresh questions across forces, kinematics, momentum, rotation, energy, Ohm’s law, Kirchhoff, dividers and RC/induction — with numbers, units and the classic traps. From memory. 80% to pass.',
     whyItMatters:
       'Whether your robot climbs the ramp is decided by exactly these equations — better to fail them here than in hardware.',
-    prereqIds: ['phys-forces', 'phys-forces-2', 'phys-forces-3', 'phys-energy', 'phys-electricity'],
+    prereqIds: ['phys-forces', 'phys-forces-2', 'phys-forces-3', 'phys-energy', 'phys-electricity', 'phys-electricity-2', 'phys-electricity-3'],
     x: 2060,
     y: 480,
     hasLesson: true,
@@ -737,7 +765,7 @@ export const nodes: KnowledgeNode[] = [
       'How robots sense the world (encoders, IMUs, lidar) and push back on it (motors, servos) — analog reality meeting your digital bits.',
     whyItMatters:
       'Sense → decide → act is the eternal loop of robotics; this node is the “sense” and “act”.',
-    prereqIds: ['cpu', 'phys-electricity'],
+    prereqIds: ['cpu', 'phys-electricity-3'],
     x: 1760,
     y: 760,
     hasLesson: true,
@@ -1390,6 +1418,16 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'course', title: 'Modern Robotics — Ch. 5 (Velocity Kinematics & the Jacobian)', url: 'https://hades.mech.northwestern.edu/index.php/Modern_Robotics', note: 'The canonical treatment of Jacobians, singularities and manipulability.' },
     { type: 'article', title: 'Modern Robotics practice exercises (with solutions)', url: 'https://hades.mech.northwestern.edu/images/e/ef/MR_practice_exercises.pdf', note: 'Real problem sets — work the Jacobian and singularity exercises after this lesson.' },
     { type: 'video', title: 'Brian Douglas — Robotics/control channel', url: 'https://engineeringmedia.com/', note: 'Clear animated intuition for Jacobians and why singularities wreck a controller.' },
+  ],
+  'phys-electricity-2': [
+    { type: 'interactive', title: 'Falstad CircuitJS (live circuit simulator)', url: 'https://www.falstad.com/circuit/', note: 'Draw a divider or resistor network and watch current and voltage animate — the best way to feel KVL/KCL.' },
+    { type: 'video', title: 'Khan Academy — Circuit analysis', url: 'https://www.khanacademy.org/science/physics/circuits-topic', note: 'Kirchhoff’s laws and dividers worked step by step.' },
+    { type: 'course', title: 'MIT 8.02 — DC circuits', url: 'https://ocw.mit.edu/courses/8-02-physics-ii-electricity-and-magnetism-spring-2007/', note: 'The real course; the problem-solving sessions cover resistor networks in depth.' },
+  ],
+  'phys-electricity-3': [
+    { type: 'video', title: 'Ben Eater — Capacitors, transistors & clocks', url: 'https://eater.net/', note: 'He builds RC timing and transistor switches on breadboards — theory made physical.' },
+    { type: 'interactive', title: 'Falstad CircuitJS — RC & inductors', url: 'https://www.falstad.com/circuit/', note: 'Watch a capacitor charge on its exponential curve and see induction live.' },
+    { type: 'course', title: 'MIT 8.02 — Faraday’s law & induction', url: 'https://ocw.mit.edu/courses/8-02-physics-ii-electricity-and-magnetism-spring-2007/', note: 'Induction, RC/RL circuits and the physics behind motors.' },
   ],
   'robo-estimation': [
     { type: 'article', title: 'How a Kalman filter works, in pictures (bzarg)', url: 'https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/', note: 'THE best first read on Kalman filters — start here, it builds the exact intuition of this lesson.' },

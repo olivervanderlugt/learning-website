@@ -7,7 +7,7 @@ export const physExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — the laws your robot obeys',
       body: [
-        'Fourteen questions spanning forces, kinematics, momentum, rotation, energy and electricity — all NEW scenarios, no repeats from the lesson quizzes. No sims, no notes: pure retrieval from memory.',
+        'Eighteen questions spanning forces, kinematics, momentum, rotation, energy, Ohm’s law, Kirchhoff, dividers and RC/induction — all NEW scenarios, no repeats from the lesson quizzes. No sims, no notes: pure retrieval from memory.',
         'Score 80% and physics is sealed. Fall short? It costs nothing — you’ll see exactly which law slipped, review it, and retake.',
       ],
     },
@@ -216,6 +216,68 @@ export const physExamLesson: Lesson = {
         '15 N·m is off by a factor of 10 — likely misreading 0.3 m as 3 m. τ = 0.3 × 5 = 1.5 N·m.',
         '5.3 N·m comes from ADDING the lever arm and force (0.3 + 5) — torque MULTIPLIES them.',
         '0.06 N·m comes from dividing (0.3 ÷ 5) instead of multiplying — torque is r × F = 1.5 N·m.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A 9 V supply feeds a divider: R₁ = 2 kΩ on top, R₂ = 1 kΩ on the bottom, output tapped across R₂. What is Vout?',
+      options: ['3 V', '6 V', '4.5 V', '9 V'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: Vout = 9 · R₂/(R₁+R₂) = 9 · 1000/3000 = 9 · 1/3 = 3 V.',
+        '6 V is what the TOP resistor R₁ drops (2/3 of 9); the output across R₂ gets the remaining 3 V.',
+        '4.5 V would be the equal-resistor (half) case; here R₁ is twice R₂, so R₂’s share is a third.',
+        '9 V is the full supply — a divider always outputs a fraction of it.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'At a wiring junction, 6 A flows in and one branch carries 4 A out. By Kirchhoff’s current law, what does the other branch carry?',
+      options: ['2 A out', '10 A out', '6 A out', '2 A in'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: KCL — current in (6 A) equals current out, so the second branch carries 6 − 4 = 2 A out.',
+        '10 A adds inflow and outflow; they must BALANCE, not sum — total out equals the 6 A in.',
+        '6 A out would ignore the 4 A already leaving on the first branch — only 2 A remains.',
+        'It flows OUT: the 6 A inflow must exit, and 4 A + 2 A = 6 A accounts for it.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A capacitor charges through a resistor with time constant RC = 3 s. After 3 seconds it is approximately…',
+      options: [
+        '63% charged',
+        '100% charged',
+        '50% charged',
+        '33% charged',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: after exactly one time constant (t = RC), the capacitor reaches Vin·(1 − e⁻¹) ≈ 63% of full.',
+        'Full charge (~99%) takes about five time constants, not one.',
+        '50% is a common guess, but the exponential curve passes 63% at one time constant, not half.',
+        '33% underestimates it — the fast early rise reaches 63% by one RC.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A DC motor is switched on and briefly draws a large current spike before settling lower. What causes the spike to fade?',
+      options: [
+        'As it spins up it generates a back-EMF that opposes the supply, throttling the current',
+        'The battery voltage drops permanently',
+        'The motor’s resistance grows as it warms',
+        'Friction cancels the current',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: a spinning motor acts as a generator, producing a back-EMF that opposes the supply; at startup there’s no spin, so nothing limits the inrush.',
+        'The supply voltage is set by the battery, not by the motor spinning up.',
+        'Warming changes resistance only slightly; the dominant effect is the rising back-EMF from rotation.',
+        'Friction is mechanical — the electrical current is throttled by the induced back-EMF, not friction.',
       ],
     },
   ],
