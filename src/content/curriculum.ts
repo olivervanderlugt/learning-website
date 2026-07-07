@@ -333,12 +333,54 @@ export const nodes: KnowledgeNode[] = [
     hasLesson: true,
   },
   {
+    id: 'math-ode',
+    title: 'Differential Equations: Change Itself',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Equations that relate a quantity to its own rate of change — the math of decay, growth, cooling and discharge, solved by separation of variables.',
+    whyItMatters:
+      'Every physical system a robot touches — a discharging battery, a cooling motor, a settling arm — is described by a differential equation.',
+    prereqIds: ['math-calculus-3'],
+    x: 1420,
+    y: 480,
+    hasLesson: true,
+  },
+  {
+    id: 'math-ode-2',
+    title: 'Second-Order: Oscillators & Damping',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Mass–spring–damper systems: the damping ratio ζ sorts every oscillator into underdamped (rings), critical (fastest clean settle) or overdamped (slow) — the exact math of PID overshoot.',
+    whyItMatters:
+      'A badly tuned arm rings like an underdamped spring; the whole point of tuning Kd is to push ζ toward 1.',
+    prereqIds: ['math-ode'],
+    x: 1360,
+    y: 670,
+    hasLesson: true,
+  },
+  {
+    id: 'math-ode-3',
+    title: 'Systems, Phase Portraits & Stability',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Rewrite an ODE as x′ = A·x, read stability off the eigenvalues of A, and see the whole story as a spiral on a phase portrait — the mathematical heart of state-space control.',
+    whyItMatters:
+      'Control design IS moving A’s eigenvalues into the stable half-plane; this is where the linalg and ODE chains fuse into robotics.',
+    prereqIds: ['math-ode-2'],
+    x: 1380,
+    y: 790,
+    hasLesson: true,
+  },
+  {
     id: 'math-exam',
     title: 'Module Exam: Math',
     subject: 'math',
     domainId: 'math',
     description:
-      'Fresh mixed questions across logic, vectors & matrices, probability and calculus — now including the deeper rules, integrals, determinants and Bayes. From memory. 80% to pass.',
+      'Fresh mixed questions across logic, vectors & matrices, probability, calculus and differential equations — the deeper rules, integrals, determinants, Bayes and stability. From memory. 80% to pass.',
     whyItMatters:
       'Robotics runs on all of these at once; the exam checks they coexist in your head, not just in separate lessons.',
     prereqIds: [
@@ -352,6 +394,9 @@ export const nodes: KnowledgeNode[] = [
       'math-calculus',
       'math-calculus-2',
       'math-calculus-3',
+      'math-ode',
+      'math-ode-2',
+      'math-ode-3',
     ],
     x: 800,
     y: 770,
@@ -1245,6 +1290,21 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'video', title: 'Walter Lewin — 8.01 Rotation Lectures (19–24, 31–32)', url: 'https://www.youtube.com/playlist?list=PLyQSN7X0ro203puVhQsmCj9qhlFQ-As8e', note: 'Torque, moment of inertia and angular momentum, including a live spinning-chair demo.' },
     { type: 'video', title: 'The Mechanical Universe — Conservation of Momentum', url: 'https://www.youtube.com/playlist?list=PL8_xPU5epJddRABXqJ5h5G0dk-XGtA5cZ', note: 'Caltech’s classic series; the momentum and rotation episodes pair perfectly with this lesson.' },
     { type: 'interactive', title: 'PhET — Torque & Rotation sims', url: 'https://phet.colorado.edu/en/simulations/filter?subjects=physics&type=html', note: 'Play with levers, spinning platforms and moment of inertia hands-on.' },
+  ],
+  'math-ode': [
+    { type: 'video', title: '3Blue1Brown — Differential Equations, ch. 1', url: 'https://www.3blue1brown.com/topics/differential-equations', note: 'The clearest visual intro to what a differential equation even is. Start here.' },
+    { type: 'course', title: 'Khan Academy — Differential Equations', url: 'https://www.khanacademy.org/math/differential-equations', note: 'Separable equations and exponential models with unlimited practice.' },
+    { type: 'course', title: 'MIT 18.03SC — Differential Equations', url: 'https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/', note: 'The full free MIT course when you want the real depth — problem sets with solutions.' },
+  ],
+  'math-ode-2': [
+    { type: 'video', title: '3Blue1Brown — Differential Equations (harmonic oscillator)', url: 'https://www.3blue1brown.com/topics/differential-equations', note: 'The mass-spring-damper and why it rings, animated.' },
+    { type: 'interactive', title: 'PhET — Masses & Springs', url: 'https://phet.colorado.edu/en/simulations/masses-and-springs', note: 'Drag the damping slider and watch under/critical/overdamped in real time.' },
+    { type: 'video', title: 'Brian Douglas — Second-order systems & damping', url: 'https://engineeringmedia.com/', note: 'The control-engineer’s take on ζ, ω_n and step response — bridges straight to PID.' },
+  ],
+  'math-ode-3': [
+    { type: 'video', title: '3Blue1Brown — Differential Equations (phase space & stability)', url: 'https://www.3blue1brown.com/topics/differential-equations', note: 'Phase portraits and the connection to eigenvalues, drawn out beautifully.' },
+    { type: 'video', title: '3Blue1Brown — Essence of Linear Algebra (eigenvectors)', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab', note: 'Why eigenvalues are the natural axes of a matrix — the key to reading x′ = A·x.' },
+    { type: 'course', title: 'MIT 18.03SC — Systems of ODEs', url: 'https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/', note: 'The matrix-exponential and phase-portrait units, free with solutions.' },
   ],
   'robo-control-2': [
     { type: 'video', title: 'MATLAB Tech Talks — Understanding PID Control (series)', url: 'https://www.mathworks.com/videos/series/understanding-pid-control.html', note: 'Parts 2–3 cover exactly this lesson: reading responses and the tuning trade-offs, beautifully animated.' },

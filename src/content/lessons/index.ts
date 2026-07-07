@@ -71,6 +71,9 @@ import { histExamLesson } from './hist-exam'
 import { chemExamLesson } from './chem-exam'
 import { physForces2Lesson } from './phys-forces-2'
 import { physForces3Lesson } from './phys-forces-3'
+import { mathOdeLesson } from './math-ode'
+import { mathOde2Lesson } from './math-ode-2'
+import { mathOde3Lesson } from './math-ode-3'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -145,4 +148,7 @@ export const lessons: Record<string, Lesson> = {
   'chem-exam': chemExamLesson,
   'phys-forces-2': physForces2Lesson,
   'phys-forces-3': physForces3Lesson,
+  'math-ode': mathOdeLesson,
+  'math-ode-2': mathOde2Lesson,
+  'math-ode-3': mathOde3Lesson,
 }

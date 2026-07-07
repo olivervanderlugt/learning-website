@@ -7,7 +7,7 @@ export const mathExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — math that moves robots',
       body: [
-        'Fourteen questions spanning logic, vectors, matrices, probability and calculus — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
+        'Eighteen questions spanning logic, vectors, matrices, probability, calculus and differential equations — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
         'Score 80% and the module is sealed. Below that? You lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -218,6 +218,73 @@ export const mathExamLesson: Lesson = {
         '1.0 is the plain average of the outcomes 0, 1, 2 — but expected value WEIGHTS each outcome by its probability, and the low counts are more likely here.',
         '1.5 splits the difference between 1 and 2, ignoring that grabbing 0 parts (probability 0.5) drags the average down.',
         '3.0 sums the three probabilities (0.5+0.3+0.2=1), which just confirms they’re a valid distribution — it isn’t the expected value.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A quantity obeys dy/dt = −0.5y with y(0) = 80. What is the general shape of its solution y(t)?',
+      options: [
+        'y(t) = 80·e^(−0.5t) — exponential decay',
+        'y(t) = 80 − 0.5t — a straight line dropping steadily',
+        'y(t) = 80·e^(0.5t) — exponential growth',
+        'y(t) = 0.5·e^(−80t) — decay from a start of 0.5',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: dy/dt = ky solves to y = y(0)·e^(kt); here k = −0.5 (decay) and y(0) = 80, giving 80·e^(−0.5t).',
+        'A straight line would need a CONSTANT rate — but here the rate is proportional to y, so it slows as y shrinks, curving into an exponential.',
+        'The negative sign on 0.5 means decay, not growth — the exponent must be negative.',
+        'The roles are swapped: 80 is the starting amount (out front) and 0.5 is the rate (in the exponent).',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A mass–spring–damper with m = 1, k = 9 is given damping c. For what c is it critically damped (ζ = 1, fastest settle with no overshoot)?',
+      options: ['c = 6', 'c = 9', 'c = 3', 'c = 18'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: critical damping is c = 2·√(k·m) = 2·√(9×1) = 2×3 = 6.',
+        'c = 9 equals k, but that isn’t the critical-damping formula — you need 2·√(km) = 6.',
+        'c = 3 gives ζ = 3/(2·√9) = 0.5, which is underdamped (it would still overshoot).',
+        'c = 18 gives ζ = 2, overdamped — past critical, so sluggish rather than fastest.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'You write a robot’s dynamics as x′ = A·x and find A’s eigenvalues are +1 and −4. Is the system stable?',
+      options: [
+        'No — the +1 eigenvalue makes one mode grow exponentially, so the state diverges',
+        'Yes — the −4 eigenvalue dominates and pulls everything to rest',
+        'Yes — having one negative eigenvalue is enough for stability',
+        'It is exactly marginally stable, oscillating forever',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: stability needs EVERY eigenvalue to have a negative real part. The +1 eigenvalue grows like e^(t) and eventually dominates, so the system is unstable.',
+        'A more negative eigenvalue doesn’t rescue a positive one — the growing mode wins in the long run regardless.',
+        'One negative eigenvalue is NOT enough; a single positive one is sufficient to cause divergence.',
+        'Marginal stability requires eigenvalues with zero real part; +1 is strictly positive, so this diverges, not oscillates steadily.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A phase portrait of [position, velocity] shows the state spiralling INWARD toward the origin. What does this tell you?',
+      options: [
+        'The system is a stable, damped oscillator — it rings but the rings shrink to rest',
+        'The system is unstable and gaining energy',
+        'The system conserves energy perfectly',
+        'The system is already at rest and never moved',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: an inward spiral means oscillation (the looping) plus decay (the shrinking radius) — a stable underdamped system, eigenvalues with negative real parts and nonzero imaginary parts.',
+        'Gaining energy would spiral OUTWARD — inward is the opposite, energy bleeding away.',
+        'Perfect energy conservation traces a fixed-radius closed loop, not an inward spiral.',
+        'A system at rest is a single point at the origin; a spiral shows it actively moving and settling.',
       ],
     },
   ],
