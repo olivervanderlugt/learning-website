@@ -92,7 +92,9 @@ export function SkillNode({ data, selected }: NodeProps<SkillFlowNode>) {
         later
           ? 'border-slate-700 bg-slate-900/80 opacity-60'
           : `${s.border} bg-slate-900 ${known ? 'border-dashed' : ''} ${data.status === 'available' && data.hasLesson ? s.glow : ''}`,
-        selected ? 'ring-2 ring-white/60' : mastered && data.due ? 'ring-2 ring-amber-400/70' : '',
+        // slate-100 flips with the theme (near-white on dark, near-black on light)
+        // so the selection ring stays visible in both — ring-white vanished on light.
+        selected ? 'ring-2 ring-slate-100/70' : mastered && data.due ? 'ring-2 ring-amber-400/70' : '',
         'cursor-pointer hover:opacity-100',
       ].join(' ')}
       title={

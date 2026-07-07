@@ -120,7 +120,7 @@ function GateNode({ data, selected }: NodeProps<GateFlowNode>) {
       className={[
         'relative rounded-lg border-2 bg-slate-900 px-4 py-3 font-mono text-sm font-bold',
         gateColors[data.kind] ?? 'border-slate-500',
-        selected ? 'ring-2 ring-white/70' : '',
+        selected ? 'ring-2 ring-slate-100/70' : '',
       ].join(' ')}
     >
       {two ? (

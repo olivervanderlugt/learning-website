@@ -81,7 +81,7 @@ function Curve({
     <div>
       <p className="text-sm text-slate-300">
         {prompt === 'explore' && (
-          <>This curve is <span className="font-mono text-cyan-300">y = ¼x²</span>. Drag the dot. The white line is the <b>tangent</b> — its steepness is the <b>slope</b>, and that number IS the derivative at that point.</>
+          <>This curve is <span className="font-mono text-cyan-300">y = ¼x²</span>. Drag the dot. The dashed line is the <b>tangent</b> — its steepness is the <b>slope</b>, and that number IS the derivative at that point.</>
         )}
         {prompt === 'flat' && <>Challenge: drag the dot to where the curve is perfectly <b>flat</b> — where the slope reads 0.</>}
         {prompt === 'slope1' && <>Last one: find where the slope equals exactly <span className="font-mono text-cyan-300">1</span> (the tangent rises at 45°).</>}
@@ -108,7 +108,8 @@ function Curve({
           <circle cx={targetPt.px} cy={targetPt.py} r={12} fill="none" stroke="#fbbf24" strokeWidth={2} strokeDasharray="3 3" />
         )}
         {/* tangent */}
-        <line x1={t1.px} y1={t1.py} x2={t2.px} y2={t2.py} stroke="#e2e8f0" strokeWidth={2} strokeDasharray="5 4" />
+        {/* var(--color-slate-200) flips with the theme so the tangent stays visible on light backgrounds */}
+        <line x1={t1.px} y1={t1.py} x2={t2.px} y2={t2.py} stroke="var(--color-slate-200)" strokeWidth={2} strokeDasharray="5 4" />
         {/* point */}
         <circle
           cx={pt.px}

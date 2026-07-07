@@ -48,7 +48,8 @@ export default function ArmSim({ onComplete }: { onComplete: (score: number) => 
         {/* joints */}
         <circle cx={S.base.x} cy={S.base.y} r={6} fill="#64748b" />
         <circle cx={S.elbow.x} cy={S.elbow.y} r={5} fill="#94a3b8" />
-        <circle cx={S.hand.x} cy={S.hand.y} r={6} fill={solved ? '#34d399' : '#e2e8f0'} />
+        {/* var(--color-slate-200) flips with the theme so the hand dot stays visible on light backgrounds */}
+        <circle cx={S.hand.x} cy={S.hand.y} r={6} fill={solved ? '#34d399' : 'var(--color-slate-200)'} />
       </svg>
 
       <div className="mt-3 grid grid-cols-2 gap-4">

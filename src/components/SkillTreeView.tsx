@@ -53,32 +53,65 @@ const labelSubject: Record<string, Subject> = {
 }
 
 /**
- * Prereq edges that are transitively implied by another prereq of the same node
- * (e.g. bits→exam when cpu→exam exists and cpu already requires bits). These are
- * hidden on the MAP only — unlock logic and the detail panel use the full list.
+ * Depth-chain lessons (ids ending in -2/-3, e.g. math-linalg-2) — the Stage-1
+ * deep-dives that hang under an intro node. The map's "Depth" toggle hides
+ * them for a foundations-only view; unlock logic always uses the full graph.
  */
-const redundantEdges: Set<string> = (() => {
+export const isDepthId = (id: string) => /-\d$/.test(id)
+
+/** Walk a depth chain up to its (visible) intro node, e.g. phys-forces-3 → phys-forces. */
+const projectToFoundations = (id: string): string => {
+  let cur = id
+  while (isDepthId(cur)) cur = nodeById.get(cur)!.prereqIds[0]
+  return cur
+}
+
+/**
+ * Build the visible edge list for a node set, dropping prereq edges that are
+ * transitively implied by another prereq of the same node (e.g. bits→exam when
+ * cpu→exam exists and cpu already requires bits). MAP display only — unlock
+ * logic and the detail panel use the full list.
+ */
+function buildVisibleEdges(prereqsOf: (n: KnowledgeNode) => string[], include: (n: KnowledgeNode) => boolean) {
   const ancestors = new Map<string, Set<string>>()
   const ancestorsOf = (id: string): Set<string> => {
     const cached = ancestors.get(id)
     if (cached) return cached
     const set = new Set<string>()
     ancestors.set(id, set) // seed before recursing (prereq graph is a DAG)
-    for (const p of nodeById.get(id)?.prereqIds ?? []) {
+    const node = nodeById.get(id)
+    for (const p of node && include(node) ? prereqsOf(node) : []) {
       set.add(p)
       for (const a of ancestorsOf(p)) set.add(a)
     }
     return set
   }
-  const redundant = new Set<string>()
+  const edges: { source: string; target: string }[] = []
   for (const n of curriculum) {
-    for (const p of n.prereqIds) {
-      const implied = n.prereqIds.some((q) => q !== p && ancestorsOf(q).has(p))
-      if (implied) redundant.add(`${p}->${n.id}`)
+    if (!include(n)) continue
+    const prereqs = prereqsOf(n)
+    for (const p of prereqs) {
+      const implied = prereqs.some((q) => q !== p && ancestorsOf(q).has(p))
+      if (!implied) edges.push({ source: p, target: n.id })
     }
   }
-  return redundant
-})()
+  return edges
+}
+
+/** Full-graph edges (depth chains shown). */
+const fullEdges = buildVisibleEdges(
+  (n) => n.prereqIds,
+  () => true,
+)
+
+/**
+ * Foundations-only edges: depth nodes hidden, their in/out edges re-anchored to
+ * the chain intro (deduped, self-loops dropped) so the map stays connected.
+ */
+const foundationEdges = buildVisibleEdges(
+  (n) => [...new Set(n.prereqIds.map(projectToFoundations))].filter((p) => p !== n.id),
+  (n) => !isDepthId(n.id),
+)
 
 /** Bounding box of a domain's nodes (plus its label above). */
 function domainBounds(domainId: string) {
@@ -109,6 +142,8 @@ function SkillTreeInner() {
   const reviews = useStore((s) => s.reviews)
   const openLesson = useStore((s) => s.openLesson)
   const theme = useStore((s) => s.theme)
+  const showDepth = useStore((s) => s.showDepth)
+  const toggleShowDepth = useStore((s) => s.toggleShowDepth)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   /** Empty = show every subject; otherwise only the chosen subjects are visible. */
   const [activeSubjects, setActiveSubjects] = useState<Set<Subject>>(new Set())
@@ -116,6 +151,7 @@ function SkillTreeInner() {
 
   const showAll = activeSubjects.size === 0
   const isVisible = (subj: Subject) => showAll || activeSubjects.has(subj)
+  const nodeShown = (n: KnowledgeNode) => isVisible(n.subject) && (showDepth || !isDepthId(n.id))
 
   const flowNodes = useMemo(() => {
     const due = new Set(dueReviewIds(reviews, masteredNodeIds))
@@ -134,7 +170,7 @@ function SkillTreeInner() {
       width: NODE_W,
       height: NODE_H,
       draggable: false,
-      hidden: !isVisible(n.subject),
+      hidden: !nodeShown(n),
     }))
     const labels: LabelFlowNode[] = domainLabels.map((l) => ({
       id: l.id,
@@ -148,35 +184,31 @@ function SkillTreeInner() {
       hidden: !isVisible(labelSubject[l.id] ?? 'cs'),
     }))
     return [...skillNodes, ...labels]
-  }, [masteredNodeIds, knownNodeIds, reviews, activeSubjects])
+  }, [masteredNodeIds, knownNodeIds, reviews, activeSubjects, showDepth])
 
   /** Nodes filtered out — their edges are hidden too. */
   const hiddenNodeIds = useMemo(
-    () => new Set(curriculum.filter((n) => !isVisible(n.subject)).map((n) => n.id)),
-    [activeSubjects],
+    () => new Set(curriculum.filter((n) => !nodeShown(n)).map((n) => n.id)),
+    [activeSubjects, showDepth],
   )
 
   const flowEdges = useMemo<Edge[]>(
     () =>
-      curriculum.flatMap((n) =>
-        n.prereqIds
-          .filter((p) => !redundantEdges.has(`${p}->${n.id}`))
-          .map((p) => {
-            const active = masteredNodeIds.includes(p)
-            return {
-              id: `${p}->${n.id}`,
-              source: p,
-              target: n.id,
-              style: {
-                stroke: active ? '#38bdf8' : '#334155',
-                strokeWidth: active ? 2 : 1.5,
-              },
-              animated: active && !masteredNodeIds.includes(n.id),
-              hidden: hiddenNodeIds.has(p) || hiddenNodeIds.has(n.id),
-            }
-          }),
-      ),
-    [masteredNodeIds, hiddenNodeIds],
+      (showDepth ? fullEdges : foundationEdges).map(({ source: p, target }) => {
+        const active = masteredNodeIds.includes(p)
+        return {
+          id: `${p}->${target}`,
+          source: p,
+          target,
+          style: {
+            stroke: active ? '#38bdf8' : '#334155',
+            strokeWidth: active ? 2 : 1.5,
+          },
+          animated: active && !masteredNodeIds.includes(target),
+          hidden: hiddenNodeIds.has(p) || hiddenNodeIds.has(target),
+        }
+      }),
+    [masteredNodeIds, hiddenNodeIds, showDepth],
   )
 
   const toggleSubject = (s: Subject) =>
@@ -196,7 +228,7 @@ function SkillTreeInner() {
     }
     const t = setTimeout(() => fitView({ padding: 0.2, duration: 400 }), 60)
     return () => clearTimeout(t)
-  }, [activeSubjects, fitView])
+  }, [activeSubjects, showDepth, fitView])
 
   const selected: KnowledgeNode | undefined = selectedId ? nodeById.get(selectedId) : undefined
 
@@ -257,6 +289,22 @@ function SkillTreeInner() {
           className="rounded-lg border border-slate-700 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-800"
         >
           🗺 Whole map
+        </button>
+        <span className="mx-1 h-4 w-px bg-slate-700" />
+        <button
+          onClick={toggleShowDepth}
+          title={
+            showDepth
+              ? 'Hide the deep-dive chains (-2/-3 lessons) for a foundations-only overview. Suggestions and unlocks are unaffected.'
+              : 'Show the full map including every deep-dive chain.'
+          }
+          className={`rounded-full border px-2.5 py-0.5 text-[11px] font-medium transition ${
+            showDepth
+              ? 'border-violet-500/40 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20'
+              : 'border-slate-600 bg-slate-800 text-slate-300 hover:bg-slate-700'
+          }`}
+        >
+          {showDepth ? '🌳 Full depth' : '🌱 Foundations'}
         </button>
         <span className="mx-1 h-4 w-px bg-slate-700" />
         <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Filter</span>

@@ -38,6 +38,8 @@ interface AppState extends Progress {
   /** Backfill review schedules for nodes mastered before this feature existed. */
   seedMissingReviews: () => void
   toggleTheme: () => void
+  /** Toggle between the foundations-only map view and the full depth-chain view. */
+  toggleShowDepth: () => void
   resetProgress: () => void
   importProgress: (data: Partial<Progress>) => void
 }
@@ -53,6 +55,7 @@ const initialProgress: Progress = {
   navStack: [],
   reviews: {},
   theme: 'dark',
+  showDepth: true,
 }
 
 export const useStore = create<AppState>()(
@@ -146,7 +149,9 @@ export const useStore = create<AppState>()(
 
       toggleTheme: () => set((s) => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
 
-      resetProgress: () => set((s) => ({ ...initialProgress, theme: s.theme })),
+      toggleShowDepth: () => set((s) => ({ showDepth: !s.showDepth })),
+
+      resetProgress: () => set((s) => ({ ...initialProgress, theme: s.theme, showDepth: s.showDepth })),
 
       importProgress: (data) =>
         set((s) => ({
@@ -160,6 +165,7 @@ export const useStore = create<AppState>()(
           navStack: [],
           reviews: data.reviews ?? {},
           theme: data.theme ?? s.theme,
+          showDepth: data.showDepth ?? s.showDepth,
         })),
     }),
     {
@@ -175,6 +181,7 @@ export const useStore = create<AppState>()(
         navStack: s.navStack,
         reviews: s.reviews,
         theme: s.theme,
+        showDepth: s.showDepth,
       }),
     },
   ),

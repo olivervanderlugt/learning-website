@@ -41,9 +41,13 @@ function App() {
           )}
           <ReviewQueue />
           <button
-            onClick={() => setRoadmapOpen(true)}
-            title="Roadmap & coming soon"
-            className="rounded-lg border border-slate-700 px-3 py-1.5 text-sm text-slate-300 hover:bg-slate-800"
+            onClick={() => setRoadmapOpen((o) => !o)}
+            title={roadmapOpen ? 'Back to the map' : 'Roadmap & coming soon'}
+            className={`rounded-lg border px-3 py-1.5 text-sm transition ${
+              roadmapOpen
+                ? 'border-cyan-500/50 bg-cyan-500/10 text-cyan-300'
+                : 'border-slate-700 text-slate-300 hover:bg-slate-800'
+            }`}
           >
             🧭 Roadmap
           </button>

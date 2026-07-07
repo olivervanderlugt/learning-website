@@ -204,4 +204,10 @@ export interface Progress {
   /** nodeId → spaced-repetition schedule; seeded at mastery. */
   reviews: Record<string, ReviewState>
   theme: Theme
+  /**
+   * Map view mode: true shows the full depth chains (-2/-3 lessons), false
+   * shows the foundations-only "essentials" view. Pure view preference —
+   * unlock logic and suggestions always use the full graph.
+   */
+  showDepth: boolean
 }
