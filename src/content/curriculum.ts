@@ -17,16 +17,39 @@ export const domains: Domain[] = [
   { id: 'chemistry', title: 'Chemistry', prereqDomainIds: [] },
 ]
 
-// Layout: three horizontal BANDS by dependency depth — band 0 (y 0-480)
-// foundations (HCW, Programming, Math-as-row, Physics, History/Chemistry islands),
-// band 1 (y 760-1180) first derivatives (OS, Algorithms staircase, Robotics tree),
-// band 2 (y 1400+) second derivatives (Networks, Theory, AI, Databases, Security).
+// Layout (2026-07 refactor — "streets" edition, built for depth-chain growth):
+// three horizontal BANDS by dependency depth, with node-free STREETS between
+// them where long edges do their horizontal sweeping.
+//   band 0 (y 0-1100):  foundations — Programming (x0-750), Math (x1120-2430),
+//                       HCW (x2720-3190), Physics (x3500-4570),
+//                       History/Chemistry islands (x4950+).
+//   street S1 (y~1100-1400): sweep lane for prog-data-3→{os,ros} and cpu→os.
+//                       Only math-exam (1500,1560) sits below it, threaded
+//                       between the two vertical math→AI lanes.
+//   band 1 (y 1400-2200): Networks (x0), Algorithms staircase (x620-1310),
+//                       Theory (x1360), Robotics — the convergence cell —
+//                       (x2280-3910), OS (x3960-4430).
+//   band 2 (y 2300-3400): Security (x0), Databases (x300), AI (x1120-1870),
+//                       Robotics estimation chain + exam (bottom-right).
+// KEY structural choice: HCW lives NEXT TO Physics so cpu→robo-sensing is
+// short; the only cross-map corridors are prog-data-3→{os-processes,robo-ros}
+// (both sweep street S1, verified clear in BOTH view tiers).
+// RESERVED SLOTS for queued chains (keep empty; re-run the checker on use):
+//   math-linalg-4/-5  → col x1400, y620/820 (left of linalg col)
+//   math-mv chain     → col x2520, y0-400   (right of calculus col)
+//   math-stats chain  → col x2520, y580-940 (below the mv slot)
+//   robo-control-4    → (2950,2300), continuing the control column
+//   phys-statics      → col x4660, y220-620 (right of energy)
+//   Electronics domain→ x4660+, y850+ (hangs off phys-electricity-3)
+//   math-logic-2/-3   → col x1120, y200/400 (below logic)
+// When a chain lands, exams repoint to the chain bottom (transitive filter
+// hides the old edge) — then re-verify both tiers with the bezier checker.
 // Rules that keep edges readable: no edge between same-x nodes that aren't
-// vertically adjacent (offset branches sideways instead); long band-skipping
-// edges run through reserved empty corridors (x~1240 math→AI, x~960 graphs→AI).
+// vertically adjacent (offset branches sideways); exams sit at their cell's
+// bottom, offset out of hub out-edge lanes.
 // Redundant transitive edges are hidden in SkillTreeView (visual only).
 export const nodes: KnowledgeNode[] = [
-  // ---- How Computers Work (col 0, y 50-350) — the playable MVP module ----
+  // ---- How Computers Work (col x3000, next to Physics) — the playable MVP module ----
   {
     id: 'bits',
     title: 'Speaking in Switches',
@@ -37,7 +60,7 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Every sensor reading your future robot takes arrives as raw bits — this is the native language of every machine you will ever build.',
     prereqIds: [],
-    x: 0,
+    x: 3000,
     y: 0,
     hasLesson: true,
   },
@@ -51,8 +74,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'An H-bridge motor driver is four transistor switches — the exact same switches you build gates from here.',
     prereqIds: ['bits'],
-    x: 0,
-    y: 120,
+    x: 3000,
+    y: 200,
     hasLesson: true,
   },
   {
@@ -65,8 +88,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'When your robot computes “turn 3° left”, this circuit — etched a billion times smaller — is doing the math.',
     prereqIds: ['gates'],
-    x: 0,
-    y: 240,
+    x: 3000,
+    y: 400,
     hasLesson: true,
   },
   {
@@ -79,8 +102,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A microcontroller on a robot is this exact machine, just small and cheap enough to glue onto a motor.',
     prereqIds: ['adder'],
-    x: 0,
-    y: 360,
+    x: 3000,
+    y: 600,
     hasLesson: true,
   },
   {
@@ -93,13 +116,13 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Retrieval days after learning is what converts lessons into permanent knowledge — an exam is a learning event, not just a measurement.',
     prereqIds: ['bits', 'gates', 'adder', 'cpu'],
-    x: -260,
-    y: 480,
+    x: 2720,
+    y: 780,
     hasLesson: true,
     isExam: true,
   },
 
-  // ---- Programming Fundamentals (col 0, y 580-780) ----
+  // ---- Programming Fundamentals (far left: intro col x560, depth col x300) ----
   {
     id: 'prog-variables',
     title: 'Variables & Control Flow',
@@ -110,7 +133,7 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       '“If obstacle closer than 20 cm, turn” is one variable and one if-statement — robot behavior starts exactly here.',
     prereqIds: [],
-    x: 480,
+    x: 560,
     y: 0,
     hasLesson: true,
   },
@@ -124,8 +147,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Abstraction is how a two-million-line robot codebase stays understandable by humans.',
     prereqIds: ['prog-variables'],
-    x: 480,
-    y: 120,
+    x: 560,
+    y: 200,
     hasLesson: true,
   },
   {
@@ -138,13 +161,14 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A lidar scan is an array of 360 distances — you need data structures the moment your robot opens its eyes.',
     prereqIds: ['prog-functions'],
-    x: 480,
-    y: 240,
+    x: 560,
+    y: 400,
     hasLesson: true,
   },
-  // Depth chain (Stage 1): programming deepens below-LEFT of prog-data (x360) —
-  // prog-data's east-bound corridors (→db-relational etc.) funnel through
-  // x576-800 in the y400-700 band, so the chain must sit west of them.
+  // Depth chain (Stage 1): deepens below-LEFT of prog-data (col x300) so the
+  // east/south-bound corridors out of prog-data/-3 (→db, →algo, →os, →ros)
+  // leave cleanly to the right of it. prog-exam sits further left again (x0),
+  // out of the hub lanes. Future prog-c chain: continue left/below (x0 col).
   {
     id: 'prog-data-2',
     title: 'Recursion: Functions That Call Themselves',
@@ -155,8 +179,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Robot planners search branching trees of possible futures — recursion is the shape of code that walks self-similar structure.',
     prereqIds: ['prog-data'],
-    x: 360,
-    y: 420,
+    x: 300,
+    y: 620,
     hasLesson: true,
   },
   {
@@ -169,8 +193,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'On a robot a bug can bend metal — professional teams test in simulation first, and this lesson is where that habit starts.',
     prereqIds: ['prog-data-2'],
-    x: 360,
-    y: 620,
+    x: 300,
+    y: 820,
     hasLesson: true,
   },
   {
@@ -183,13 +207,13 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'If you can predict what code does without running it, you actually speak the language — that is what this exam checks.',
     prereqIds: ['prog-variables', 'prog-functions', 'prog-data', 'prog-data-2', 'prog-data-3'],
-    x: 160,
-    y: 880,
+    x: 0,
+    y: 1020,
     hasLesson: true,
     isExam: true,
   },
 
-  // ---- Math for CS & Robotics (col 0, y 1010-1210) ----
+  // ---- Math (x1120-2430: logic | linalg | prob | calculus+ODE columns) ----
   {
     id: 'math-logic',
     title: 'Logic: The Algebra of Truth',
@@ -200,7 +224,7 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'The gates you build in “The Logic of Gates” are this algebra made of silicon — one idea, two subjects.',
     prereqIds: [],
-    x: 760,
+    x: 1120,
     y: 0,
     hasLesson: true,
   },
@@ -214,7 +238,7 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robot arm’s position is a chain of matrix multiplications — kinematics IS linear algebra.',
     prereqIds: [],
-    x: 1000,
+    x: 1680,
     y: 0,
     hasLesson: true,
   },
@@ -228,7 +252,7 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Real sensors are noisy — a robot that can’t reason about uncertainty walks into walls it “saw”.',
     prereqIds: [],
-    x: 1240,
+    x: 1960,
     y: 0,
     hasLesson: true,
   },
@@ -242,12 +266,15 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A PID controller is literally a Proportional term plus an Integral plus a Derivative — you cannot read robotics without calculus.',
     prereqIds: [],
-    x: 1480,
+    x: 2240,
     y: 0,
     hasLesson: true,
   },
   // Depth chains (Stage 1): each robotics-critical math topic is a 3-lesson
-  // column — intro (y0) → rules/worked (y190) → independent (y380).
+  // column — intro (y0) → rules/worked (y200) → independent (y400); the ODE
+  // chain continues straight down the calculus column (y580-1020). math-exam
+  // lives at (1500,1560), BELOW street S1, threaded between the two vertical
+  // math→ai-learning lanes (x1776 / x2056) — verified in both tiers.
   {
     id: 'math-linalg-2',
     title: 'Matrices as Transformations',
@@ -258,8 +285,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Rotating a sensor reading into the robot’s own frame is one matrix multiply; chaining joint rotations is several in a row.',
     prereqIds: ['math-linalg'],
-    x: 1000,
-    y: 190,
+    x: 1680,
+    y: 200,
     hasLesson: true,
   },
   {
@@ -272,8 +299,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A singular (determinant-0) configuration is a robot arm losing a degree of freedom — gimbal lock captured in a single number.',
     prereqIds: ['math-linalg-2'],
-    x: 1000,
-    y: 380,
+    x: 1680,
+    y: 400,
     hasLesson: true,
   },
   {
@@ -286,8 +313,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'The expected reading of a noisy sensor is its mean; its variance IS the noise you have to engineer around.',
     prereqIds: ['math-prob'],
-    x: 1240,
-    y: 190,
+    x: 1960,
+    y: 200,
     hasLesson: true,
   },
   {
@@ -300,8 +327,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Localization and sensor fusion are Bayes’ rule run hundreds of times a second.',
     prereqIds: ['math-prob-2'],
-    x: 1240,
-    y: 380,
+    x: 1960,
+    y: 400,
     hasLesson: true,
   },
   {
@@ -314,8 +341,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Velocity is the derivative of position, acceleration the derivative of velocity — every layer of motion is one more derivative.',
     prereqIds: ['math-calculus'],
-    x: 1480,
-    y: 190,
+    x: 2240,
+    y: 200,
     hasLesson: true,
   },
   {
@@ -328,8 +355,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Odometry integrates wheel speed into distance travelled; the I in a PID controller integrates accumulated error.',
     prereqIds: ['math-calculus-2'],
-    x: 1480,
-    y: 380,
+    x: 2240,
+    y: 400,
     hasLesson: true,
   },
   {
@@ -342,8 +369,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Every physical system a robot touches — a discharging battery, a cooling motor, a settling arm — is described by a differential equation.',
     prereqIds: ['math-calculus-3'],
-    x: 1420,
-    y: 480,
+    x: 2240,
+    y: 580,
     hasLesson: true,
   },
   {
@@ -356,8 +383,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A badly tuned arm rings like an underdamped spring; the whole point of tuning Kd is to push ζ toward 1.',
     prereqIds: ['math-ode'],
-    x: 1360,
-    y: 670,
+    x: 2240,
+    y: 760,
     hasLesson: true,
   },
   {
@@ -370,8 +397,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Control design IS moving A’s eigenvalues into the stable half-plane; this is where the linalg and ODE chains fuse into robotics.',
     prereqIds: ['math-ode-2'],
-    x: 1380,
-    y: 790,
+    x: 2240,
+    y: 940,
     hasLesson: true,
   },
   {
@@ -398,13 +425,13 @@ export const nodes: KnowledgeNode[] = [
       'math-ode-2',
       'math-ode-3',
     ],
-    x: 800,
-    y: 770,
+    x: 1500,
+    y: 1560,
     hasLesson: true,
     isExam: true,
   },
 
-  // ---- Physics Foundations (col 1, y -380..-180) — coming soon ----
+  // ---- Physics (x3500-4570: elec col x3500, forces top, forces-depth x4100, energy x4380) ----
   {
     id: 'phys-forces',
     title: 'Forces & Motion',
@@ -415,7 +442,7 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Torque, friction and inertia decide whether your robot climbs the ramp or tips over on it.',
     prereqIds: [],
-    x: 1980,
+    x: 3800,
     y: 0,
     hasLesson: true,
   },
@@ -429,8 +456,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Battery capacity vs. motor power is THE central budget of every mobile robot design.',
     prereqIds: ['phys-forces'],
-    x: 2200,
-    y: 140,
+    x: 4380,
+    y: 220,
     hasLesson: true,
   },
   {
@@ -443,8 +470,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Your logic gates, sensors and motors all live on the same physics: moving charge through circuits.',
     prereqIds: ['phys-forces'],
-    x: 1760,
-    y: 140,
+    x: 3500,
+    y: 220,
     hasLesson: true,
   },
   {
@@ -457,8 +484,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Reading a thermistor, potentiometer or photoresistor is a voltage divider; sizing any passive circuit is Kirchhoff.',
     prereqIds: ['phys-electricity'],
-    x: 1760,
-    y: 320,
+    x: 3500,
+    y: 420,
     hasLesson: true,
   },
   {
@@ -471,8 +498,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Motor inrush, back-EMF, PWM filtering and the H-bridge that drives your wheels all live here.',
     prereqIds: ['phys-electricity-2'],
-    x: 1760,
-    y: 500,
+    x: 3500,
+    y: 620,
     hasLesson: true,
   },
   {
@@ -485,8 +512,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Trajectory planning for a thrown payload or a swinging arm IS suvat — the same four equations, over and over.',
     prereqIds: ['phys-forces'],
-    x: 2450,
-    y: 150,
+    x: 4100,
+    y: 220,
     hasLesson: true,
   },
   {
@@ -499,8 +526,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A gripper closing on an object, a wheel spinning up, a reaction wheel steering a satellite — all three run on this page.',
     prereqIds: ['phys-forces-2'],
-    x: 2480,
-    y: 320,
+    x: 4100,
+    y: 420,
     hasLesson: true,
   },
   {
@@ -513,13 +540,13 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Whether your robot climbs the ramp is decided by exactly these equations — better to fail them here than in hardware.',
     prereqIds: ['phys-forces', 'phys-forces-2', 'phys-forces-3', 'phys-energy', 'phys-electricity', 'phys-electricity-2', 'phys-electricity-3'],
-    x: 2060,
-    y: 480,
+    x: 4380,
+    y: 850,
     hasLesson: true,
     isExam: true,
   },
 
-  // ---- Operating Systems (col 1, y 50-250) ----
+  // ---- Operating Systems (x3960-4430, band 1, below Physics-right; cpu + prog-data-3 fan in) ----
   {
     id: 'os-processes',
     title: 'Processes & Scheduling',
@@ -530,8 +557,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robot reads sensors, plans and drives motors “simultaneously” — that illusion is scheduling.',
     prereqIds: ['cpu', 'prog-data-3'],
-    x: 0,
-    y: 760,
+    x: 4100,
+    y: 1500,
     hasLesson: true,
   },
   {
@@ -544,8 +571,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'When your robot’s vision process crashes, memory isolation is why the motor controller keeps running.',
     prereqIds: ['os-processes'],
-    x: -420,
-    y: 880,
+    x: 3960,
+    y: 1700,
     hasLesson: true,
   },
   {
@@ -558,8 +585,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       '“Bumper pressed!” reaching your code in microseconds instead of milliseconds is an interrupt at work.',
     prereqIds: ['os-processes'],
-    x: -180,
-    y: 880,
+    x: 4240,
+    y: 1700,
     hasLesson: true,
   },
   {
@@ -572,13 +599,13 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robot is a dozen processes sharing one small computer — the OS rules you retrieve here are what keep them from trampling each other.',
     prereqIds: ['os-processes', 'os-memory', 'os-io'],
-    x: -300,
-    y: 1060,
+    x: 4100,
+    y: 1900,
     hasLesson: true,
     isExam: true,
   },
 
-  // ---- Algorithms & Data Structures (col 1, y 480-680) ----
+  // ---- Algorithms & Data Structures (band 1 staircase x620→1120, below Prog/Math-left) ----
   {
     id: 'algo-bigo',
     title: 'Measuring Speed: Big-O',
@@ -589,8 +616,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A path planner that is O(n²) on map size freezes your robot the moment it leaves the living room.',
     prereqIds: ['prog-data-3', 'math-logic'],
-    x: 600,
-    y: 710,
+    x: 620,
+    y: 1500,
     hasLesson: true,
   },
   {
@@ -603,8 +630,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robot’s task queue, sensor buffer and landmark lookup are a stack, a ring buffer and a hash map.',
     prereqIds: ['algo-bigo'],
-    x: 720,
-    y: 910,
+    x: 870,
+    y: 1700,
     hasLesson: true,
   },
   {
@@ -617,8 +644,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A* over a grid map is literally how vacuum robots and Mars rovers decide where to roll next.',
     prereqIds: ['algo-structures'],
-    x: 960,
-    y: 1000,
+    x: 1120,
+    y: 1900,
     hasLesson: true,
   },
   {
@@ -631,13 +658,13 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Choosing the wrong structure or blowing up quadratically is the classic way robot code dies at scale — this exam is the vaccine.',
     prereqIds: ['algo-bigo', 'algo-structures', 'algo-graphs'],
-    x: 720,
-    y: 1120,
+    x: 870,
+    y: 2100,
     hasLesson: true,
     isExam: true,
   },
 
-  // ---- Networks (col 1, y 910-1110) ----
+  // ---- Networks (col x0, band 1; Security continues below it in band 2) ----
   {
     id: 'net-stack',
     title: 'The Network Stack',
@@ -649,7 +676,7 @@ export const nodes: KnowledgeNode[] = [
       'Teleoperating a robot means your joystick command survives every one of these layers, twice.',
     prereqIds: ['prog-data-3'],
     x: 0,
-    y: 1400,
+    y: 1500,
     hasLesson: true,
   },
   {
@@ -663,7 +690,7 @@ export const nodes: KnowledgeNode[] = [
       'A drone video feed drops packets constantly; designing for loss is what keeps the picture moving.',
     prereqIds: ['net-stack'],
     x: 0,
-    y: 1520,
+    y: 1700,
     hasLesson: true,
   },
   {
@@ -677,7 +704,7 @@ export const nodes: KnowledgeNode[] = [
       'MQTT — the IoT protocol — is how a fleet of warehouse robots gossips about where the boxes are.',
     prereqIds: ['net-packets'],
     x: 0,
-    y: 1640,
+    y: 1900,
     hasLesson: true,
   },
   {
@@ -690,13 +717,13 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'When your robot drops off the network mid-mission, this is the mental model you will debug with.',
     prereqIds: ['net-stack', 'net-packets', 'net-protocols'],
-    x: -260,
-    y: 1760,
+    x: -280,
+    y: 2100,
     hasLesson: true,
     isExam: true,
   },
 
-  // ---- Databases (col 1, y 1340-1540) ----
+  // ---- Databases (col x300, band 2 — leaf domain off prog-data) ----
   {
     id: 'db-relational',
     title: 'Tables & Relations',
@@ -707,8 +734,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Your robot’s map, mission log and battery history all want to be tables the moment they must survive a reboot.',
     prereqIds: ['prog-data'],
-    x: 1760,
-    y: 1400,
+    x: 300,
+    y: 2700,
     hasLesson: true,
   },
   {
@@ -721,8 +748,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       '“Which rooms had obstacles this week?” is one SQL query over your robot’s log tables.',
     prereqIds: ['db-relational'],
-    x: 1760,
-    y: 1520,
+    x: 300,
+    y: 2900,
     hasLesson: true,
   },
   {
@@ -735,8 +762,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robot that loses power mid-save must not wake up with half a map — that guarantee is a transaction.',
     prereqIds: ['db-sql'],
-    x: 1760,
-    y: 1640,
+    x: 300,
+    y: 3100,
     hasLesson: true,
   },
   {
@@ -749,13 +776,16 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Every mission log and map your robot keeps must survive crashes and queries — prove you know why it does.',
     prereqIds: ['db-relational', 'db-sql', 'db-transactions'],
-    x: 1760,
-    y: 1760,
+    x: 300,
+    y: 3300,
     hasLesson: true,
     isExam: true,
   },
 
-  // ---- Robotics Bridge (col 2, y -280..-80) ----
+  // ---- Robotics Bridge (x2280-3910, bands 1-2) — the CONVERGENCE cell ----
+  // sensing top (3600,1400) under HCW/Physics; three columns below it:
+  // kinematics x2560, control x2950 (control-4 slot at y2300), embedded/ros
+  // x3400/x3820; estimation chain x2280 (band 2); robo-exam (3100,2900).
   {
     id: 'robo-sensing',
     title: 'Sensors & Actuators',
@@ -766,8 +796,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Sense → decide → act is the eternal loop of robotics; this node is the “sense” and “act”.',
     prereqIds: ['cpu', 'phys-electricity-3'],
-    x: 1760,
-    y: 760,
+    x: 3600,
+    y: 1400,
     hasLesson: true,
   },
   {
@@ -780,12 +810,11 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Every drone hovering perfectly still is running this exact loop hundreds of times per second.',
     prereqIds: ['robo-sensing', 'phys-forces'],
-    x: 1520,
-    y: 880,
+    x: 2950,
+    y: 1700,
     hasLesson: true,
   },
-  // Depth chain (Stage 1): robo-control deepens into a 3-lesson column,
-  // offset left (x1440) so the long robo-kinematics→robo-exam edge clears it.
+  // Depth chain (Stage 1): robo-control deepens straight down the x2950 column.
   {
     id: 'robo-control-2',
     title: 'Tuning PID: Reading the Response',
@@ -796,8 +825,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Every robot you ever ship will be tuned by staring at this exact curve and knowing which knob its shape is pointing at.',
     prereqIds: ['robo-control'],
-    x: 1400,
-    y: 1060,
+    x: 2950,
+    y: 1900,
     hasLesson: true,
   },
   {
@@ -810,8 +839,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'This is the doorway from hobby PID to the control theory that flies rockets, balances Segways and runs every serious robot startup.',
     prereqIds: ['robo-control-2'],
-    x: 1440,
-    y: 1240,
+    x: 2950,
+    y: 2100,
     hasLesson: true,
   },
   {
@@ -824,8 +853,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'The CPU you studied, shrunk to €2 and strapped to a motor: this is where your whole skill tree converges.',
     prereqIds: ['robo-sensing'],
-    x: 1760,
-    y: 920,
+    x: 3400,
+    y: 1700,
     hasLesson: true,
   },
   {
@@ -838,8 +867,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Every pick-and-place robot solves inverse kinematics dozens of times per second just to reach for an object.',
     prereqIds: ['math-linalg-3', 'robo-sensing'],
-    x: 2000,
-    y: 880,
+    x: 2560,
+    y: 1700,
     hasLesson: true,
   },
   {
@@ -852,8 +881,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Every joint of every robot arm is a transform; chaining them is how the software knows where the gripper is.',
     prereqIds: ['robo-kinematics'],
-    x: 2260,
-    y: 1020,
+    x: 2560,
+    y: 1900,
     hasLesson: true,
   },
   {
@@ -866,8 +895,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Singularities make real arms lurch and fault; every motion planner is built to see the det(J)→0 cliff coming.',
     prereqIds: ['robo-kinematics-2'],
-    x: 2260,
-    y: 1200,
+    x: 2560,
+    y: 2100,
     hasLesson: true,
   },
   {
@@ -880,8 +909,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'It’s how a drone knows where it is: no single sensor is trustworthy, but fused well they are. Highest-leverage idea in robotics.',
     prereqIds: ['robo-control-3'],
-    x: 2380,
-    y: 1360,
+    x: 2280,
+    y: 2300,
     hasLesson: true,
   },
   {
@@ -894,8 +923,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'The covariance ellipse tells a robot exactly where its blind spots are — and which sensor would fix them.',
     prereqIds: ['robo-estimation'],
-    x: 2380,
-    y: 1540,
+    x: 2280,
+    y: 2500,
     hasLesson: true,
   },
   {
@@ -908,8 +937,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'The EKF is the workhorse of real localization; it’s running in essentially every self-driving car and drone.',
     prereqIds: ['robo-estimation-2'],
-    x: 2380,
-    y: 1720,
+    x: 2280,
+    y: 2700,
     hasLesson: true,
   },
   {
@@ -922,8 +951,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Your future startup will almost certainly prototype on ROS — it is the lingua franca of modern robotics.',
     prereqIds: ['robo-embedded', 'prog-data-3'],
-    x: 1880,
-    y: 1180,
+    x: 3820,
+    y: 1900,
     hasLesson: true,
   },
   {
@@ -949,13 +978,13 @@ export const nodes: KnowledgeNode[] = [
       'robo-embedded',
       'robo-ros',
     ],
-    x: 2120,
-    y: 1400,
+    x: 3100,
+    y: 2900,
     hasLesson: true,
     isExam: true,
   },
 
-  // ---- Theory of Computation (col 2, y 480-680) ----
+  // ---- Theory of Computation (col x1360, band 1, below math-logic) ----
   {
     id: 'theory-fsm',
     title: 'Finite State Machines',
@@ -966,8 +995,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       '“Patrolling → obstacle seen → avoiding → patrolling” — robot behavior controllers are literally FSMs.',
     prereqIds: ['math-logic', 'algo-bigo'],
-    x: 480,
-    y: 1400,
+    x: 1360,
+    y: 1700,
     hasLesson: true,
   },
   {
@@ -980,8 +1009,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Knowing what NO robot can ever compute saves you from burning months on an impossible feature.',
     prereqIds: ['theory-fsm'],
-    x: 480,
-    y: 1520,
+    x: 1360,
+    y: 1900,
     hasLesson: true,
   },
   {
@@ -994,8 +1023,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Optimal multi-robot task assignment is NP-hard — pros approximate it, and now you’ll know why.',
     prereqIds: ['theory-turing'],
-    x: 480,
-    y: 1640,
+    x: 1360,
+    y: 2100,
     hasLesson: true,
   },
   {
@@ -1008,13 +1037,13 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Theory tells you which robot features are impossible before you waste a month on them — worth retrieving precisely.',
     prereqIds: ['theory-fsm', 'theory-turing', 'theory-complexity'],
-    x: 480,
-    y: 1760,
+    x: 840,
+    y: 2300,
     hasLesson: true,
     isExam: true,
   },
 
-  // ---- AI & Machine Learning (col 2, y 910-1110) ----
+  // ---- AI & Machine Learning (band 2 x1120-1870, directly below Math) ----
   {
     id: 'ai-search',
     title: 'Search & Planning',
@@ -1025,8 +1054,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A chess engine and a warehouse robot planning its route are running the same idea.',
     prereqIds: ['algo-graphs'],
-    x: 960,
-    y: 1400,
+    x: 1120,
+    y: 2700,
     hasLesson: true,
   },
   {
@@ -1039,12 +1068,12 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'You can’t hand-code “what a pedestrian looks like” — perception is learned from data.',
     // Depends on the DEEP ends of the prob/linalg chains (Bayes, determinants) —
-    // gradient descent needs distributions and matrix math. Pointing at the
-    // chain bottoms also keeps the long down-edges below the depth nodes rather
-    // than piercing them, and clears algo-graphs (nudged x 1240→1300).
+    // gradient descent needs distributions and matrix math. ai-learning sits
+    // directly below the gap between the linalg/prob columns, so both in-edges
+    // are clean vertical lanes (x1776 / x2056) that math-exam threads between.
     prereqIds: ['math-prob-3', 'math-linalg-3'],
-    x: 1300,
-    y: 1400,
+    x: 1680,
+    y: 2700,
     hasLesson: true,
   },
   {
@@ -1057,8 +1086,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'The network that lets a robot grasp unfamiliar objects is layers of the matrix math you already know.',
     prereqIds: ['ai-learning'],
-    x: 1240,
-    y: 1520,
+    x: 1680,
+    y: 2900,
     hasLesson: true,
   },
   {
@@ -1071,13 +1100,13 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Perception and planning are the hardest half of any robot — this exam checks the foundations actually stuck.',
     prereqIds: ['ai-search', 'ai-learning', 'ai-neural'],
-    x: 1100,
-    y: 1680,
+    x: 1400,
+    y: 3100,
     hasLesson: true,
     isExam: true,
   },
 
-  // ---- Security & Crypto (col 2, y 1340-1540) ----
+  // ---- Security & Crypto (col x0, band 2, straight below Networks) ----
   {
     id: 'sec-threats',
     title: 'Thinking Like an Attacker',
@@ -1088,8 +1117,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robot is a computer that can push things — an insecure one is a physical hazard, not just a data leak.',
     prereqIds: ['net-protocols'],
-    x: 260,
-    y: 1880,
+    x: 0,
+    y: 2450,
     hasLesson: true,
   },
   {
@@ -1102,8 +1131,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'The command channel to your drone is encrypted — or someone else is flying it.',
     prereqIds: ['sec-threats'],
-    x: 260,
-    y: 2000,
+    x: 0,
+    y: 2650,
     hasLesson: true,
   },
   {
@@ -1116,8 +1145,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Fleets of IoT robots have been hijacked into botnets — hardening is part of shipping.',
     prereqIds: ['sec-crypto'],
-    x: 260,
-    y: 2120,
+    x: 0,
+    y: 2850,
     hasLesson: true,
   },
   {
@@ -1130,13 +1159,13 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robot is a computer that can push things — the security instincts you retrieve here are a safety feature.',
     prereqIds: ['sec-threats', 'sec-crypto', 'sec-systems'],
-    x: 260,
-    y: 2240,
+    x: 0,
+    y: 3050,
     hasLesson: true,
     isExam: true,
   },
 
-  // ---- History of Science & Technology (col 3, y 50-250) ----
+  // ---- History of Science & Technology (row at x4950-5700 — prereq-free island, far right) ----
   {
     id: 'hist-scientific-revolution',
     title: 'The Scientific Revolution',
@@ -1147,7 +1176,7 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Knowing HOW knowledge is built — and how it was wrong before — makes you a sharper builder and a harder person to fool.',
     prereqIds: [],
-    x: 2600,
+    x: 4950,
     y: 0,
     hasLesson: true,
   },
@@ -1161,7 +1190,7 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Every “new” idea in tech rhymes with an old one; history is a founder’s cheat sheet for what tends to work.',
     prereqIds: [],
-    x: 2840,
+    x: 5230,
     y: 0,
     hasLesson: true,
   },
@@ -1175,7 +1204,7 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A robotics startup changes how people work; understanding past automation waves is understanding your own impact.',
     prereqIds: [],
-    x: 3080,
+    x: 5510,
     y: 0,
     hasLesson: true,
   },
@@ -1189,13 +1218,13 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'History only pays off if the patterns are retrievable when you face the same choice — that retrieval is what this exam trains.',
     prereqIds: ['hist-scientific-revolution', 'hist-computing', 'hist-industrial'],
-    x: 2840,
+    x: 5230,
     y: 240,
     hasLesson: true,
     isExam: true,
   },
 
-  // ---- Chemistry (col 3, y 480-680) ----
+  // ---- Chemistry (col x4950, below the History row — prereq-free island) ----
   {
     id: 'chem-atoms',
     title: 'Atoms & the Periodic Table',
@@ -1206,8 +1235,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Silicon chips, copper wires and lithium batteries are all just clever uses of particular elements’ chemistry.',
     prereqIds: [],
-    x: 2600,
-    y: 480,
+    x: 4950,
+    y: 500,
     hasLesson: true,
   },
   {
@@ -1220,8 +1249,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'A battery is a controlled chemical reaction; its energy density sets what your robot can carry and how long it runs.',
     prereqIds: ['chem-atoms'],
-    x: 2600,
-    y: 600,
+    x: 4950,
+    y: 700,
     hasLesson: true,
   },
   {
@@ -1234,8 +1263,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Choosing the right material — light, strong, conductive, cheap — is half of designing real robot hardware.',
     prereqIds: ['chem-reactions'],
-    x: 2600,
-    y: 720,
+    x: 4950,
+    y: 900,
     hasLesson: true,
   },
   {
@@ -1248,8 +1277,8 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Batteries, wires and chips are applied chemistry — retrieving these basics cold is what lets you read a datasheet critically.',
     prereqIds: ['chem-atoms', 'chem-reactions', 'chem-materials'],
-    x: 2600,
-    y: 840,
+    x: 4950,
+    y: 1100,
     hasLesson: true,
     isExam: true,
   },
@@ -1507,20 +1536,20 @@ export const nodeById: Map<string, KnowledgeNode> = new Map(nodes.map((n) => [n.
 
 /** Domain title blocks rendered on the map above each cluster. */
 export const domainLabels: { id: string; title: string; x: number; y: number }[] = [
-  { id: 'label-hcw', title: 'How Computers Work', x: 0, y: -60 },
-  { id: 'label-prog', title: 'Programming Fundamentals', x: 480, y: -60 },
-  { id: 'label-math', title: 'Math for CS & Robotics', x: 760, y: -60 },
-  { id: 'label-phys', title: 'Physics Foundations', x: 1760, y: -60 },
-  { id: 'label-os', title: 'Operating Systems', x: -420, y: 700 },
-  { id: 'label-algo', title: 'Algorithms & Data Structures', x: 480, y: 700 },
-  { id: 'label-net', title: 'Networks', x: 0, y: 1340 },
-  { id: 'label-db', title: 'Databases', x: 1760, y: 1340 },
-  { id: 'label-robo', title: 'Robotics Bridge', x: 1520, y: 700 },
-  { id: 'label-theory', title: 'Theory of Computation', x: 480, y: 1340 },
-  { id: 'label-ai', title: 'AI & Machine Learning', x: 960, y: 1340 },
-  { id: 'label-sec', title: 'Security & Crypto', x: 260, y: 1820 },
-  { id: 'label-hist', title: 'History of Science & Tech', x: 2600, y: -60 },
-  { id: 'label-chem', title: 'Chemistry', x: 2600, y: 420 },
+  { id: 'label-hcw', title: 'How Computers Work', x: 3000, y: -60 },
+  { id: 'label-prog', title: 'Programming Fundamentals', x: 560, y: -60 },
+  { id: 'label-math', title: 'Math for CS & Robotics', x: 1120, y: -60 },
+  { id: 'label-phys', title: 'Physics Foundations', x: 3800, y: -60 },
+  { id: 'label-os', title: 'Operating Systems', x: 4100, y: 1440 },
+  { id: 'label-algo', title: 'Algorithms & Data Structures', x: 620, y: 1440 },
+  { id: 'label-net', title: 'Networks', x: 0, y: 1440 },
+  { id: 'label-db', title: 'Databases', x: 300, y: 2640 },
+  { id: 'label-robo', title: 'Robotics Bridge', x: 3600, y: 1340 },
+  { id: 'label-theory', title: 'Theory of Computation', x: 1360, y: 1640 },
+  { id: 'label-ai', title: 'AI & Machine Learning', x: 1120, y: 2640 },
+  { id: 'label-sec', title: 'Security & Crypto', x: 0, y: 2390 },
+  { id: 'label-hist', title: 'History of Science & Tech', x: 4950, y: -60 },
+  { id: 'label-chem', title: 'Chemistry', x: 4950, y: 440 },
 ]
 
 export const XP_PER_NODE = 100

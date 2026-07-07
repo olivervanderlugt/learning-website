@@ -263,7 +263,7 @@ function SkillTreeInner() {
         onNodeClick={(_, node) => node.type === 'skill' && setSelectedId(node.id)}
         onPaneClick={() => setSelectedId(null)}
         onInit={() => fitBounds(domainBounds('how-computers-work'), { padding: 0.35 })}
-        minZoom={0.15}
+        minZoom={0.08}
         maxZoom={1.6}
         proOptions={{ hideAttribution: true }}
         colorMode={theme}
