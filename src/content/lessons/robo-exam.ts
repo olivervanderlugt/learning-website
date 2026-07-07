@@ -330,5 +330,77 @@ export const roboExamLesson: Lesson = {
         'A lookup table can’t cover a continuous space of targets; IK computes the angles on the fly.',
       ],
     },
+    {
+      kind: 'quiz',
+      question:
+        'A Kalman filter fuses a prediction (mean 30, variance 2) with a measurement (mean 36, variance 2). What is the fused estimate?',
+      options: [
+        'Mean 33, variance 1 — the midpoint, and more certain than either',
+        'Mean 33, variance 4 — the midpoint, less certain',
+        'Mean 36, variance 2 — jump to the measurement',
+        'Mean 66, variance 2 — add the means',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: equal variances give K = 2/4 = 0.5, so mean = 30 + 0.5·6 = 33; and variance = (1−0.5)·2 = 1, halved — fusing two equal sources sharpens the belief.',
+        'The midpoint is right, but fusion always REDUCES variance (to 1 here), never increases it.',
+        'Jumping fully to the measurement would need K = 1, i.e. a far more certain sensor than the prediction — here they’re equal.',
+        'Fusion is a weighted average, never a sum — 66 has no meaning here.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A robot dead-reckons for several seconds using only its motion model, with no sensor updates. What happens to its estimated uncertainty (covariance)?',
+      options: [
+        'It grows — each blind predict step adds process noise, so confidence decays',
+        'It shrinks — moving makes it more certain',
+        'It stays constant until a measurement arrives',
+        'It instantly becomes infinite',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: predict propagates the state and adds process noise (P ← A·P·Aᵀ + Q), inflating uncertainty every step — dead reckoning drifts.',
+        'Motion with no measurement adds no information; it can only erode certainty.',
+        'The predict step actively grows P each tick; it doesn’t wait for a measurement to change.',
+        'It grows steadily, not instantly to infinity — a measurement (update) reins it back in.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Why does a self-driving car run its IMU, GPS and wheel encoders through a single Extended Kalman Filter?',
+      options: [
+        'Each sensor’s strengths cover the others’ weaknesses, and the EKF weights each by its live uncertainty',
+        'Because the three sensors are identical and confirm each other',
+        'To make the software look more advanced',
+        'Because one of them is perfectly accurate',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: IMU is precise briefly then drifts, GPS is absolute but jumpy, encoders are smooth but accumulate error — fusing them lets each shine where it’s strong, weighted by covariance.',
+        'They measure different things with different noise profiles — that difference is precisely why fusion helps.',
+        'It’s about robustness and accuracy, not appearances.',
+        'None is perfect; the fused estimate beats every individual sensor.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'The Extended Kalman Filter handles a nonlinear sensor (like range = √(x²+y²)) by…',
+      options: [
+        'Linearizing it each step with its Jacobian, then reusing the normal Kalman update',
+        'Ignoring the nonlinearity and hoping it averages out',
+        'Switching the robot to a straight-line path',
+        'Refusing to use nonlinear sensors at all',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the EKF computes the measurement Jacobian ∂h/∂x at the current estimate and plugs it in as H — the same trick as linearizing anything by its derivative.',
+        'It approximates rather than ignores; the Jacobian captures the local slope precisely.',
+        'The robot’s physical path is unchanged — only the MATH is locally linearized.',
+        'Handling nonlinear sensors is the entire reason the EKF exists.',
+      ],
+    },
   ],
 }

@@ -843,6 +843,48 @@ export const nodes: KnowledgeNode[] = [
     hasLesson: true,
   },
   {
+    id: 'robo-estimation',
+    title: 'State Estimation: Fusing Noisy Senses',
+    subject: 'robotics',
+    domainId: 'robotics-bridge',
+    description:
+      'Every sensor lies a little. The Kalman filter fuses a model prediction with a noisy measurement, weighting each by its uncertainty — Bayes’ rule for a moving robot.',
+    whyItMatters:
+      'It’s how a drone knows where it is: no single sensor is trustworthy, but fused well they are. Highest-leverage idea in robotics.',
+    prereqIds: ['robo-control-3'],
+    x: 2380,
+    y: 1360,
+    hasLesson: true,
+  },
+  {
+    id: 'robo-estimation-2',
+    title: 'The Multivariate Kalman Filter',
+    subject: 'robotics',
+    domainId: 'robotics-bridge',
+    description:
+      'State vectors and covariance matrices: predict grows uncertainty, update shrinks it, and correlations let one measurement improve many variables at once.',
+    whyItMatters:
+      'The covariance ellipse tells a robot exactly where its blind spots are — and which sensor would fix them.',
+    prereqIds: ['robo-estimation'],
+    x: 2380,
+    y: 1540,
+    hasLesson: true,
+  },
+  {
+    id: 'robo-estimation-3',
+    title: 'EKF & Sensor Fusion',
+    subject: 'robotics',
+    domainId: 'robotics-bridge',
+    description:
+      'Real sensors are nonlinear, so the Extended Kalman Filter linearizes them each step with a Jacobian — then fuses IMU, GPS and encoders into one robust estimate.',
+    whyItMatters:
+      'The EKF is the workhorse of real localization; it’s running in essentially every self-driving car and drone.',
+    prereqIds: ['robo-estimation-2'],
+    x: 2380,
+    y: 1720,
+    hasLesson: true,
+  },
+  {
     id: 'robo-ros',
     title: 'Robot Software Stacks (ROS)',
     subject: 'engineering',
@@ -862,7 +904,7 @@ export const nodes: KnowledgeNode[] = [
     subject: 'robotics',
     domainId: 'robotics-bridge',
     description:
-      'Eighteen fresh questions across sensing, control & tuning, state space, kinematics, transforms, the Jacobian, embedded systems and ROS — the capstone check on the whole bridge. 80% to pass.',
+      'Twenty-two fresh questions across sensing, control & tuning, state space, kinematics, transforms, the Jacobian, Kalman estimation & sensor fusion, embedded systems and ROS — the capstone check on the whole bridge. 80% to pass.',
     whyItMatters:
       'This module is where every other subject converges into an actual robot — passing it from memory means the convergence happened in your head too.',
     prereqIds: [
@@ -873,6 +915,9 @@ export const nodes: KnowledgeNode[] = [
       'robo-kinematics',
       'robo-kinematics-2',
       'robo-kinematics-3',
+      'robo-estimation',
+      'robo-estimation-2',
+      'robo-estimation-3',
       'robo-embedded',
       'robo-ros',
     ],
@@ -1345,6 +1390,19 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'course', title: 'Modern Robotics — Ch. 5 (Velocity Kinematics & the Jacobian)', url: 'https://hades.mech.northwestern.edu/index.php/Modern_Robotics', note: 'The canonical treatment of Jacobians, singularities and manipulability.' },
     { type: 'article', title: 'Modern Robotics practice exercises (with solutions)', url: 'https://hades.mech.northwestern.edu/images/e/ef/MR_practice_exercises.pdf', note: 'Real problem sets — work the Jacobian and singularity exercises after this lesson.' },
     { type: 'video', title: 'Brian Douglas — Robotics/control channel', url: 'https://engineeringmedia.com/', note: 'Clear animated intuition for Jacobians and why singularities wreck a controller.' },
+  ],
+  'robo-estimation': [
+    { type: 'article', title: 'How a Kalman filter works, in pictures (bzarg)', url: 'https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/', note: 'THE best first read on Kalman filters — start here, it builds the exact intuition of this lesson.' },
+    { type: 'interactive', title: 'kalmanfilter.net', url: 'https://www.kalmanfilter.net/', note: 'Fully worked numerical examples, 1D → multivariate, step by step.' },
+    { type: 'video', title: 'MATLAB Tech Talks — Understanding Kalman Filters', url: 'https://www.mathworks.com/videos/series/understanding-kalman-filters.html', note: 'A 7-part animated series covering exactly this chain, predict/update to EKF.' },
+  ],
+  'robo-estimation-2': [
+    { type: 'book', title: 'Kalman and Bayesian Filters in Python (rlabbe)', url: 'https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python', note: 'Free Jupyter book: g-h → KF → EKF/UKF/particle, with exercises AND solutions. The deep dive.' },
+    { type: 'interactive', title: 'kalmanfilter.net — multivariate', url: 'https://www.kalmanfilter.net/multiSummary.html', note: 'The covariance-matrix version worked out numerically, matrices and all.' },
+  ],
+  'robo-estimation-3': [
+    { type: 'book', title: 'rlabbe — the EKF & UKF chapters', url: 'https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python', note: 'Nonlinear filtering: linearization, the EKF, and when to reach for a UKF or particle filter.' },
+    { type: 'course', title: 'Stachniss — Mobile Sensing & Robotics (SLAM)', url: 'https://www.ipb.uni-bonn.de/online-training-robotics/index.html', note: 'Free full course: Bayes filter → EKF/MCL → sensor fusion → graph SLAM.' },
   ],
   'robo-control-2': [
     { type: 'video', title: 'MATLAB Tech Talks — Understanding PID Control (series)', url: 'https://www.mathworks.com/videos/series/understanding-pid-control.html', note: 'Parts 2–3 cover exactly this lesson: reading responses and the tuning trade-offs, beautifully animated.' },
