@@ -27,7 +27,7 @@ export default function SettingsPanel() {
       navStack: s.navStack,
       reviews: s.reviews,
       theme: s.theme,
-      showDepth: s.showDepth,
+      viewTier: s.viewTier,
     }
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
@@ -100,7 +100,7 @@ export default function SettingsPanel() {
 
           <div className="overflow-y-auto p-4">
             {tab === 'progress' ? (
-              <ProgressTab />
+              <ProgressTab onReset={onReset} />
             ) : (
               <>
                 <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
@@ -150,7 +150,7 @@ export default function SettingsPanel() {
   )
 }
 
-function ProgressTab() {
+function ProgressTab({ onReset }: { onReset: () => void }) {
   const xp = useStore((s) => s.xp)
   const masteredNodeIds = useStore((s) => s.masteredNodeIds)
   const knownNodeIds = useStore((s) => s.knownNodeIds)
@@ -234,6 +234,13 @@ function ProgressTab() {
         Everything here is computed from your progress — master lessons, pass exams and keep
         reviews fresh to fill it up. No streaks, no pressure.
       </p>
+
+      <button
+        onClick={onReset}
+        className="mt-4 w-full rounded-lg border border-rose-900 px-3 py-2 text-left text-sm text-rose-300 hover:bg-rose-950"
+      >
+        🗑 Reset all progress
+      </button>
     </div>
   )
 }

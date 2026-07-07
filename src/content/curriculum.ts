@@ -1524,3 +1524,28 @@ export const domainLabels: { id: string; title: string; x: number; y: number }[]
 ]
 
 export const XP_PER_NODE = 100
+
+// ---- Map view tiers (cumulative content layers) ----
+
+/** Depth-chain lessons: ids ending in -2/-3 (e.g. math-linalg-2). */
+export const isDepthId = (id: string) => /-\d$/.test(id)
+
+/**
+ * Content layer of a node: 0 = essentials/intro, 1 = depth chain. Inferred
+ * from the id suffix unless the node sets `tier` explicitly. Future stages
+ * (rigor, labs…) claim higher tiers by setting `tier` on their nodes.
+ */
+export const nodeTier = (n: KnowledgeNode): number => n.tier ?? (isDepthId(n.id) ? 1 : 0)
+
+/**
+ * The map's selectable view layers, cumulative: picking a tier shows every
+ * node at that tier or below. ADD AN ENTRY here when a new stage's nodes land
+ * — the map's segmented control renders straight from this list.
+ */
+export const viewTiers: { tier: number; icon: string; label: string; desc: string }[] = [
+  { tier: 0, icon: '🌱', label: 'Essentials', desc: 'One intro lesson per topic — the breadth spine, nothing else.' },
+  { tier: 1, icon: '🌳', label: 'Depth', desc: 'Everything: intros plus the deep-dive chains (-2/-3 lessons).' },
+]
+
+/** The highest defined tier — the "show everything" view. */
+export const MAX_TIER = viewTiers[viewTiers.length - 1].tier

@@ -4,6 +4,7 @@ import LessonPlayer from './components/LessonPlayer'
 import SettingsPanel from './components/SettingsPanel'
 import RoadmapView from './components/RoadmapView'
 import ReviewQueue from './components/ReviewQueue'
+import AchievementToasts from './components/AchievementToasts'
 import { useStore } from './store'
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
         <div className="flex items-center gap-3">
           <span className="text-xl">🤖</span>
           <h1 className="text-base font-bold tracking-tight">
-            Foundations <span className="font-normal text-slate-500">· one map, every subject</span>
+            Atlas <span className="font-normal text-slate-500">· one map, every subject</span>
           </h1>
         </div>
         <div className="flex items-center gap-4">
@@ -73,6 +74,7 @@ function App() {
           <LessonPlayer key={view.nodeId} nodeId={view.nodeId} />
         )}
         {roadmapOpen && <RoadmapView onClose={() => setRoadmapOpen(false)} />}
+        <AchievementToasts />
       </main>
     </div>
   )

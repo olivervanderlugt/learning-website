@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { MAX_TIER } from './content/curriculum'
 import type { NodeStatus, Progress, ReviewState } from './types'
 
 // ---- Spaced repetition (Stage 4) ----
@@ -38,10 +39,10 @@ interface AppState extends Progress {
   /** Backfill review schedules for nodes mastered before this feature existed. */
   seedMissingReviews: () => void
   toggleTheme: () => void
-  /** Toggle between the foundations-only map view and the full depth-chain view. */
-  toggleShowDepth: () => void
+  /** Pick the map's content layer (0 = essentials, up to MAX_TIER = everything). */
+  setViewTier: (tier: number) => void
   resetProgress: () => void
-  importProgress: (data: Partial<Progress>) => void
+  importProgress: (data: Partial<Progress> & { showDepth?: boolean }) => void
 }
 
 const initialProgress: Progress = {
@@ -55,7 +56,7 @@ const initialProgress: Progress = {
   navStack: [],
   reviews: {},
   theme: 'dark',
-  showDepth: true,
+  viewTier: MAX_TIER,
 }
 
 export const useStore = create<AppState>()(
@@ -149,9 +150,9 @@ export const useStore = create<AppState>()(
 
       toggleTheme: () => set((s) => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
 
-      toggleShowDepth: () => set((s) => ({ showDepth: !s.showDepth })),
+      setViewTier: (tier) => set({ viewTier: Math.max(0, Math.min(MAX_TIER, tier)) }),
 
-      resetProgress: () => set((s) => ({ ...initialProgress, theme: s.theme, showDepth: s.showDepth })),
+      resetProgress: () => set((s) => ({ ...initialProgress, theme: s.theme, viewTier: s.viewTier })),
 
       importProgress: (data) =>
         set((s) => ({
@@ -165,7 +166,10 @@ export const useStore = create<AppState>()(
           navStack: [],
           reviews: data.reviews ?? {},
           theme: data.theme ?? s.theme,
-          showDepth: data.showDepth ?? s.showDepth,
+          // Accept both the current field and the short-lived boolean it replaced.
+          viewTier:
+            data.viewTier ??
+            (typeof data.showDepth === 'boolean' ? (data.showDepth ? MAX_TIER : 0) : s.viewTier),
         })),
     }),
     {
@@ -181,11 +185,15 @@ export const useStore = create<AppState>()(
         navStack: s.navStack,
         reviews: s.reviews,
         theme: s.theme,
-        showDepth: s.showDepth,
+        viewTier: s.viewTier,
       }),
     },
   ),
 )
+
+// Dev-only handle so browser-driven verification reaches the LIVE store
+// (dynamic import('/src/store.ts') gets a parallel instance under Vite HMR).
+if (import.meta.env.DEV) (globalThis as unknown as { __store?: typeof useStore }).__store = useStore
 
 /** Mastered nodes whose review is due (computed, never stored). */
 export function dueReviewIds(

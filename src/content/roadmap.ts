@@ -25,7 +25,7 @@ export const stages: RoadmapStage[] = [
     status: 'done',
     goal: 'Give intuition + vocabulary for the WHOLE map — one interactive lesson per big idea in every domain, so nothing on the map is a mystery and every subject has an on-ramp.',
     doneWhen: 'Every domain has playable intro lessons for its nodes.',
-    note: 'Complete — every one of the 14 domains has playable intro lessons. The 🌱 Foundations toggle on the map shows exactly this layer.',
+    note: 'Complete — every one of the 14 domains has playable intro lessons. The map’s 🌱 Essentials view shows exactly this layer.',
   },
   {
     n: 1,
@@ -33,7 +33,7 @@ export const stages: RoadmapStage[] = [
     status: 'current',
     goal: 'Turn each single-lesson node from "I get the idea" into "I can actually do this" — multiple lessons per key node (concept → worked problems → independent problem sets via bigger extra-practice pools), plus a module exam per domain.',
     doneWhen: 'Every domain has an exam node (fresh mixed retrieval, prereqs = all domain nodes), and the robotics-critical nodes (calculus, linear algebra, probability, control, programming) each span 2–4 lessons instead of one.',
-    note: 'The current frontier — deep-dive chains land here session by session (math ×4, control, kinematics, Kalman estimation, forces and electricity are in). The 🌳 Full depth toggle on the map shows them.',
+    note: 'The current frontier — deep-dive chains land here session by session (math ×4, control, kinematics, Kalman estimation, forces and electricity are in). The map’s 🌳 Depth view shows them; each future stage gets its own view layer.',
   },
   {
     n: 2,

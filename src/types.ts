@@ -35,6 +35,12 @@ export interface KnowledgeNode {
   hasLesson?: boolean
   /** Node is a module exam (mixed retrieval test over several nodes). */
   isExam?: boolean
+  /**
+   * Content layer for the map's view selector: 0 = essentials/intro (default),
+   * 1 = depth chain. Future stages claim higher tiers (2 = rigor, 3 = labs…).
+   * Usually inferred from the id (-2/-3 suffix ⇒ 1) — set explicitly to override.
+   */
+  tier?: number
   /** Curated videos/links/books for going deeper than the lesson. */
   resources?: Resource[]
 }
@@ -205,9 +211,9 @@ export interface Progress {
   reviews: Record<string, ReviewState>
   theme: Theme
   /**
-   * Map view mode: true shows the full depth chains (-2/-3 lessons), false
-   * shows the foundations-only "essentials" view. Pure view preference —
-   * unlock logic and suggestions always use the full graph.
+   * Highest content layer shown on the map (cumulative): 0 = essentials only,
+   * 1 = + depth chains; future stages add tiers (2 = rigor, 3 = labs…).
+   * Pure view preference — unlock logic and suggestions always use the full graph.
    */
-  showDepth: boolean
+  viewTier: number
 }

@@ -10,7 +10,14 @@ import {
 } from '@xyflow/react'
 import type { Edge, NodeTypes } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import { domains, domainLabels, nodeById, nodes as curriculum } from '../content/curriculum'
+import {
+  domains,
+  domainLabels,
+  nodeById,
+  nodes as curriculum,
+  nodeTier,
+  viewTiers,
+} from '../content/curriculum'
 import { useStore, nodeStatus, dueReviewIds } from '../store'
 import { SkillNode, DomainLabelNode, subjectStyles, subjectNames } from './SkillNode'
 import type { SkillFlowNode, LabelFlowNode } from './SkillNode'
@@ -29,6 +36,17 @@ const subjectHex: Record<Subject, string> = {
   robotics: '#fb7185',
   history: '#e879f9',
   chemistry: '#2dd4bf',
+}
+
+/** Darker subject shades for the minimap on light backgrounds (mirrors html.light in index.css). */
+const subjectHexLight: Record<Subject, string> = {
+  cs: '#0891b2',
+  math: '#7c3aed',
+  physics: '#b45309',
+  engineering: '#047857',
+  robotics: '#e11d48',
+  history: '#a21caf',
+  chemistry: '#0f766e',
 }
 
 const NODE_W = 192
@@ -53,16 +71,13 @@ const labelSubject: Record<string, Subject> = {
 }
 
 /**
- * Depth-chain lessons (ids ending in -2/-3, e.g. math-linalg-2) — the Stage-1
- * deep-dives that hang under an intro node. The map's "Depth" toggle hides
- * them for a foundations-only view; unlock logic always uses the full graph.
+ * Walk up a node's prereq chain until it lands at or below the given tier,
+ * e.g. tier 0: phys-forces-3 → phys-forces. Higher-tier nodes always hang off
+ * a chain whose first prereq leads back to a lower tier.
  */
-export const isDepthId = (id: string) => /-\d$/.test(id)
-
-/** Walk a depth chain up to its (visible) intro node, e.g. phys-forces-3 → phys-forces. */
-const projectToFoundations = (id: string): string => {
+const projectToTier = (id: string, tier: number): string => {
   let cur = id
-  while (isDepthId(cur)) cur = nodeById.get(cur)!.prereqIds[0]
+  while (nodeTier(nodeById.get(cur)!) > tier) cur = nodeById.get(cur)!.prereqIds[0]
   return cur
 }
 
@@ -98,19 +113,19 @@ function buildVisibleEdges(prereqsOf: (n: KnowledgeNode) => string[], include: (
   return edges
 }
 
-/** Full-graph edges (depth chains shown). */
-const fullEdges = buildVisibleEdges(
-  (n) => n.prereqIds,
-  () => true,
-)
-
 /**
- * Foundations-only edges: depth nodes hidden, their in/out edges re-anchored to
- * the chain intro (deduped, self-loops dropped) so the map stays connected.
+ * One edge list per view tier. At lower tiers, hidden higher-tier nodes have
+ * their in/out edges re-anchored down the chain (deduped, self-loops dropped)
+ * so the map stays connected.
  */
-const foundationEdges = buildVisibleEdges(
-  (n) => [...new Set(n.prereqIds.map(projectToFoundations))].filter((p) => p !== n.id),
-  (n) => !isDepthId(n.id),
+const edgesByTier = new Map(
+  viewTiers.map(({ tier }) => [
+    tier,
+    buildVisibleEdges(
+      (n) => [...new Set(n.prereqIds.map((p) => projectToTier(p, tier)))].filter((p) => p !== n.id),
+      (n) => nodeTier(n) <= tier,
+    ),
+  ]),
 )
 
 /** Bounding box of a domain's nodes (plus its label above). */
@@ -142,8 +157,8 @@ function SkillTreeInner() {
   const reviews = useStore((s) => s.reviews)
   const openLesson = useStore((s) => s.openLesson)
   const theme = useStore((s) => s.theme)
-  const showDepth = useStore((s) => s.showDepth)
-  const toggleShowDepth = useStore((s) => s.toggleShowDepth)
+  const viewTier = useStore((s) => s.viewTier)
+  const setViewTier = useStore((s) => s.setViewTier)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   /** Empty = show every subject; otherwise only the chosen subjects are visible. */
   const [activeSubjects, setActiveSubjects] = useState<Set<Subject>>(new Set())
@@ -151,7 +166,7 @@ function SkillTreeInner() {
 
   const showAll = activeSubjects.size === 0
   const isVisible = (subj: Subject) => showAll || activeSubjects.has(subj)
-  const nodeShown = (n: KnowledgeNode) => isVisible(n.subject) && (showDepth || !isDepthId(n.id))
+  const nodeShown = (n: KnowledgeNode) => isVisible(n.subject) && nodeTier(n) <= viewTier
 
   const flowNodes = useMemo(() => {
     const due = new Set(dueReviewIds(reviews, masteredNodeIds))
@@ -184,31 +199,33 @@ function SkillTreeInner() {
       hidden: !isVisible(labelSubject[l.id] ?? 'cs'),
     }))
     return [...skillNodes, ...labels]
-  }, [masteredNodeIds, knownNodeIds, reviews, activeSubjects, showDepth])
+  }, [masteredNodeIds, knownNodeIds, reviews, activeSubjects, viewTier])
 
   /** Nodes filtered out — their edges are hidden too. */
   const hiddenNodeIds = useMemo(
     () => new Set(curriculum.filter((n) => !nodeShown(n)).map((n) => n.id)),
-    [activeSubjects, showDepth],
+    [activeSubjects, viewTier],
   )
 
   const flowEdges = useMemo<Edge[]>(
     () =>
-      (showDepth ? fullEdges : foundationEdges).map(({ source: p, target }) => {
-        const active = masteredNodeIds.includes(p)
-        return {
-          id: `${p}->${target}`,
-          source: p,
-          target,
-          style: {
-            stroke: active ? '#38bdf8' : '#334155',
-            strokeWidth: active ? 2 : 1.5,
-          },
-          animated: active && !masteredNodeIds.includes(target),
-          hidden: hiddenNodeIds.has(p) || hiddenNodeIds.has(target),
-        }
-      }),
-    [masteredNodeIds, hiddenNodeIds, showDepth],
+      (edgesByTier.get(viewTier) ?? edgesByTier.get(viewTiers[viewTiers.length - 1].tier)!).map(
+        ({ source: p, target }) => {
+          const active = masteredNodeIds.includes(p)
+          return {
+            id: `${p}->${target}`,
+            source: p,
+            target,
+            style: {
+              stroke: active ? '#38bdf8' : '#334155',
+              strokeWidth: active ? 2 : 1.5,
+            },
+            animated: active && !masteredNodeIds.includes(target),
+            hidden: hiddenNodeIds.has(p) || hiddenNodeIds.has(target),
+          }
+        },
+      ),
+    [masteredNodeIds, hiddenNodeIds, viewTier],
   )
 
   const toggleSubject = (s: Subject) =>
@@ -228,7 +245,7 @@ function SkillTreeInner() {
     }
     const t = setTimeout(() => fitView({ padding: 0.2, duration: 400 }), 60)
     return () => clearTimeout(t)
-  }, [activeSubjects, showDepth, fitView])
+  }, [activeSubjects, viewTier, fitView])
 
   const selected: KnowledgeNode | undefined = selectedId ? nodeById.get(selectedId) : undefined
 
@@ -264,7 +281,10 @@ function SkillTreeInner() {
             const kn = nodeById.get(n.id)
             if (!kn) return 'transparent'
             const st = nodeStatus(kn.id, kn.prereqIds, masteredNodeIds, knownNodeIds)
-            return st === 'later' ? '#1e293b' : subjectHex[kn.subject]
+            // 'later' blocks were hardcoded near-black — invisible contrast on the
+            // light minimap. Both the dim shade and the subject colors flip now.
+            if (st === 'later') return theme === 'light' ? '#cbd5e1' : '#1e293b'
+            return (theme === 'light' ? subjectHexLight : subjectHex)[kn.subject]
           }}
           nodeStrokeWidth={0}
         />
@@ -291,21 +311,25 @@ function SkillTreeInner() {
           🗺 Whole map
         </button>
         <span className="mx-1 h-4 w-px bg-slate-700" />
-        <button
-          onClick={toggleShowDepth}
-          title={
-            showDepth
-              ? 'Hide the deep-dive chains (-2/-3 lessons) for a foundations-only overview. Suggestions and unlocks are unaffected.'
-              : 'Show the full map including every deep-dive chain.'
-          }
-          className={`rounded-full border px-2.5 py-0.5 text-[11px] font-medium transition ${
-            showDepth
-              ? 'border-violet-500/40 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20'
-              : 'border-slate-600 bg-slate-800 text-slate-300 hover:bg-slate-700'
-          }`}
-        >
-          {showDepth ? '🌳 Full depth' : '🌱 Foundations'}
-        </button>
+        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">View</span>
+        <div className="flex overflow-hidden rounded-lg border border-slate-700">
+          {viewTiers.map((t, i) => (
+            <button
+              key={t.tier}
+              onClick={() => setViewTier(t.tier)}
+              title={`${t.desc} Suggestions and unlocks are never affected.`}
+              className={`px-2.5 py-1 text-[11px] font-medium transition ${
+                i > 0 ? 'border-l border-slate-700' : ''
+              } ${
+                viewTier === t.tier
+                  ? 'bg-violet-500/15 text-violet-300'
+                  : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+              }`}
+            >
+              {t.icon} {t.label}
+            </button>
+          ))}
+        </div>
         <span className="mx-1 h-4 w-px bg-slate-700" />
         <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Filter</span>
         {(Object.keys(subjectHex) as Subject[]).map((s) => {
