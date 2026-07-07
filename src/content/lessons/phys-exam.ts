@@ -7,7 +7,7 @@ export const physExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — the laws your robot obeys',
       body: [
-        'Ten questions spanning forces, energy and electricity — all NEW scenarios, no repeats from the lesson quizzes. No sims, no notes: pure retrieval from memory.',
+        'Fourteen questions spanning forces, kinematics, momentum, rotation, energy and electricity — all NEW scenarios, no repeats from the lesson quizzes. No sims, no notes: pure retrieval from memory.',
         'Score 80% and physics is sealed. Fall short? It costs nothing — you’ll see exactly which law slipped, review it, and retake.',
       ],
     },
@@ -164,6 +164,58 @@ export const physExamLesson: Lesson = {
         'The classic “current gets used up” trap — the flow is like water in a closed loop, identical everywhere in a series path. The motor drains energy from the charge, not the charge itself.',
         'If 0 A came out, charge would pile up inside the motor forever — circuits are loops, and the flow rate matches all the way around.',
         'Voltage sets HOW MUCH current flows in the first place (I = V/R), but whatever flows in one terminal flows out the other — series current is the same everywhere.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A rover decelerates steadily from 8 m/s to a full stop over 4 seconds. How far does it travel while braking?',
+      options: ['16 m', '32 m', '8 m', '24 m'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: with constant deceleration, average speed is (8+0)/2 = 4 m/s; distance = 4 × 4 = 16 m.',
+        '32 m treats the speed as a constant 8 m/s the whole time — but it’s slowing to a stop, so you need the AVERAGE speed, 4 m/s, not the starting speed.',
+        '8 m divides the correct answer by 2 again — the average-speed method already accounts for the slow-down once.',
+        '24 m overcounts — the correct average speed is (8+0)/2 = 4 m/s, giving 4 × 4 = 16 m, not 24.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A robot launches a small dart horizontally at 6 m/s off a shelf 1.25 m above the floor (use g = 10 m/s²). How far from the shelf does it land?',
+      options: ['3.0 m', '1.25 m', '6.0 m', '12 m'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: fall time comes from the VERTICAL drop alone: 1.25 = ½×10×t² → t = 0.5 s. Horizontal distance = 6 × 0.5 = 3.0 m.',
+        '1.25 m is just the shelf height — that number describes how far it falls, not how far it travels sideways.',
+        '6.0 m is the horizontal speed by itself, skipping the step of finding how LONG the fall actually takes.',
+        '12 m would need a 2-second fall — but 1.25 m only takes 0.5 s to fall at g = 10 m/s², not 2 s.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A 2 kg robot-arm segment moving at 3 m/s collides and sticks to a stationary 4 kg segment. What is their combined speed afterward?',
+      options: ['1 m/s', '1.5 m/s', '3 m/s', '0.5 m/s'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: total momentum = 2×3 + 4×0 = 6 kg·m/s; combined mass = 6 kg; v = 6/6 = 1 m/s.',
+        '1.5 m/s divides the momentum by the WRONG mass (4 kg instead of the combined 6 kg).',
+        '3 m/s would mean the collision changed nothing — but the momentum must now move a heavier combined mass, so it slows.',
+        '0.5 m/s divides the momentum by too much mass — the correct total is 6 kg, giving 1 m/s.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'You apply a 5 N force perpendicular to a wrench, 0.3 m from the bolt. What torque does that produce?',
+      options: ['1.5 N·m', '15 N·m', '5.3 N·m', '0.06 N·m'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: torque = lever arm × force = 0.3 × 5 = 1.5 N·m.',
+        '15 N·m is off by a factor of 10 — likely misreading 0.3 m as 3 m. τ = 0.3 × 5 = 1.5 N·m.',
+        '5.3 N·m comes from ADDING the lever arm and force (0.3 + 5) — torque MULTIPLIES them.',
+        '0.06 N·m comes from dividing (0.3 ÷ 5) instead of multiplying — torque is r × F = 1.5 N·m.',
       ],
     },
   ],

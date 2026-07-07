@@ -403,17 +403,45 @@ export const nodes: KnowledgeNode[] = [
     hasLesson: true,
   },
   {
+    id: 'phys-forces-2',
+    title: 'Kinematics: suvat, Projectiles & Circles',
+    subject: 'physics',
+    domainId: 'physics',
+    description:
+      'The five-letter toolkit for constant-acceleration motion, then two of its favorite applications: things you throw, and things that spin in place.',
+    whyItMatters:
+      'Trajectory planning for a thrown payload or a swinging arm IS suvat — the same four equations, over and over.',
+    prereqIds: ['phys-forces'],
+    x: 2450,
+    y: 150,
+    hasLesson: true,
+  },
+  {
+    id: 'phys-forces-3',
+    title: 'Momentum, Collisions & Rotation',
+    subject: 'physics',
+    domainId: 'physics',
+    description:
+      'What never leaks in a collision, and rotation’s mirror-image version of force, mass and momentum.',
+    whyItMatters:
+      'A gripper closing on an object, a wheel spinning up, a reaction wheel steering a satellite — all three run on this page.',
+    prereqIds: ['phys-forces-2'],
+    x: 2480,
+    y: 320,
+    hasLesson: true,
+  },
+  {
     id: 'phys-exam',
     title: 'Module Exam: Physics',
     subject: 'physics',
     domainId: 'physics',
     description:
-      'Ten fresh questions across forces, energy and circuits — with numbers, units and the classic traps. From memory. 80% to pass.',
+      'Fourteen fresh questions across forces, kinematics, momentum, rotation, energy and circuits — with numbers, units and the classic traps. From memory. 80% to pass.',
     whyItMatters:
       'Whether your robot climbs the ramp is decided by exactly these equations — better to fail them here than in hardware.',
-    prereqIds: ['phys-forces', 'phys-energy', 'phys-electricity'],
+    prereqIds: ['phys-forces', 'phys-forces-2', 'phys-forces-3', 'phys-energy', 'phys-electricity'],
     x: 2060,
-    y: 300,
+    y: 480,
     hasLesson: true,
     isExam: true,
   },
@@ -1207,6 +1235,16 @@ const resourcesByNode: Record<string, Resource[]> = {
   'robo-control': [
     { type: 'video', title: 'Brian Douglas — Understanding PID (MATLAB)', url: 'https://www.youtube.com/watch?v=wkfEZmsQqiA', note: 'The classic PID explanation every robotics engineer has watched.' },
     { type: 'video', title: 'Brian Douglas — Control systems channel', url: 'https://www.youtube.com/user/ControlLectures', note: 'A whole free control-theory education, one animation at a time.' },
+  ],
+  'phys-forces-2': [
+    { type: 'video', title: 'Walter Lewin — 8.01 Lecture 4 (Projectile Motion)', url: 'https://www.youtube.com/playlist?list=PLyQSN7X0ro203puVhQsmCj9qhlFQ-As8e', note: 'MIT’s legendary lecturer derives and demonstrates suvat and projectiles live in the lecture hall.' },
+    { type: 'interactive', title: 'PhET — Projectile Motion', url: 'https://phet.colorado.edu/en/simulations/filter?subjects=physics&type=html', note: 'Drag the launch angle and speed, watch the trajectory and range update live.' },
+    { type: 'course', title: 'MIT 8.01SC — Kinematics', url: 'https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/', note: 'Full free course with problem sets and solutions for everything in this lesson.' },
+  ],
+  'phys-forces-3': [
+    { type: 'video', title: 'Walter Lewin — 8.01 Rotation Lectures (19–24, 31–32)', url: 'https://www.youtube.com/playlist?list=PLyQSN7X0ro203puVhQsmCj9qhlFQ-As8e', note: 'Torque, moment of inertia and angular momentum, including a live spinning-chair demo.' },
+    { type: 'video', title: 'The Mechanical Universe — Conservation of Momentum', url: 'https://www.youtube.com/playlist?list=PL8_xPU5epJddRABXqJ5h5G0dk-XGtA5cZ', note: 'Caltech’s classic series; the momentum and rotation episodes pair perfectly with this lesson.' },
+    { type: 'interactive', title: 'PhET — Torque & Rotation sims', url: 'https://phet.colorado.edu/en/simulations/filter?subjects=physics&type=html', note: 'Play with levers, spinning platforms and moment of inertia hands-on.' },
   ],
   'robo-control-2': [
     { type: 'video', title: 'MATLAB Tech Talks — Understanding PID Control (series)', url: 'https://www.mathworks.com/videos/series/understanding-pid-control.html', note: 'Parts 2–3 cover exactly this lesson: reading responses and the tuning trade-offs, beautifully animated.' },
