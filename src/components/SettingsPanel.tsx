@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useStore } from '../store'
 import type { Progress } from '../types'
 
@@ -6,8 +6,21 @@ export default function SettingsPanel() {
   const [open, setOpen] = useState(false)
   const [msg, setMsg] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
   const importProgress = useStore((s) => s.importProgress)
   const resetProgress = useStore((s) => s.resetProgress)
+
+  // Close when clicking anywhere outside — so opening another header panel
+  // (the XP/progress dropdown, reviews) dismisses this one instead of stacking
+  // both open and overlapping. Mirrors ProgressPanel/ReviewQueue.
+  useEffect(() => {
+    if (!open) return
+    const onClick = (e: MouseEvent) => {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false)
+    }
+    window.addEventListener('mousedown', onClick)
+    return () => window.removeEventListener('mousedown', onClick)
+  }, [open])
 
   const exportProgress = () => {
     const s = useStore.getState()
@@ -56,7 +69,7 @@ export default function SettingsPanel() {
   }
 
   return (
-    <div className="relative">
+    <div ref={rootRef} className="relative">
       <button
         onClick={() => { setOpen(!open); setMsg(null) }}
         aria-label="Settings"

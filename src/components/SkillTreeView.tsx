@@ -4,6 +4,7 @@ import {
   ReactFlowProvider,
   Background,
   Controls,
+  ControlButton,
   MiniMap,
   BackgroundVariant,
   useReactFlow,
@@ -165,6 +166,23 @@ function SkillTreeInner() {
   /** Empty = show every subject; otherwise only the chosen subjects are visible. */
   const [activeSubjects, setActiveSubjects] = useState<Set<Subject>>(new Set())
   const { fitBounds, fitView } = useReactFlow()
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  // Track the browser Fullscreen API so the control icon reflects the real state
+  // (Esc-to-exit updates it too, not just our button).
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(!!document.fullscreenElement)
+    document.addEventListener('fullscreenchange', onChange)
+    return () => document.removeEventListener('fullscreenchange', onChange)
+  }, [])
+
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.()
+    } else {
+      document.documentElement.requestFullscreen?.()
+    }
+  }
 
   const showAll = activeSubjects.size === 0
   const isVisible = (subj: Subject) => showAll || activeSubjects.has(subj)
@@ -273,7 +291,23 @@ function SkillTreeInner() {
         className="bg-slate-950"
       >
         <Background variant={BackgroundVariant.Dots} gap={24} size={1} color={theme === 'light' ? '#cbd5e1' : '#1e293b'} />
-        <Controls showInteractive={false} position="bottom-left" />
+        <Controls showInteractive={false} showFitView={false} position="bottom-left">
+          <ControlButton
+            onClick={toggleFullscreen}
+            title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+            aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+          >
+            {isFullscreen ? (
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3" />
+              </svg>
+            )}
+          </ControlButton>
+        </Controls>
         <MiniMap
           position="bottom-right"
           pannable
