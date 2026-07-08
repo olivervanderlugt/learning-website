@@ -7,7 +7,7 @@ export const osExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — command the machine',
       body: [
-        'Ten questions across scheduling, virtual memory and I/O — all NEW, no repeats from the lesson quizzes. No notes, no lookups: retrieval from memory is the point.',
+        'Fourteen questions across scheduling, virtual memory, I/O and concurrency — all NEW, no repeats from the lesson quizzes. No notes, no lookups: retrieval from memory is the point.',
         'Score 80% and the module is sealed. Below that? You lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -174,6 +174,73 @@ export const osExamLesson: Lesson = {
         'One interrupt per byte is 30 MILLION interrupts a second — the save/restore overhead alone would bury the CPU.',
         'A tight poll loop dedicates the whole CPU to being a copy machine — nothing left for the vision pipeline it’s feeding.',
         'Copying 1 MB inside a handler blocks every other interrupt for the whole copy — encoder ticks and e-stops wait behind a million bytes.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A shared counter starts at 0. Three threads each run `count = count + 1` exactly once, with no locking. What is the LOWEST value count could end up holding?',
+      options: ['1', '3', '0', '2'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: if all three load 0 before any stores, each writes 1 and the last store wins — two increments are lost, leaving 1. At least one always sticks, so 0 is impossible and 1 is the floor.',
+        '3 is the BEST case (no overlap), not the lowest — the question asks how bad the race can get.',
+        '0 would mean every increment vanished, but at least one store always lands — the minimum is 1.',
+        '2 is one possible interleaving, but with three threads all reading 0 you can lose two increments, reaching 1.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'You guard a shared list with a mutex, but one error path returns WITHOUT releasing it. Under load the robot freezes with no crash and no error message. The cause?',
+      options: [
+        'The leaked lock is never released, so every thread that later needs it blocks forever',
+        'A race condition corrupted the list’s contents',
+        'The machine ran out of memory holding the mutex',
+        'Two locks were acquired in opposite orders, causing a deadlock cycle',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: a lock is a promise to release; skip it on one path and every future waiter sleeps forever. Releasing in a `finally`/scope-guard is the fix.',
+        'The freeze is threads BLOCKED on a lock, not corrupted data — a race would give wrong values, not a stall.',
+        'A mutex is a few bytes; memory isn’t the issue — the missing release is.',
+        'There’s only one lock here, so no cycle can form — it’s a leaked lock, not a deadlock.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A logging thread locks `file` then `buffer`; a flush thread locks `buffer` then `file`. Occasionally both freeze forever. What is the minimal fix?',
+      options: [
+        'Make both threads acquire the locks in the same global order (e.g. file before buffer)',
+        'Give each thread its own private copy of the file and buffer',
+        'Raise the logging thread’s priority above the flush thread’s',
+        'Remove the file lock so only the buffer is protected',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the freeze is a circular wait from opposite lock orders. One consistent global order makes a cycle impossible — the cheapest deadlock prevention there is.',
+        'Private copies defeat the point of a shared file/buffer and don’t address the ordering bug.',
+        'Priority doesn’t break the wait cycle — a higher-priority thread still blocks on a lock the other holds.',
+        'Dropping the file lock reintroduces a race on the file — you’d trade a deadlock for corruption.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Three periodic tasks are all ready at once: motor control (2 ms period), path planner (50 ms), telemetry (200 ms). Under rate-monotonic scheduling, which runs first?',
+      options: [
+        'Motor control — the shortest period gets the highest priority',
+        'Telemetry — the longest period, so it isn’t starved',
+        'Path planner — it sits in the middle and balances the others',
+        'Whichever task happened to become ready first',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: rate-monotonic ranks by period, and the 2 ms motor loop is the most urgent — it preempts the slower tasks every time.',
+        'Longest period = lowest priority under rate-monotonic; telemetry waits behind the faster loops.',
+        'The planner’s 50 ms period puts it in the middle of the priority order, not first.',
+        'Rate-monotonic ignores start order entirely — priority is fixed by period.',
       ],
     },
   ],

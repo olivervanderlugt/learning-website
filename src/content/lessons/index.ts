@@ -47,6 +47,9 @@ import { aiNeuralLesson } from './ai-neural'
 import { osProcessesLesson } from './os-processes'
 import { osMemoryLesson } from './os-memory'
 import { osIoLesson } from './os-io'
+import { osConcurrencyLesson } from './os-concurrency'
+import { osConcurrency2Lesson } from './os-concurrency-2'
+import { osConcurrency3Lesson } from './os-concurrency-3'
 import { netStackLesson } from './net-stack'
 import { netPacketsLesson } from './net-packets'
 import { netProtocolsLesson } from './net-protocols'
@@ -147,6 +150,9 @@ export const lessons: Record<string, Lesson> = {
   'os-processes': osProcessesLesson,
   'os-memory': osMemoryLesson,
   'os-io': osIoLesson,
+  'os-concurrency': osConcurrencyLesson,
+  'os-concurrency-2': osConcurrency2Lesson,
+  'os-concurrency-3': osConcurrency3Lesson,
   'net-stack': netStackLesson,
   'net-packets': netPacketsLesson,
   'net-protocols': netProtocolsLesson,

@@ -796,16 +796,62 @@ export const nodes: KnowledgeNode[] = [
     y: 1500,
     hasLesson: true,
   },
+  // Concurrency chain hangs off os-processes into the open space right of the
+  // OS cell (x4280 col, between os-io at x4040 and Electronics at x4660). Intro
+  // is tier-0 Essentials; -2/-3 are tier-1 Depth. os-exam repoints to the chain
+  // bottom (transitive filter hides the redundant os-processes→exam edge).
+  {
+    id: 'os-concurrency',
+    title: 'Threads & Race Conditions',
+    subject: 'cs',
+    domainId: 'os',
+    description:
+      'Threads share memory, so two can touch the same variable at once — and updates silently vanish. Meet the race condition.',
+    whyItMatters:
+      'Your robot’s sensing, planning and motor threads share state; a lost update there is a bug that passes every test and crashes in the field.',
+    prereqIds: ['os-processes'],
+    x: 4360,
+    y: 1360,
+    hasLesson: true,
+  },
+  {
+    id: 'os-concurrency-2',
+    title: 'Locks, Mutexes & Semaphores',
+    subject: 'cs',
+    domainId: 'os',
+    description:
+      'Mutual exclusion tames the race: locks, counting semaphores, and condition variables so threads wait for each other efficiently.',
+    whyItMatters:
+      'Every shared sensor queue and resource pool on a robot is a lock or semaphore — the tools that turn overlap into an orderly queue.',
+    prereqIds: ['os-concurrency'],
+    x: 4360,
+    y: 1560,
+    hasLesson: true,
+  },
+  {
+    id: 'os-concurrency-3',
+    title: 'Deadlock & Real-Time Scheduling',
+    subject: 'cs',
+    domainId: 'os',
+    description:
+      'Locks can freeze the system in a wait cycle. The four deadlock conditions, lock ordering, and why control loops need priorities.',
+    whyItMatters:
+      'A deadlocked robot stops dead with no error; priority inversion froze a Mars rover. Real-time scheduling is what keeps a control loop on time.',
+    prereqIds: ['os-concurrency-2'],
+    x: 4360,
+    y: 1760,
+    hasLesson: true,
+  },
   {
     id: 'os-exam',
     title: 'Module Exam: Operating Systems',
     subject: 'cs',
     domainId: 'os',
     description:
-      'Ten fresh questions across scheduling, virtual memory and I/O — including traces you compute by hand. 80% to pass.',
+      'Fourteen fresh questions across scheduling, virtual memory, I/O and concurrency — including traces you compute by hand. 80% to pass.',
     whyItMatters:
-      'A robot is a dozen processes sharing one small computer — the OS rules you retrieve here are what keep them from trampling each other.',
-    prereqIds: ['os-processes', 'os-memory', 'os-io'],
+      'A robot is a dozen processes and threads sharing one small computer — the OS rules you retrieve here are what keep them from trampling each other.',
+    prereqIds: ['os-processes', 'os-memory', 'os-io', 'os-concurrency', 'os-concurrency-2', 'os-concurrency-3'],
     x: 4060,
     y: 1720,
     hasLesson: true,
@@ -1654,6 +1700,18 @@ const resourcesByNode: Record<string, Resource[]> = {
   'os-io': [
     { type: 'video', title: 'Ben Eater — Interrupts (6502 series)', url: 'https://eater.net/6502', note: 'Watch real interrupt hardware wired on a breadboard — polling vs interrupts made physical.' },
     { type: 'book', title: 'OSTEP — I/O devices chapter', url: 'https://pages.cs.wisc.edu/~remzi/OSTEP/', note: 'Polling, interrupts and DMA formalized.' },
+  ],
+  'os-concurrency': [
+    { type: 'book', title: 'OSTEP — Concurrency: an Introduction', url: 'https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf', note: 'The threads + race-condition chapter this lesson follows — free PDF.' },
+    { type: 'interactive', title: 'OSTEP homework simulators', url: 'https://pages.cs.wisc.edu/~remzi/OSTEP/Homework/homework.html', note: 'Python scripts that generate unlimited race/interleaving problems and compute the answers (-c flag).' },
+  ],
+  'os-concurrency-2': [
+    { type: 'book', title: 'OSTEP — Locks & Condition Variables', url: 'https://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks.pdf', note: 'Mutexes, spinlocks and how they’re built from atomic instructions.' },
+    { type: 'book', title: 'OSTEP — Semaphores', url: 'https://pages.cs.wisc.edu/~remzi/OSTEP/threads-sema.pdf', note: 'Counting semaphores and the producer–consumer pattern, worked in full.' },
+  ],
+  'os-concurrency-3': [
+    { type: 'book', title: 'OSTEP — Common Concurrency Problems (deadlock)', url: 'https://pages.cs.wisc.edu/~remzi/OSTEP/threads-bugs.pdf', note: 'The four conditions, lock ordering and real deadlock bugs.' },
+    { type: 'article', title: 'What really happened on Mars (priority inversion)', url: 'https://www.rapitasystems.com/blog/what-really-happened-to-the-software-on-the-mars-pathfinder-spacecraft', note: 'The Pathfinder priority-inversion story and the priority-inheritance fix.' },
   ],
   'net-stack': [
     { type: 'video', title: 'Practical Networking — OSI/TCP-IP model', url: 'https://www.youtube.com/watch?v=E5bSumTAHZE', note: 'The layer model with concrete packet examples.' },
