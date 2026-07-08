@@ -38,7 +38,9 @@ export const domains: Domain[] = [
 // prog-data→{os,net,algo,ros} edges sweep street S1; OS was lowered to
 // (3900,1300) so cpu→os clears the robotics cell. Verified clear in BOTH tiers.
 // RESERVED SLOTS for queued chains (keep empty; re-run the checker on use):
-//   math-linalg-4/-5  → col x1400, y620/820 (left of linalg col)
+//   math-linalg-4/-5  → PLACED at x1490, y620/835 (down-left of linalg col;
+//                       threaded between the math-logic→exam sweep on its left
+//                       and the prog-data→os-processes sweep just above -5)
 //   math-mv chain     → col x2520, y0-400   (right of calculus col)
 //   math-stats chain  → col x2520, y580-940 (below the mv slot)
 //   robo-control-4    → (2950,2300), continuing the control column
@@ -306,6 +308,39 @@ export const nodes: KnowledgeNode[] = [
     y: 400,
     hasLesson: true,
   },
+  // linalg depth continues into the reserved x1400 column (down-left of the
+  // linalg col so the -3→-4 edge exits the grid cleanly): rank/column-space +
+  // least squares (-4) → SVD & the pseudoinverse (-5). The single most
+  // robotics-valuable missing math (redundant-arm IK, point-cloud registration,
+  // covariance/conditioning). Both tier-1 Depth.
+  {
+    id: 'math-linalg-4',
+    title: 'Rank, Column Space & Least Squares',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'What a matrix can reach (its column space) and how many independent directions that is (its rank). When more equations than unknowns leave no exact answer, project onto what’s reachable: least squares, AᵀA·x̂ = Aᵀb.',
+    whyItMatters:
+      'Calibrating a camera, fitting a plane to a lidar cloud, estimating a pose from noisy odometry — all are least squares, the workhorse of robot perception.',
+    prereqIds: ['math-linalg-3'],
+    x: 1490,
+    y: 620,
+    hasLesson: true,
+  },
+  {
+    id: 'math-linalg-5',
+    title: 'SVD & the Pseudoinverse',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Every matrix factors as rotate-stretch-rotate (A = UΣVᵀ); the singular values grade how close it is to collapse. The pseudoinverse A⁺ inverts what it can — least squares for tall systems, minimum-norm for redundant ones.',
+    whyItMatters:
+      'Redundant-arm inverse kinematics, point-cloud registration (ICP) and the condition-number warning before a singularity all run on the SVD.',
+    prereqIds: ['math-linalg-4'],
+    x: 1490,
+    y: 835,
+    hasLesson: true,
+  },
   {
     id: 'math-prob-2',
     title: 'Distributions & Expected Value',
@@ -465,6 +500,8 @@ export const nodes: KnowledgeNode[] = [
       'math-linalg',
       'math-linalg-2',
       'math-linalg-3',
+      'math-linalg-4',
+      'math-linalg-5',
       'math-prob',
       'math-prob-2',
       'math-prob-3',
@@ -1368,6 +1405,16 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'video', title: '3Blue1Brown — Essence of Linear Algebra', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab', note: 'The gold standard. Watch it twice; robotics runs on these animations.' },
     { type: 'interactive', title: 'Immersive Linear Algebra', url: 'http://immersivemath.com/ila/index.html', note: 'A textbook where every figure is draggable.' },
     { type: 'course', title: 'MIT 18.06 — Gilbert Strang', url: 'https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/', note: 'The real bachelor course, free, when you want full depth.' },
+  ],
+  'math-linalg-4': [
+    { type: 'video', title: '3Blue1Brown — Inverse matrices, column space & null space', url: 'https://www.youtube.com/watch?v=uQhTuRlWMxw', note: 'The exact geometric picture of column space, rank and null space from this lesson.' },
+    { type: 'course', title: 'MIT 18.06 — Least squares & projections', url: 'https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/', note: 'Strang’s projection and AᵀAx̂ = Aᵀb lectures (15–16), free with problem sets and exams.' },
+    { type: 'article', title: 'Least squares (Wikipedia)', url: 'https://en.wikipedia.org/wiki/Linear_least_squares', note: 'Concise reference for the normal equations and their geometry.' },
+  ],
+  'math-linalg-5': [
+    { type: 'video', title: '3Blue1Brown / Visual Kernel — Singular Value Decomposition', url: 'https://www.youtube.com/watch?v=vSczTbgc8Rc', note: 'The rotate-stretch-rotate picture of the SVD, animated.' },
+    { type: 'course', title: 'MIT 18.06 — SVD & pseudoinverse', url: 'https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/', note: 'Strang’s SVD lectures (29–30) plus the pseudoinverse — the canonical treatment, free with solutions.' },
+    { type: 'article', title: 'Moore–Penrose pseudoinverse (Wikipedia)', url: 'https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse', note: 'Reference for A⁺, its least-squares/minimum-norm properties and the SVD formula A⁺ = VΣ⁺Uᵀ.' },
   ],
   'math-prob': [
     { type: 'interactive', title: 'Seeing Theory', url: 'https://seeing-theory.brown.edu', note: 'Beautiful interactive intro to probability & statistics.' },

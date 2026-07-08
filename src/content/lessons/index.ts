@@ -7,6 +7,8 @@ import { hcwExamLesson } from './hcw-exam'
 import { mathLinalgLesson } from './math-linalg'
 import { mathLinalg2Lesson } from './math-linalg-2'
 import { mathLinalg3Lesson } from './math-linalg-3'
+import { mathLinalg4Lesson } from './math-linalg-4'
+import { mathLinalg5Lesson } from './math-linalg-5'
 import { mathCalculusLesson } from './math-calculus'
 import { mathCalculus2Lesson } from './math-calculus-2'
 import { mathCalculus3Lesson } from './math-calculus-3'
@@ -94,6 +96,8 @@ export const lessons: Record<string, Lesson> = {
   'math-linalg': mathLinalgLesson,
   'math-linalg-2': mathLinalg2Lesson,
   'math-linalg-3': mathLinalg3Lesson,
+  'math-linalg-4': mathLinalg4Lesson,
+  'math-linalg-5': mathLinalg5Lesson,
   'math-calculus': mathCalculusLesson,
   'math-calculus-2': mathCalculus2Lesson,
   'math-calculus-3': mathCalculus3Lesson,

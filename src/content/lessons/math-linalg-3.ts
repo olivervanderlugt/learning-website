@@ -43,9 +43,7 @@ export const mathLinalg3Lesson: Lesson = {
       kind: 'code',
       prompt:
         'Finish the determinant function so it returns ad − bc for the matrix [[a, b], [c, d]]. The two test matrices are already set up — just complete the one returned line.',
-      starter: `const print = (...a) => console.log(a.join(' '))
-
-// Matrix [[a, b], [c, d]]  ->  determinant = a*d - b*c
+      starter: `// Matrix [[a, b], [c, d]]  ->  determinant = a*d - b*c
 function det(a, b, c, d) {
   return a * d - /* fill in: what gets subtracted? */ 0
 }

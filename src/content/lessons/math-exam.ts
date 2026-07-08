@@ -7,7 +7,7 @@ export const mathExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — math that moves robots',
       body: [
-        'Twenty-two questions spanning logic, vectors, matrices, probability, calculus, differential equations and multivariable calculus — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
+        'Twenty-six questions spanning logic, vectors, matrices, rank & least squares, the SVD, probability, calculus, differential equations and multivariable calculus — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
         'Score 80% and the module is sealed. Below that? You lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -356,6 +356,78 @@ export const mathExamLesson: Lesson = {
         '∇f = 0 finds the UNCONSTRAINED minimum, which usually violates g = 0.',
         '∇g = 0 describes the constraint degenerating, not the optimization condition — Lagrange matches f’s gradient to g’s, not sets g’s to zero.',
         'The objective value f need not be zero at the optimum; Lagrange is about gradient alignment, not function values.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'You have 200 noisy sensor readings and want the best-fit line (2 unknowns). Written A·x = b this is overdetermined with no exact solution. What system does least squares solve instead?',
+      options: [
+        'AᵀA·x̂ = Aᵀb — the normal equations, a 2×2 solve that gives the closest reachable fit',
+        'A·x̂ = b exactly — force every reading to be satisfied',
+        'A⁻¹·x̂ = b — invert the 200×2 matrix directly',
+        'x̂ = Aᵀb — just apply the transpose once',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: multiplying by Aᵀ enforces the residual ⟂ column space, collapsing 200 rows into the 2×2 normal equations AᵀA·x̂ = Aᵀb whose solution is the least-squares fit.',
+        'An exact solution can’t exist for noisy overdetermined data — that’s exactly why least squares projects onto the closest point instead.',
+        'A tall 200×2 matrix has no inverse; forming AᵀA (which IS square) is the way around that.',
+        'x̂ = Aᵀb has the wrong shape and skips the AᵀA solve; the normal equations require inverting AᵀA, not just applying Aᵀ.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A matrix has singular values (8, 2, 0). What are its rank and its most important weakness?',
+      options: [
+        'Rank 2 (two non-zero singular values) — the zero singular value means it collapses a direction, so it is singular / non-invertible',
+        'Rank 3 — every listed singular value counts toward rank',
+        'Rank 1 — only the largest singular value counts',
+        'Rank 2, and it is perfectly well-conditioned',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: rank = number of NON-zero singular values = 2, and the zero σ flattens one direction to nothing, making the matrix singular and non-invertible.',
+        'The zero singular value does NOT count — it marks a collapsed direction, so the rank is 2, not 3.',
+        'Every non-zero singular value counts, so two of them give rank 2, not 1.',
+        'A zero singular value makes the matrix outright singular (condition number infinite), the opposite of well-conditioned.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A redundant 7-joint arm must hit one 6-D pose — more unknowns than equations, so infinitely many joint solutions exist. Solving with the pseudoinverse J⁺ returns which one?',
+      options: [
+        'The minimum-norm solution — the smallest, least-effort joint motion that still reaches the pose',
+        'The largest-norm solution — the biggest joint motion',
+        'No solution, because the system is underdetermined',
+        'The least-squares residual of the pose',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: for a wide (underdetermined) system the pseudoinverse selects the minimum-norm solution among all exact ones — the gentlest motion, ideal for a redundant arm.',
+        'It returns the SMALLEST-norm solution; least effort is the whole benefit.',
+        'Infinitely many solutions is not failure — the pseudoinverse cleanly picks the minimum-norm one.',
+        'A residual arises in the tall/overdetermined case; here exact solutions exist and J⁺ chooses the smallest among them.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A matrix has a non-zero determinant of 0.02 but a condition number (σ_max/σ_min) of 50,000. What should you conclude?',
+      options: [
+        'It is ill-conditioned — inverting it amplifies tiny errors enormously, even though det ≠ 0',
+        'It is safe to invert, because the determinant is non-zero',
+        'It is exactly singular',
+        'The condition number is irrelevant to inversion',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: a huge condition number means σ_min is nearly zero, so the inverse magnifies noise ~50,000-fold in the worst direction — the determinant being non-zero doesn’t protect you.',
+        'A non-zero determinant only rules out EXACT collapse; conditioning (the singular-value ratio) is what governs numerical safety.',
+        'It is not exactly singular (det = 0.02 ≠ 0), but it is dangerously close in the conditioning sense.',
+        'The condition number is precisely the measure of how badly inversion amplifies error — it is the key quantity here.',
       ],
     },
   ],
