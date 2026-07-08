@@ -8,6 +8,7 @@ export type Subject =
   | 'robotics'
   | 'history'
   | 'chemistry'
+  | 'electronics'
 
 /** Curated external material shown in the node detail panel ("Go deeper"). */
 export interface Resource {

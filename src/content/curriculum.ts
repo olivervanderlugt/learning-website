@@ -15,6 +15,7 @@ export const domains: Domain[] = [
   { id: 'robotics-bridge', title: 'Robotics Bridge', prereqDomainIds: ['how-computers-work', 'physics'] },
   { id: 'history', title: 'History of Science & Technology', prereqDomainIds: [] },
   { id: 'chemistry', title: 'Chemistry', prereqDomainIds: [] },
+  { id: 'electronics', title: 'Electronics & Circuit Design', prereqDomainIds: ['physics'] },
 ]
 
 // Layout (2026-07 refactor — "streets" edition, built for depth-chain growth):
@@ -1455,6 +1456,74 @@ export const nodes: KnowledgeNode[] = [
     hasLesson: true,
     isExam: true,
   },
+
+  // ---- Electronics & Circuit Design (NEW domain, orange). Reserved slot
+  // x4660, y850+ — the open pocket between the physics column (x4380, phys-exam
+  // at y850) and the chemistry island (x4950). The engineering layer on top of
+  // phys-electricity: designing with components → the transistor & op-amp →
+  // driving a motor. Prereq of elec-components = phys-electricity-3 (which
+  // already teaches capacitors/RC/transistor-as-switch); the incoming corridor
+  // from phys-electricity-3 (3500,620) is the one real layout risk (it must
+  // clear phys-exam at 4380,850) — the chain sits low enough (y1420+) that the
+  // edge sags BELOW phys-exam (found via a margin-max bezier search). elec-motors cross-LINKS robo-embedded &
+  // phys-electricity-3. phys-statics (chain 4) takes x4660 y220-620 above this.
+  {
+    id: 'elec-components',
+    title: 'Designing with Components: Dividers, Loading & Networks',
+    subject: 'electronics',
+    domainId: 'electronics',
+    description:
+      'Real circuits are resistor networks you design: the voltage divider Vout = Vin·R₂/(R₁+R₂) is the workhorse, but connect a load across R₂ and the output SAGS — “loading,” the first thing that bites a beginner.',
+    whyItMatters:
+      'Every resistive sensor (thermistor, potentiometer, flex sensor) is a divider you read — and loading is why your reading drifts.',
+    prereqIds: ['phys-electricity-3'],
+    x: 4660,
+    y: 1420,
+    hasLesson: true,
+  },
+  {
+    id: 'elec-transistors',
+    title: 'The Transistor & the Op-Amp: Switch, Amplifier, Building Block',
+    subject: 'electronics',
+    domainId: 'electronics',
+    description:
+      'A transistor lets a tiny signal control a large current (switch or amplifier); wrap an op-amp in negative feedback and its two golden rules — no input current, inputs forced equal — make gain a matter of just two resistors.',
+    whyItMatters:
+      'An op-amp conditions every analog sensor before the ADC; the MOSFET is what an MCU pin uses to switch real power.',
+    prereqIds: ['elec-components'],
+    x: 4660,
+    y: 1600,
+    hasLesson: true,
+  },
+  {
+    id: 'elec-motors',
+    title: 'Driving a Motor: PWM, the H-Bridge & Flyback',
+    subject: 'electronics',
+    domainId: 'electronics',
+    description:
+      'An MCU pin can’t source motor current, and a motor is an inductive load that kicks back a voltage spike — so you use transistors (PWM for speed, an H-bridge of four for direction) plus a flyback diode to catch the spike.',
+    whyItMatters:
+      'This is the literal circuit between your robot’s brain and its wheels — the on-ramp from physics to hardware you can build.',
+    prereqIds: ['elec-transistors'],
+    x: 4660,
+    y: 1780,
+    hasLesson: true,
+  },
+  {
+    id: 'elec-exam',
+    title: 'Module Exam: Electronics',
+    subject: 'electronics',
+    domainId: 'electronics',
+    description:
+      'Ten fresh questions across dividers & loading, KCL, the op-amp’s golden rules and gains, the MOSFET switch, the H-bridge, PWM and flyback — the whole engineering layer, from memory. 80% to pass.',
+    whyItMatters:
+      'Reading a driver datasheet or debugging a sensor interface means recalling this cold — the exam is where it sticks.',
+    prereqIds: ['elec-components', 'elec-transistors', 'elec-motors'],
+    x: 4520,
+    y: 1960,
+    hasLesson: true,
+    isExam: true,
+  },
 ]
 
 
@@ -1743,6 +1812,21 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'video', title: 'Real Engineering — The truth about carbon fiber', url: 'https://www.youtube.com/watch?v=QO9Ledxlx-c', note: 'Why composites dominate aerospace and drones — specific strength made visual.' },
     { type: 'interactive', title: 'PhET — Battery-Resistor Circuit', url: 'https://phet.colorado.edu/en/simulations/battery-resistor-circuit', note: 'Connects this lesson’s electrochemistry to the circuits you already know.' },
   ],
+  'elec-components': [
+    { type: 'interactive', title: 'Falstad CircuitJS (live circuit simulator)', url: 'https://www.falstad.com/circuit/', note: 'Draw a divider, add a load resistor and WATCH the output sag — the definitive free sandbox for predict→observe.' },
+    { type: 'book', title: 'Ultimate Electronics — Voltage Dividers', url: 'https://ultimateelectronicsbook.com/voltage-dividers/', note: 'Dividers, Thévenin and loading with runnable in-page simulations — the best free treatment.' },
+    { type: 'course', title: 'MIT 6.002 — Circuits and Electronics (free)', url: 'https://ocw.mit.edu/courses/6-002-circuits-and-electronics-spring-2007/', note: 'The real first course in circuits & electronics when you want full depth.' },
+  ],
+  'elec-transistors': [
+    { type: 'book', title: 'Ultimate Electronics — The Ideal Op-Amp', url: 'https://ultimateelectronicsbook.com/ideal-op-amp/', note: 'The clearest free ideal-op-amp/virtual-ground treatment (+ its Inverting Amplifier chapter).' },
+    { type: 'video', title: 'EEVblog #600 — What is an Operational Amplifier?', url: 'https://www.youtube.com/watch?v=7FYHt5XviKc', note: 'The canonical free op-amp video — intuition first, then the golden rules.' },
+    { type: 'article', title: 'electronics-tutorials.ws — MOSFET as a Switch', url: 'https://www.electronics-tutorials.ws/transistor/tran_7.html', note: 'Fills the transistor half: cutoff/saturation, V_GS threshold, R_DS(on) (its op-amp series is great too).' },
+  ],
+  'elec-motors': [
+    { type: 'article', title: 'All About Circuits — H-bridge DC motor control (PWM, shoot-through, dead-time)', url: 'https://www.allaboutcircuits.com/technical-articles/h-bridge-dc-motor-control-complementary-pulse-width-modulation-pwm-shoot-through-dead-time-pwm/', note: 'The cleanest free H-bridge article — diagonal pairs, complementary PWM, why dead-time matters.' },
+    { type: 'article', title: 'Northwestern Mechatronics Wiki — Driving a DC motor with an H-bridge', url: 'https://hades.mech.northwestern.edu/index.php/Driving_a_high_current_DC_Motor_using_an_H-bridge', note: 'Practical: back-EMF, freewheeling diodes and why 20 kHz PWM.' },
+    { type: 'video', title: 'DroneBot Workshop — L298N H-bridge + Arduino', url: 'https://dronebotworkshop.com/dc-motors-l298n-h-bridge/', note: 'Hands-on with a real driver IC — wiring, PWM speed and direction control.' },
+  ],
 }
 
 for (const n of nodes) {
@@ -1768,6 +1852,7 @@ export const domainLabels: { id: string; title: string; x: number; y: number }[]
   { id: 'label-sec', title: 'Security & Crypto', x: 0, y: 2390 },
   { id: 'label-hist', title: 'History of Science & Tech', x: 4950, y: -60 },
   { id: 'label-chem', title: 'Chemistry', x: 4950, y: 440 },
+  { id: 'label-elec', title: 'Electronics & Circuit Design', x: 4520, y: 1360 },
 ]
 
 export const XP_PER_NODE = 100

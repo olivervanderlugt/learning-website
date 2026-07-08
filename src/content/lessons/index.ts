@@ -90,6 +90,10 @@ import { mathMv3Lesson } from './math-mv-3'
 import { mathStatsLesson } from './math-stats'
 import { mathStats2Lesson } from './math-stats-2'
 import { mathStats3Lesson } from './math-stats-3'
+import { elecComponentsLesson } from './elec-components'
+import { elecTransistorsLesson } from './elec-transistors'
+import { elecMotorsLesson } from './elec-motors'
+import { elecExamLesson } from './elec-exam'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -183,4 +187,8 @@ export const lessons: Record<string, Lesson> = {
   'math-stats': mathStatsLesson,
   'math-stats-2': mathStats2Lesson,
   'math-stats-3': mathStats3Lesson,
+  'elec-components': elecComponentsLesson,
+  'elec-transistors': elecTransistorsLesson,
+  'elec-motors': elecMotorsLesson,
+  'elec-exam': elecExamLesson,
 }
