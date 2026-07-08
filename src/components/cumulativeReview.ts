@@ -1,6 +1,7 @@
 import { lessons } from '../content/lessons'
 import { nodeById } from '../content/curriculum'
 import { DAY_MS } from '../store'
+import { shuffle } from '../shuffle'
 import type { QuizQuestion, ReviewState, Subject } from '../types'
 
 /**
@@ -52,15 +53,6 @@ export const CUMULATIVE_REVIEW_COUNT = 10
 
 function pickOne<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)]
-}
-
-function shuffle<T>(arr: T[]): T[] {
-  const out = arr.slice()
-  for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[out[i], out[j]] = [out[j], out[i]]
-  }
-  return out
 }
 
 /**

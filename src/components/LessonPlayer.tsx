@@ -362,8 +362,11 @@ function ExtraPractice({
   onFinish: () => void
 }) {
   const [i, setI] = useState(0)
-  const q = questions[i]
   const last = i === questions.length - 1
+  // Stable object per question — QuizScreenView's option shuffle is keyed on the
+  // screen object, so a fresh object every render would reshuffle mid-question
+  // (same guard as CumulativeReviewFlow).
+  const quizScreen = useMemo(() => ({ kind: 'quiz' as const, ...questions[i] }), [questions, i])
   return (
     <div className="mx-auto flex h-full w-full max-w-2xl flex-col px-6">
       <div className="flex items-center justify-between py-4">
@@ -377,7 +380,7 @@ function ExtraPractice({
       <div className="min-h-0 flex-1 overflow-y-auto pb-10">
         <QuizScreenView
           key={i}
-          screen={{ kind: 'quiz', ...q }}
+          screen={quizScreen}
           questionNumber={i + 1}
           totalQuestions={questions.length}
           onAnswer={() => {}}

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { nodeById } from '../content/curriculum'
 import { useStore, dueReviewIds } from '../store'
 import { subjectStyles } from './SkillNode'
+import { useDismissable } from './useDismissable'
 
 /**
  * Header chip + dropdown for spaced repetition (Stage 4): lists mastered nodes
@@ -21,14 +22,7 @@ export default function ReviewQueue() {
     seedMissingReviews()
   }, [seedMissingReviews])
 
-  useEffect(() => {
-    if (!open) return
-    const onClick = (e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false)
-    }
-    window.addEventListener('mousedown', onClick)
-    return () => window.removeEventListener('mousedown', onClick)
-  }, [open])
+  useDismissable(open, () => setOpen(false), rootRef)
 
   const due = dueReviewIds(reviews, masteredNodeIds)
   if (due.length === 0) return null

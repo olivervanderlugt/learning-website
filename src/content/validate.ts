@@ -27,9 +27,23 @@ export function validateContent(): string[] {
     if (!n.whyItMatters?.trim()) err(`Node ${n.id} has no whyItMatters`)
     if (n.hasLesson && !lessons[n.id]) err(`Node ${n.id} is hasLesson but no lesson registered`)
     for (const r of n.resources ?? []) {
+      if (!r.title?.trim()) err(`Node ${n.id} has a resource with no title (url ${r.url})`)
       if (!/^https?:\/\//.test(r.url)) err(`Node ${n.id} resource "${r.title}" has a non-http url`)
       if (!r.note?.trim()) err(`Node ${n.id} resource "${r.title}" has no note`)
     }
+  }
+
+  // --- Exams must ask FRESH questions, never reuse a lesson quiz verbatim ---
+  const normQ = (q: string) => q.replace(/\s+/g, ' ').trim().toLowerCase()
+  for (const exam of nodes.filter((n) => n.isExam)) {
+    const examQs = (lessons[exam.id]?.screens ?? []).flatMap((s) => (s.kind === 'quiz' ? [s.question] : []))
+    const domainQs = new Set(
+      nodes
+        .filter((n) => n.domainId === exam.domainId && n.id !== exam.id)
+        .flatMap((n) => (lessons[n.id]?.screens ?? []).flatMap((s) => (s.kind === 'quiz' ? [normQ(s.question)] : []))),
+    )
+    for (const q of examQs)
+      if (domainQs.has(normQ(q))) err(`Exam ${exam.id} reuses a lesson quiz question verbatim: "${q}"`)
   }
 
   // --- Module exams: every domain has exactly one, gated on ALL its other nodes ---
@@ -106,8 +120,14 @@ function validateLesson(id: string, lesson: Lesson, err: (m: string) => void) {
         if (!games[s.gameId]) err(`${at}: unknown gameId "${s.gameId}"`)
         break
       case 'code':
-        if (typeof s.expected !== 'string') err(`${at}: no expected output`)
+        if (typeof s.expected !== 'string' || !s.expected.trim()) err(`${at}: no/empty expected output`)
+        if (!s.prompt?.trim()) err(`${at}: no prompt`)
         if (!s.success?.trim()) err(`${at}: no success message`)
+        // The worker injects print as a Function parameter — a starter that
+        // redeclares it throws "already been declared" and the screen never
+        // runs (this silently broke math-linalg-3 once).
+        if (/\b(const|let|var|function)\s+print\b/.test(s.starter))
+          err(`${at}: starter declares 'print' (already injected by the code worker — remove the declaration)`)
         break
     }
     // interlink targets must exist

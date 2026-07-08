@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useStore } from '../store'
 import { computeAchievements, computeStats } from '../content/achievements'
 import { subjectStyles } from './SkillNode'
+import { useDismissable } from './useDismissable'
 import type { Subject } from '../types'
 
 /**
@@ -20,14 +21,7 @@ export default function ProgressPanel() {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (!open) return
-    const onClick = (e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false)
-    }
-    window.addEventListener('mousedown', onClick)
-    return () => window.removeEventListener('mousedown', onClick)
-  }, [open])
+  useDismissable(open, () => setOpen(false), rootRef)
 
   const onReset = () => {
     if (window.confirm('Really wipe ALL progress (XP, mastered nodes, quiz scores)? Export first if unsure.')) {

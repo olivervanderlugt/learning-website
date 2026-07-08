@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { CodeScreen } from '../../types'
 
 // Worker source: runs the learner's JS with a print() that collects output.
@@ -41,13 +41,25 @@ export default function CodeScreenView({
   const [run, setRun] = useState<RunState>({ phase: 'idle' })
   const [attempts, setAttempts] = useState(0)
   const workerRef = useRef<Worker | null>(null)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const solved = run.phase === 'done' && run.correct
+
+  useEffect(
+    () => () => {
+      workerRef.current?.terminate()
+      workerRef.current = null
+      clearTimeout(timerRef.current)
+    },
+    [],
+  )
 
   const execute = () => {
     if (run.phase === 'running') return
     setRun({ phase: 'running' })
     const blob = new Blob([WORKER_SRC], { type: 'application/javascript' })
-    const worker = new Worker(URL.createObjectURL(blob))
+    const url = URL.createObjectURL(blob)
+    const worker = new Worker(url)
+    URL.revokeObjectURL(url)
     workerRef.current = worker
 
     const timer = setTimeout(() => {
@@ -55,6 +67,7 @@ export default function CodeScreenView({
       workerRef.current = null
       setRun({ phase: 'timeout' })
     }, 2000)
+    timerRef.current = timer
 
     worker.onmessage = (e: MessageEvent) => {
       clearTimeout(timer)
@@ -102,6 +115,7 @@ export default function CodeScreenView({
           value={code}
           onChange={(e) => setCode(e.target.value)}
           onKeyDown={onKeyDown}
+          aria-label="Code editor"
           spellCheck={false}
           rows={Math.max(6, code.split('\n').length + 1)}
           className="w-full resize-none bg-slate-950 px-4 py-3 font-mono text-sm leading-relaxed text-slate-100 outline-none"

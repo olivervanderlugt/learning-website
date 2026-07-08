@@ -73,7 +73,8 @@ export function computeStats(p: ProgressSlice): Stats {
     ).length,
     knownMarks: p.knownNodeIds.length,
     domainsTouched: perDomain.filter((d) => d.mastered > 0).length,
-    domainsCompleted: perDomain.filter((d) => d.mastered === d.total).length,
+    // d.total > 0 guard: an empty domain must not count as "completed".
+    domainsCompleted: perDomain.filter((d) => d.total > 0 && d.mastered === d.total).length,
     perDomain,
   }
 }
@@ -81,9 +82,16 @@ export function computeStats(p: ProgressSlice): Stats {
 export function computeAchievements(p: ProgressSlice): Achievement[] {
   const s = computeStats(p)
   const mastered = new Set(p.masteredNodeIds)
-  const chainsDone = depthChainIntros.filter(
-    (base) => mastered.has(base) && mastered.has(`${base}-2`) && mastered.has(`${base}-3`),
-  ).length
+  // A chain counts when the intro and every depth node that EXISTS for it is
+  // mastered — hardcoding -2 and -3 would break for 2-lesson or 5-lesson chains.
+  const nodeIds = new Set(nodes.map((n) => n.id))
+  const chainsDone = depthChainIntros.filter((base) => {
+    if (!mastered.has(base)) return false
+    for (let d = 2; nodeIds.has(`${base}-${d}`); d++) {
+      if (!mastered.has(`${base}-${d}`)) return false
+    }
+    return true
+  }).length
 
   const a = (
     id: string,
@@ -120,7 +128,7 @@ export function computeAchievements(p: ProgressSlice): Achievement[] {
       '🏆',
       'Valedictorian',
       'Pass every module exam on the map.',
-      s.examsPassed >= s.totalExams,
+      s.totalExams > 0 && s.examsPassed >= s.totalExams,
       `${s.examsPassed}/${s.totalExams}`,
     ),
     a('perfectionist', '💯', 'Perfectionist', 'Score 100% on any quiz or exam.', s.perfectQuizzes >= 1),
@@ -145,7 +153,7 @@ export function computeAchievements(p: ProgressSlice): Achievement[] {
       'deep-diver',
       '⛓️',
       'Deep Diver',
-      'Master a full 3-lesson deep-dive chain (intro → -2 → -3).',
+      'Master a full deep-dive chain — the intro and every one of its depth lessons.',
       chainsDone >= 1,
     ),
     a(

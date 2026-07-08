@@ -21,10 +21,16 @@ export default function ArmSim({ onComplete }: { onComplete: (score: number) => 
   const hand = fk(a1, a2)
   const dist = Math.hypot(hand.x - TARGET.x, hand.y - TARGET.y)
   const solved = dist < 14
+  const [done, setDone] = useState(false)
 
+  // Latched — `solved` is derived, so sweeping out of and back into the target
+  // region would otherwise call onComplete again.
   useEffect(() => {
-    if (solved) onComplete(1)
-  }, [solved, onComplete])
+    if (solved && !done) {
+      setDone(true)
+      onComplete(1)
+    }
+  }, [solved, done, onComplete])
 
   const S = { base: toScreen({ x: 0, y: 0 }), elbow: toScreen(elbow), hand: toScreen(hand), target: toScreen(TARGET) }
 

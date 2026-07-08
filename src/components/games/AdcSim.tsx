@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const VREF = 5 // volts full-scale
 const BITS = 3 // 3-bit ADC → 8 levels
@@ -11,6 +11,7 @@ const LEVELS = 2 ** BITS // 8
 export default function AdcSim({ onComplete }: { onComplete: (score: number) => void }) {
   const [volts, setVolts] = useState(2.4)
   const [seenLevels, setSeenLevels] = useState<Set<number>>(new Set())
+  const [done, setDone] = useState(false)
 
   // quantize
   const step = VREF / (LEVELS - 1)
@@ -22,12 +23,22 @@ export default function AdcSim({ onComplete }: { onComplete: (score: number) => 
     setVolts(v)
     const d = Math.round(v / step)
     setSeenLevels((prev) => {
+      if (prev.has(d)) return prev
       const next = new Set(prev)
       next.add(d)
-      if (next.size >= LEVELS) onComplete(1)
       return next
     })
   }
+
+  // Fire completion from an effect, latched — calling onComplete inside the
+  // setState updater double-fires under StrictMode and re-fires on every
+  // slider move once all levels are seen.
+  useEffect(() => {
+    if (!done && seenLevels.size >= LEVELS) {
+      setDone(true)
+      onComplete(1)
+    }
+  }, [seenLevels, done, onComplete])
 
   return (
     <div className="rounded-xl border border-slate-700 bg-slate-900 p-4">

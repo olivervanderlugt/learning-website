@@ -61,21 +61,24 @@ export default function PidSim({ onComplete }: { onComplete: (score: number) => 
 
   useEffect(() => {
     if (!playing || !traj) return
+    // Local frame counter — keeps the setState updater pure (scheduling rAF
+    // inside an updater multiplies frames under StrictMode). run() always
+    // resets frame to 0 before playing, so starting from 0 here is correct.
+    let f = 0
     const step = () => {
-      setFrame((f) => {
-        if (f >= STEPS - 1) {
-          setPlaying(false)
-          // evaluate: last 20% of run stays within tolerance of setpoint
-          const tail = traj.slice(Math.floor(STEPS * 0.8))
-          const settled = tail.every((s) => Math.abs(s.err) < TOL)
-          const finalErr = traj[STEPS - 1].err
-          setResult({ settled, finalErr })
-          if (settled) setSolved(true)
-          return f
-        }
-        raf.current = requestAnimationFrame(step)
-        return f + 3 // ~3 sim steps per frame
-      })
+      if (f >= STEPS - 1) {
+        setPlaying(false)
+        // evaluate: last 20% of run stays within tolerance of setpoint
+        const tail = traj.slice(Math.floor(STEPS * 0.8))
+        const settled = tail.every((s) => Math.abs(s.err) < TOL)
+        const finalErr = traj[STEPS - 1].err
+        setResult({ settled, finalErr })
+        if (settled) setSolved(true)
+        return
+      }
+      f = Math.min(f + 3, STEPS - 1) // ~3 sim steps per frame
+      setFrame(f)
+      raf.current = requestAnimationFrame(step)
     }
     raf.current = requestAnimationFrame(step)
     return () => {

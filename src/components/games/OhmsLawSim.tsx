@@ -12,10 +12,16 @@ export default function OhmsLawSim({ onComplete }: { onComplete: (score: number)
   const current = volts / ohms // I = V / R
   const solved = Math.abs(current - TARGET_I) < 0.05
   const power = volts * current // P = V·I
+  const [done, setDone] = useState(false)
 
+  // Latched — `solved` is derived, so dialing out of and back into the target
+  // band would otherwise call onComplete again.
   useEffect(() => {
-    if (solved) onComplete(1)
-  }, [solved, onComplete])
+    if (solved && !done) {
+      setDone(true)
+      onComplete(1)
+    }
+  }, [solved, done, onComplete])
 
   // brightness 0..1 from current (cap at ~4A)
   const bright = Math.min(current / 4, 1)

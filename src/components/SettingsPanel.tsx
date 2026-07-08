@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useStore } from '../store'
+import { useDismissable } from './useDismissable'
 import type { Progress } from '../types'
 
 export default function SettingsPanel() {
@@ -10,17 +11,7 @@ export default function SettingsPanel() {
   const importProgress = useStore((s) => s.importProgress)
   const resetProgress = useStore((s) => s.resetProgress)
 
-  // Close when clicking anywhere outside — so opening another header panel
-  // (the XP/progress dropdown, reviews) dismisses this one instead of stacking
-  // both open and overlapping. Mirrors ProgressPanel/ReviewQueue.
-  useEffect(() => {
-    if (!open) return
-    const onClick = (e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false)
-    }
-    window.addEventListener('mousedown', onClick)
-    return () => window.removeEventListener('mousedown', onClick)
-  }, [open])
+  useDismissable(open, () => setOpen(false), rootRef)
 
   const exportProgress = () => {
     const s = useStore.getState()

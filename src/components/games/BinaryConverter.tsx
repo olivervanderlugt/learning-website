@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 /**
  * Decimal↔binary drills with worked-example fading:
@@ -177,14 +177,15 @@ function IndependentD2B({ onDone }: { onDone: () => void }) {
   const [solved, setSolved] = useState(false)
   const value = bits.reduce((a, b, i) => a + b * PLACES[i], 0)
 
+  // Functional update + derive the win from committed state — rapid clicks
+  // otherwise race on the stale closure `bits`.
   const toggle = (i: number) => {
     if (solved) return
-    const next = bits.map((b, j) => (j === i ? 1 - b : b))
-    setBits(next)
-    if (next.reduce((a, b, j) => a + b * PLACES[j], 0) === 25) {
-      setSolved(true)
-    }
+    setBits((prev) => prev.map((b, j) => (j === i ? 1 - b : b)))
   }
+  useEffect(() => {
+    if (!solved && value === 25) setSolved(true)
+  }, [value, solved])
 
   return (
     <div>

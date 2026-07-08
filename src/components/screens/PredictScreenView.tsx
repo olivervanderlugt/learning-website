@@ -1,15 +1,6 @@
 import { useMemo, useState } from 'react'
+import { shuffledIndices } from '../../shuffle'
 import type { PredictScreen } from '../../types'
-
-/** Display order for options — shuffled so the correct answer's position carries no signal. */
-function shuffledIndices(n: number): number[] {
-  const idx = Array.from({ length: n }, (_, i) => i)
-  for (let i = idx.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[idx[i], idx[j]] = [idx[j], idx[i]]
-  }
-  return idx
-}
 
 export default function PredictScreenView({
   screen,

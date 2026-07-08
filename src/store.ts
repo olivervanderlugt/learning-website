@@ -158,23 +158,38 @@ export const useStore = create<AppState>()(
 
       resetProgress: () => set((s) => ({ ...initialProgress, theme: s.theme, viewTier: s.viewTier })),
 
-      importProgress: (data) =>
+      importProgress: (data) => {
+        // A hand-edited or truncated export can carry wrong shapes (e.g. a string
+        // where an array belongs) — spreading those into state corrupts it later.
+        const strings = (v: unknown): string[] =>
+          Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : []
+        const record = <T,>(v: unknown, ok: (x: unknown) => x is T): Record<string, T> => {
+          if (typeof v !== 'object' || v === null || Array.isArray(v)) return {}
+          return Object.fromEntries(Object.entries(v).filter(([, x]) => ok(x)))
+        }
+        const isNum = (x: unknown): x is number => typeof x === 'number' && Number.isFinite(x)
+        const isReview = (x: unknown): x is ReviewState =>
+          typeof x === 'object' && x !== null &&
+          isNum((x as ReviewState).lastSeen) && isNum((x as ReviewState).intervalDays)
         set((s) => ({
           version: 1,
-          xp: data.xp ?? 0,
-          completedScreens: data.completedScreens ?? [],
-          masteredNodeIds: data.masteredNodeIds ?? [],
-          knownNodeIds: data.knownNodeIds ?? [],
-          quizScores: data.quizScores ?? {},
-          lessonProgress: data.lessonProgress ?? {},
+          xp: isNum(data.xp) ? data.xp : 0,
+          completedScreens: strings(data.completedScreens),
+          masteredNodeIds: strings(data.masteredNodeIds),
+          knownNodeIds: strings(data.knownNodeIds),
+          quizScores: record(data.quizScores, isNum),
+          lessonProgress: record(data.lessonProgress, isNum),
           navStack: [],
-          reviews: data.reviews ?? {},
-          theme: data.theme ?? s.theme,
+          reviews: record(data.reviews, isReview),
+          theme: data.theme === 'light' || data.theme === 'dark' ? data.theme : s.theme,
           // Accept both the current field and the short-lived boolean it replaced.
-          viewTier:
-            data.viewTier ??
-            (typeof data.showDepth === 'boolean' ? (data.showDepth ? MAX_TIER : 0) : s.viewTier),
-        })),
+          viewTier: isNum(data.viewTier)
+            ? Math.max(0, Math.min(MAX_TIER, data.viewTier))
+            : typeof data.showDepth === 'boolean'
+              ? (data.showDepth ? MAX_TIER : 0)
+              : s.viewTier,
+        }))
+      },
     }),
     {
       name: 'learn-progress-v1',

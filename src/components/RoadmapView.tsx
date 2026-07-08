@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { stages, futureSubjects, foldInNote } from '../content/roadmap'
 import type { StageStatus } from '../content/roadmap'
 
@@ -24,8 +25,21 @@ const statusMeta: Record<StageStatus, { label: string; icon: string; badge: stri
 
 /** Preview / "coming soon" overview of the plan to grow to bachelor depth. */
 export default function RoadmapView({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [onClose])
+
   return (
-    <div className="absolute inset-0 z-20 overflow-y-auto bg-slate-950/95 backdrop-blur">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Roadmap"
+      className="absolute inset-0 z-20 overflow-y-auto bg-slate-950/95 backdrop-blur"
+    >
       <div className="mx-auto max-w-4xl px-5 py-8">
         {/* Header */}
         <div className="mb-6 flex items-start justify-between gap-4">

@@ -23,26 +23,27 @@ export default function ForceSim({ onComplete }: { onComplete: (score: number) =
   useEffect(() => {
     if (!running) return
     let last: number | null = null
+    let elapsed = 0 // local accumulator — keeps the setState updaters pure
+    // (scheduling rAF inside an updater multiplies frames under StrictMode).
     const RUN = 3 // simulate 3 seconds
     const tick = (ts: number) => {
       if (last === null) last = ts
       const dt = Math.min((ts - last) / 1000, 0.05)
       last = ts
-      setT((prev) => {
-        const nt = prev + dt
-        if (nt >= RUN) {
-          setRunning(false)
-          const finalV = a * RUN
-          setV(finalV)
-          setBest(finalV)
-          if (Math.abs(finalV - TARGET_V) < 0.35) setSolved(true)
-          return RUN
-        }
-        setV(a * nt)
-        setX(0.5 * a * nt * nt)
-        raf.current = requestAnimationFrame(tick)
-        return nt
-      })
+      elapsed += dt
+      if (elapsed >= RUN) {
+        const finalV = a * RUN
+        setT(RUN)
+        setV(finalV)
+        setBest(finalV)
+        setRunning(false)
+        if (Math.abs(finalV - TARGET_V) < 0.35) setSolved(true)
+        return
+      }
+      setT(elapsed)
+      setV(a * elapsed)
+      setX(0.5 * a * elapsed * elapsed)
+      raf.current = requestAnimationFrame(tick)
     }
     raf.current = requestAnimationFrame(tick)
     return () => {

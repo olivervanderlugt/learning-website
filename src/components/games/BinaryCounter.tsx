@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const TARGETS = [5, 11, 20]
 const PLACES = [16, 8, 4, 2, 1]
@@ -12,21 +12,28 @@ export default function BinaryCounter({ onComplete }: { onComplete: (score: numb
   const value = bits.reduce((acc, b, i) => acc + b * PLACES[i], 0)
   const target = TARGETS[targetIdx]
 
+  // Functional update — two clicks landing in the same frame would drop a
+  // toggle if the next array were computed from render-time closure state.
   const toggle = (i: number) => {
     if (done) return
-    const next = bits.map((b, j) => (j === i ? 1 - b : b))
-    setBits(next)
-    const v = next.reduce((acc, b, j) => acc + b * PLACES[j], 0)
-    if (v === target) {
-      if (targetIdx === TARGETS.length - 1) {
-        setDone(true)
-        onComplete(1)
-      } else {
-        setTargetIdx(targetIdx + 1)
-        setBits([0, 0, 0, 0, 0])
-      }
-    }
+    setBits((prev) => prev.map((b, j) => (j === i ? 1 - b : b)))
   }
+
+  // Advance on hitting the target — as an effect on the derived value, so the
+  // setState updater stays pure (StrictMode double-invokes updaters).
+  useEffect(() => {
+    if (done || value !== target) return
+    if (targetIdx === TARGETS.length - 1) {
+      setDone(true)
+    } else {
+      setTargetIdx(targetIdx + 1)
+      setBits([0, 0, 0, 0, 0])
+    }
+  }, [value, target, targetIdx, done])
+
+  useEffect(() => {
+    if (done) onComplete(1)
+  }, [done, onComplete])
 
   return (
     <div className="rounded-xl border border-slate-700 bg-slate-900 p-5">

@@ -1605,6 +1605,15 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'interactive', title: 'Immersive Linear Algebra', url: 'http://immersivemath.com/ila/index.html', note: 'A textbook where every figure is draggable.' },
     { type: 'course', title: 'MIT 18.06 — Gilbert Strang', url: 'https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/', note: 'The real bachelor course, free, when you want full depth.' },
   ],
+  'math-linalg-2': [
+    { type: 'video', title: '3Blue1Brown — Linear transformations and matrices (Ch. 3)', url: 'https://www.youtube.com/watch?v=kYB8IZa5AuE', note: 'The exact "a matrix IS a transformation" picture this lesson builds, animated.' },
+    { type: 'video', title: '3Blue1Brown — Matrix multiplication as composition (Ch. 4)', url: 'https://www.youtube.com/watch?v=XkY2DOUCWMU', note: 'Why multiplying matrices chains transformations — the FK/transform-chain payoff.' },
+  ],
+  'math-linalg-3': [
+    { type: 'video', title: '3Blue1Brown — The determinant (Ch. 6)', url: 'https://www.youtube.com/watch?v=Ip3X9LOh2dk', note: 'Determinant as area-scaling — det=0 collapse is exactly the singularity idea.' },
+    { type: 'video', title: '3Blue1Brown — Eigenvectors and eigenvalues (Ch. 14)', url: 'https://www.youtube.com/watch?v=PFDu9oVAE-g', note: 'The axes a transformation only stretches — the stability story behind ODE systems.' },
+    { type: 'interactive', title: 'Setosa — Eigenvectors and Eigenvalues', url: 'https://setosa.io/ev/eigenvectors-and-eigenvalues/', note: 'Drag the matrix, watch the eigenvectors move. Five minutes of pure intuition.' },
+  ],
   'math-linalg-4': [
     { type: 'video', title: '3Blue1Brown — Inverse matrices, column space & null space', url: 'https://www.youtube.com/watch?v=uQhTuRlWMxw', note: 'The exact geometric picture of column space, rank and null space from this lesson.' },
     { type: 'course', title: 'MIT 18.06 — Least squares & projections', url: 'https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/', note: 'Strang’s projection and AᵀAx̂ = Aᵀb lectures (15–16), free with problem sets and exams.' },
