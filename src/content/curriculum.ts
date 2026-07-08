@@ -999,6 +999,23 @@ export const nodes: KnowledgeNode[] = [
     hasLesson: true,
   },
   {
+    // robo-control-4 — reserved slot (2950,2300), continuing the control column
+    // straight below robo-control-3. Depth (tier 1). The classical-control
+    // capstone: transfer functions/poles → Bode/frequency response → LQR.
+    id: 'robo-control-4',
+    title: 'Poles, Bode & LQR: Classical Control',
+    subject: 'robotics',
+    domainId: 'robotics-bridge',
+    description:
+      'The classical view of the same system: transfer functions and POLES (left half-plane = stable), the Bode plot (bandwidth, gain/phase margin), and LQR — letting a cost function choose the optimal feedback gain u = −K·x.',
+    whyItMatters:
+      'Pole locations, stability margins and LQR are the vocabulary every real control engineer designs and argues in — the bridge from hand-tuned PID to provably-good control.',
+    prereqIds: ['robo-control-3'],
+    x: 2950,
+    y: 2300,
+    hasLesson: true,
+  },
+  {
     id: 'robo-embedded',
     title: 'Embedded Systems & Microcontrollers',
     subject: 'engineering',
@@ -1116,7 +1133,7 @@ export const nodes: KnowledgeNode[] = [
     subject: 'robotics',
     domainId: 'robotics-bridge',
     description:
-      'Twenty-two fresh questions across sensing, control & tuning, state space, kinematics, transforms, the Jacobian, Kalman estimation & sensor fusion, embedded systems and ROS — the capstone check on the whole bridge. 80% to pass.',
+      'Twenty-six fresh questions across sensing, control & tuning, state space, poles/Bode/LQR, kinematics, transforms, the Jacobian, Kalman estimation & sensor fusion, embedded systems and ROS — the capstone check on the whole bridge. 80% to pass.',
     whyItMatters:
       'This module is where every other subject converges into an actual robot — passing it from memory means the convergence happened in your head too.',
     prereqIds: [
@@ -1124,6 +1141,7 @@ export const nodes: KnowledgeNode[] = [
       'robo-control',
       'robo-control-2',
       'robo-control-3',
+      'robo-control-4',
       'robo-kinematics',
       'robo-kinematics-2',
       'robo-kinematics-3',
@@ -1673,6 +1691,11 @@ const resourcesByNode: Record<string, Resource[]> = {
   'robo-control-3': [
     { type: 'video', title: 'MATLAB Tech Talks — State Space (series)', url: 'https://www.mathworks.com/videos/series/state-space.html', note: 'Brian Douglas takes x′ = Ax + Bu from this lesson’s sketch to full working control.' },
     { type: 'article', title: 'How a Kalman Filter Works, in Pictures', url: 'https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/', note: 'The legendary illustrated walkthrough of the predict-then-correct dance.' },
+  ],
+  'robo-control-4': [
+    { type: 'video', title: 'MATLAB Tech Talks — Bode plots & frequency response', url: 'https://www.mathworks.com/videos/tech-talks/controls.html', note: 'Brian Douglas’s control index: the Bode (×9) and State Space (×5) series cover poles, margins and design, beautifully animated.' },
+    { type: 'course', title: 'MIT 2.004 — Dynamics & Control II (psets + full solutions)', url: 'https://ocw.mit.edu/courses/2-004-dynamics-and-control-ii-spring-2008/', note: 'The real course: transfer functions, time & frequency response, feedback compensation — problem sets WITH worked solutions.' },
+    { type: 'book', title: 'Underactuated Robotics — LQR (Russ Tedrake, free)', url: 'https://underactuated.mit.edu/', note: 'The definitive free treatment of LQR and optimal control for robots — the stretch goal once the intuition here lands.' },
   ],
   'robo-embedded': [
     { type: 'video', title: 'Ben Eater — 6502 computer (series)', url: 'https://eater.net/6502', note: 'Build and program a real retro computer — embedded systems from first principles.' },

@@ -22,6 +22,7 @@ import { roboSensingLesson } from './robo-sensing'
 import { roboControlLesson } from './robo-control'
 import { roboControl2Lesson } from './robo-control-2'
 import { roboControl3Lesson } from './robo-control-3'
+import { roboControl4Lesson } from './robo-control-4'
 import { roboKinematicsLesson } from './robo-kinematics'
 import { progFunctionsLesson } from './prog-functions'
 import { progDataLesson } from './prog-data'
@@ -114,6 +115,7 @@ export const lessons: Record<string, Lesson> = {
   'robo-control': roboControlLesson,
   'robo-control-2': roboControl2Lesson,
   'robo-control-3': roboControl3Lesson,
+  'robo-control-4': roboControl4Lesson,
   'robo-kinematics': roboKinematicsLesson,
   'prog-functions': progFunctionsLesson,
   'prog-data': progDataLesson,
