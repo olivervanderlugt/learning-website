@@ -7,7 +7,7 @@ export const chemExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — prove the matter',
       body: [
-        'Ten questions across the whole chemistry module — atoms, reactions, materials — and every one is NEW. No periodic table, no notes: retrieval from memory is the point.',
+        'Fourteen questions across the whole chemistry module — atoms, reactions, materials, moles, energy and electrochemistry — and every one is NEW. No periodic table, no notes: retrieval from memory is the point.',
         'Score 80% and the module is sealed. Below that? You lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -174,6 +174,73 @@ export const chemExamLesson: Lesson = {
         'Silver and copper both conduct BETTER than gold — gold wins on staying bare, not on raw conductivity.',
         'Gold is actually one of the SOFTEST metals — it’s plated microns thin over harder metal precisely because it wears easily.',
         'Try copper contacts outdoors and watch the oxide layer strangle the connection — reactive metals grow insulating skins, so the metal choice matters enormously.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'How many moles are in 88 grams of CO₂? (C = 12, O = 16, so CO₂ = 44 g/mol.)',
+      options: ['2 mol', '44 mol', '88 mol', '0.5 mol'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: moles = mass ÷ molar mass = 88 ÷ 44 = 2 mol. The molar mass converts grams to a particle count.',
+        '44 is the molar mass itself — you divide the 88 g sample by it, you don’t report it.',
+        '88 is the grams you started with; moles is that divided by 44.',
+        '0.5 inverts the division (44 ÷ 88) — moles is grams over molar mass, 88 ÷ 44 = 2.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'For N₂ + 3 H₂ → 2 NH₃, you have 5 mol N₂ and 6 mol H₂. Which is the limiting reagent?',
+      options: [
+        'H₂ — 5 mol N₂ would need 15 mol H₂, but only 6 are present',
+        'N₂ — there is less of it by the ratio',
+        'Neither — they are in perfect ratio',
+        'Both run out at exactly the same time',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the 1 : 3 ratio means 5 mol N₂ demands 15 mol H₂; with only 6 mol H₂, hydrogen runs out first and limits the yield.',
+        'By count there’s less H₂ relative to what the 1 : 3 ratio needs — N₂ is actually in excess here.',
+        'Perfect ratio would be 5 N₂ : 15 H₂; 6 mol H₂ is far short, so they’re not balanced.',
+        'H₂ is exhausted long before N₂ — 6 mol H₂ only consumes 2 mol of the 5 mol N₂.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A reaction breaks bonds totaling 500 kJ and forms bonds totaling 620 kJ. What is ΔH, and is it exothermic?',
+      options: [
+        '−120 kJ, exothermic — forming released more than breaking cost',
+        '+120 kJ, endothermic — breaking cost more',
+        '+1120 kJ — you add the two',
+        '0 kJ — they cancel',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: ΔH = broken − formed = 500 − 620 = −120 kJ. Negative means net heat is released — exothermic.',
+        'The sign is negative: formed (620) exceeds broken (500), so energy comes OUT, not in.',
+        'Adding them is meaningless — ΔH is the DIFFERENCE between energy in (breaking) and out (forming).',
+        'They don’t cancel — 500 and 620 differ by 120 kJ, which is released.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A galvanic cell has a cathode potential of +0.34 V and an anode potential of −0.44 V. What is its voltage?',
+      options: [
+        '+0.78 V — E_cell = cathode − anode = 0.34 − (−0.44)',
+        '−0.10 V — add the two potentials',
+        '+0.10 V — subtract the smaller from the larger magnitude',
+        '−0.78 V — anode minus cathode',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: E_cell = 0.34 − (−0.44) = 0.78 V. Subtracting a negative anode potential adds the magnitudes — a healthy, spontaneous voltage.',
+        'Adding the raw signed values (0.34 + −0.44) is the wrong formula — E_cell subtracts the anode.',
+        'Working with magnitudes drops the sign handling — the negative anode potential should ADD, giving 0.78, not 0.10.',
+        'That’s cathode and anode reversed — E_cell is cathode − anode, giving a positive 0.78 V for a spontaneous cell.',
       ],
     },
   ],

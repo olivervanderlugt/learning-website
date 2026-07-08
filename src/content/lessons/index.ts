@@ -41,6 +41,9 @@ import { histIndustrialLesson } from './hist-industrial'
 import { chemAtomsLesson } from './chem-atoms'
 import { chemReactionsLesson } from './chem-reactions'
 import { chemMaterialsLesson } from './chem-materials'
+import { chemQuantLesson } from './chem-quant'
+import { chemQuant2Lesson } from './chem-quant-2'
+import { chemQuant3Lesson } from './chem-quant-3'
 import { algoBigoLesson } from './algo-bigo'
 import { algoStructuresLesson } from './algo-structures'
 import { algoGraphsLesson } from './algo-graphs'
@@ -147,6 +150,9 @@ export const lessons: Record<string, Lesson> = {
   'chem-atoms': chemAtomsLesson,
   'chem-reactions': chemReactionsLesson,
   'chem-materials': chemMaterialsLesson,
+  'chem-quant': chemQuantLesson,
+  'chem-quant-2': chemQuant2Lesson,
+  'chem-quant-3': chemQuant3Lesson,
   'algo-bigo': algoBigoLesson,
   'algo-structures': algoStructuresLesson,
   'algo-graphs': algoGraphsLesson,

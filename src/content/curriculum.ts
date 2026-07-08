@@ -1585,18 +1585,65 @@ export const nodes: KnowledgeNode[] = [
     y: 900,
     hasLesson: true,
   },
+  // chem-quant chain (Stage 1 quantitative chemistry): moles/stoichiometry →
+  // thermochemistry/equilibrium → electrochemistry/batteries. Parallel column at
+  // x5230 (right of the chem column, BELOW the History row which ends at y240),
+  // hanging off chem-reactions and feeding chem-exam. The x5230 column is empty
+  // for y>240 (only hist-computing/hist-exam sit up top at y0/240).
+  {
+    id: 'chem-quant',
+    title: 'Moles & Stoichiometry',
+    subject: 'chemistry',
+    domainId: 'chemistry',
+    description:
+      'The mole counts atoms by weighing them. Balanced equations become mole ratios that tell you exactly how much reacts, what limits, and how much product you get.',
+    whyItMatters:
+      'Sizing a battery’s active material, a fuel cell’s reactants or an epoxy mix is stoichiometry — get the ratio wrong and you waste half of it.',
+    prereqIds: ['chem-reactions'],
+    x: 5350,
+    y: 700,
+    hasLesson: true,
+  },
+  {
+    id: 'chem-quant-2',
+    title: 'Thermochemistry & Equilibrium',
+    subject: 'chemistry',
+    domainId: 'chemistry',
+    description:
+      'Enthalpy (ΔH) measures the heat a reaction releases or absorbs; equilibrium and Le Chatelier’s principle predict which way a reversible reaction shifts when you push it.',
+    whyItMatters:
+      'A battery’s energy density and a motor-driver’s heat budget are thermochemistry; equilibrium governs charging, corrosion and every reversible cell.',
+    prereqIds: ['chem-quant'],
+    x: 5350,
+    y: 900,
+    hasLesson: true,
+  },
+  {
+    id: 'chem-quant-3',
+    title: 'Electrochemistry & Batteries',
+    subject: 'chemistry',
+    domainId: 'chemistry',
+    description:
+      'Redox reactions move electrons; a galvanic cell turns that flow into voltage (E_cell = E_cathode − E_anode). How a battery stores charge, and what capacity (mAh) really buys you.',
+    whyItMatters:
+      'Every robot runs on a battery — cell voltage, capacity and C-rate decide how long it lasts and how hard it can pull.',
+    prereqIds: ['chem-quant-2'],
+    x: 5350,
+    y: 1100,
+    hasLesson: true,
+  },
   {
     id: 'chem-exam',
     title: 'Module Exam: Chemistry',
     subject: 'chemistry',
     domainId: 'chemistry',
     description:
-      'Ten fresh questions across atoms, reactions and materials — identify elements, track electrons, follow the energy. 80% to pass.',
+      'Fourteen fresh questions across atoms, reactions, materials, stoichiometry, energy and electrochemistry — identify elements, balance amounts, follow the electrons. 80% to pass.',
     whyItMatters:
       'Batteries, wires and chips are applied chemistry — retrieving these basics cold is what lets you read a datasheet critically.',
-    prereqIds: ['chem-atoms', 'chem-reactions', 'chem-materials'],
+    prereqIds: ['chem-atoms', 'chem-reactions', 'chem-materials', 'chem-quant', 'chem-quant-2', 'chem-quant-3'],
     x: 4950,
-    y: 1100,
+    y: 1350,
     hasLesson: true,
     isExam: true,
   },
@@ -2003,6 +2050,18 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'video', title: 'Engineerguy — batteries series (Bill Hammack)', url: 'https://www.youtube.com/watch?v=9OVtk6G2TnQ', note: 'How real lithium-ion cells work, from an engineer who takes them apart.' },
     { type: 'video', title: 'Real Engineering — The truth about carbon fiber', url: 'https://www.youtube.com/watch?v=QO9Ledxlx-c', note: 'Why composites dominate aerospace and drones — specific strength made visual.' },
     { type: 'interactive', title: 'PhET — Battery-Resistor Circuit', url: 'https://phet.colorado.edu/en/simulations/battery-resistor-circuit', note: 'Connects this lesson’s electrochemistry to the circuits you already know.' },
+  ],
+  'chem-quant': [
+    { type: 'course', title: 'Khan Academy — The mole & stoichiometry', url: 'https://www.khanacademy.org/science/chemistry/chemical-reactions-stoichiome', note: 'Moles, molar mass, balancing and limiting reagents worked step by step, with practice.' },
+    { type: 'video', title: 'Crash Course Chemistry — Stoichiometry', url: 'https://www.youtube.com/watch?v=UL1jmJaUkaQ', note: 'Hank Green’s fast, clear tour of mole ratios and yield.' },
+  ],
+  'chem-quant-2': [
+    { type: 'course', title: 'MIT 5.111SC — Thermochemistry & equilibrium', url: 'https://ocw.mit.edu/courses/5-111sc-principles-of-chemical-science-fall-2014/', note: 'University-level enthalpy, Hess’s law and equilibrium — problem sets with solutions.' },
+    { type: 'video', title: 'Crash Course Chemistry — Enthalpy & Le Chatelier', url: 'https://www.youtube.com/watch?v=GAsPPGZHjHo', note: 'Reaction energy and how equilibria shift, visually.' },
+  ],
+  'chem-quant-3': [
+    { type: 'video', title: 'Engineerguy — How a battery works', url: 'https://www.youtube.com/watch?v=9OVtk6G2TnQ', note: 'Redox → voltage → real lithium cells, from teardown to chemistry.' },
+    { type: 'article', title: 'Battery University — fundamentals', url: 'https://batteryuniversity.com/articles', note: 'The practical reference on cell voltage, capacity, C-rate and chemistry trade-offs for real packs.' },
   ],
   'elec-components': [
     { type: 'interactive', title: 'Falstad CircuitJS (live circuit simulator)', url: 'https://www.falstad.com/circuit/', note: 'Draw a divider, add a load resistor and WATCH the output sag — the definitive free sandbox for predict→observe.' },
