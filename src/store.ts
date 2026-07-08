@@ -11,7 +11,7 @@ export const REVIEW_FIRST_INTERVAL_DAYS = 3
 export const REVIEW_MAX_INTERVAL_DAYS = 60
 
 interface View {
-  name: 'map' | 'lesson'
+  name: 'map' | 'lesson' | 'cumulativeReview'
   nodeId?: string
 }
 
@@ -21,6 +21,8 @@ interface AppState extends Progress {
   openLesson: (nodeId: string) => void
   /** Full exit to the map, clearing any interlink detour stack. */
   backToMap: () => void
+  /** Open the cumulative cross-domain review flow (samples from mastered nodes). */
+  startCumulativeReview: () => void
   /** Jump to a linked lesson mid-lesson, saving this spot to return to. */
   jumpToLesson: (fromNodeId: string, fromScreenIndex: number, toNodeId: string) => void
   /** Leave the current lesson: pop the detour stack (return to parent) or go to map. */
@@ -68,6 +70,8 @@ export const useStore = create<AppState>()(
       openLesson: (nodeId) => set({ view: { name: 'lesson', nodeId }, navStack: [] }),
 
       backToMap: () => set({ view: { name: 'map' }, navStack: [] }),
+
+      startCumulativeReview: () => set({ view: { name: 'cumulativeReview' }, navStack: [] }),
 
       jumpToLesson: (fromNodeId, fromScreenIndex, toNodeId) =>
         set((s) => ({
@@ -205,6 +209,20 @@ export function dueReviewIds(
     const r = reviews[id]
     return r !== undefined && now >= r.lastSeen + r.intervalDays * DAY_MS
   })
+}
+
+/**
+ * Gentle mastery-decay for a mastered node's map badge (Stage 4, computed).
+ * 0 while the review isn't due yet, then ramps 0→1 over one full interval past
+ * the due date (capped at 1). Drives a subtle fade/wilt on the map — never a
+ * penalty to XP or status, just a nudge that the memory is going stale.
+ */
+export function reviewDecay(review: ReviewState | undefined, now = Date.now()): number {
+  if (!review) return 0
+  const intervalMs = review.intervalDays * DAY_MS
+  const dueAt = review.lastSeen + intervalMs
+  if (now < dueAt || intervalMs <= 0) return 0
+  return Math.min(1, (now - dueAt) / intervalMs)
 }
 
 /**

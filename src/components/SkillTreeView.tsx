@@ -18,7 +18,7 @@ import {
   nodeTier,
   viewTiers,
 } from '../content/curriculum'
-import { useStore, nodeStatus, dueReviewIds } from '../store'
+import { useStore, nodeStatus, dueReviewIds, reviewDecay } from '../store'
 import { SkillNode, DomainLabelNode, subjectStyles, subjectNames } from './SkillNode'
 import type { SkillFlowNode, LabelFlowNode } from './SkillNode'
 import type { KnowledgeNode, Subject } from '../types'
@@ -181,6 +181,7 @@ function SkillTreeInner() {
         hasLesson: !!n.hasLesson,
         isExam: !!n.isExam,
         due: due.has(n.id),
+        decay: due.has(n.id) ? reviewDecay(reviews[n.id]) : 0,
       },
       width: NODE_W,
       height: NODE_H,
