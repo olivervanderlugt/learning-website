@@ -203,16 +203,63 @@ export const nodes: KnowledgeNode[] = [
     y: 820,
     hasLesson: true,
   },
+  // prog-c chain (Stage 1 CS-systems): pointers → malloc/linked-list → bits/bugs.
+  // Placed in the reserved x0 column (y440-840), ABOVE prog-exam and LEFT of the
+  // depth chain (x240). The x0 column sits left of every corridor fanning out of
+  // prog-data (net-stack→x0 passes at x>410 for y>440, db/algo further right), so
+  // these clear. prog-exam repoints to the chain bottom prog-c-3.
+  {
+    id: 'prog-c',
+    title: 'Pointers & the Memory Model',
+    subject: 'cs',
+    domainId: 'programming',
+    description:
+      'Memory is one giant array of bytes with numbered addresses. A pointer is just an address — the idea behind arrays, references and every low-level language.',
+    whyItMatters:
+      'Embedded and ROS code is C/C++: a robot’s firmware lives or dies by pointers, and this is where they stop being scary.',
+    prereqIds: ['prog-data'],
+    x: 0,
+    y: 440,
+    hasLesson: true,
+  },
+  {
+    id: 'prog-c-2',
+    title: 'malloc, Structs & a Linked List',
+    subject: 'cs',
+    domainId: 'programming',
+    description:
+      'Ask the heap for memory with malloc, bundle fields into a struct, and chain nodes with pointers to build a linked list from raw memory.',
+    whyItMatters:
+      'Every dynamic data structure on a robot — a growing path, a message queue — is malloc plus pointers underneath.',
+    prereqIds: ['prog-c'],
+    x: 0,
+    y: 640,
+    hasLesson: true,
+  },
+  {
+    id: 'prog-c-3',
+    title: 'Bit Manipulation & Memory Bugs',
+    subject: 'cs',
+    domainId: 'programming',
+    description:
+      'Masks and shifts to flip individual bits (MCU registers), and the classic C memory bugs: buffer overflow, use-after-free, dangling pointers and leaks.',
+    whyItMatters:
+      'You configure a motor driver by setting register bits, and a single dangling pointer can crash a robot mid-motion — both live here.',
+    prereqIds: ['prog-c-2'],
+    x: 0,
+    y: 840,
+    hasLesson: true,
+  },
   {
     id: 'prog-exam',
     title: 'Module Exam: Programming',
     subject: 'cs',
     domainId: 'programming',
     description:
-      'Fourteen fresh questions across variables, control flow, functions, data structures, recursion and debugging — including code you trace in your head. 80% to pass.',
+      'Eighteen fresh questions across variables, control flow, functions, data structures, recursion, debugging, pointers and bits — including code you trace in your head. 80% to pass.',
     whyItMatters:
       'If you can predict what code does without running it, you actually speak the language — that is what this exam checks.',
-    prereqIds: ['prog-variables', 'prog-functions', 'prog-data', 'prog-data-2', 'prog-data-3'],
+    prereqIds: ['prog-variables', 'prog-functions', 'prog-data', 'prog-data-2', 'prog-data-3', 'prog-c', 'prog-c-2', 'prog-c-3'],
     x: 0,
     y: 1020,
     hasLesson: true,
@@ -1688,6 +1735,18 @@ const resourcesByNode: Record<string, Resource[]> = {
   'prog-data-3': [
     { type: 'article', title: 'Julia Evans — The Pocket Guide to Debugging', url: 'https://wizardzines.com/zines/debugging-guide/', note: 'The best modern zine on debugging as a systematic skill (sample pages free).' },
     { type: 'course', title: 'CS50x — Debugging tools', url: 'https://cs50.harvard.edu/x/', note: 'printf debugging, debuggers and rubber ducks, from week 2 onward.' },
+  ],
+  'prog-c': [
+    { type: 'course', title: 'CS50x — Week 4: Memory & pointers', url: 'https://cs50.harvard.edu/x/', note: 'Malan’s pointer lecture with the physical-address demo — the canonical first exposure.' },
+    { type: 'book', title: 'Beej’s Guide to C Programming (free)', url: 'https://beej.us/guide/bgc/', note: 'The friendliest free C book — the pointers and arrays chapters are gold.' },
+  ],
+  'prog-c-2': [
+    { type: 'book', title: 'Beej’s Guide to C — Manual memory (malloc/free)', url: 'https://beej.us/guide/bgc/html/#manual-memory-allocation', note: 'malloc, free, structs and building linked structures from raw memory.' },
+    { type: 'interactive', title: 'Python Tutor — visualize a linked list', url: 'https://pythontutor.com', note: 'Build a small linked structure and watch the pointers connect the nodes, step by step.' },
+  ],
+  'prog-c-3': [
+    { type: 'article', title: 'Bit manipulation — masks, shifts & register tricks', url: 'https://graphics.stanford.edu/~seander/bithacks.html', note: 'Stanford’s legendary “Bit Twiddling Hacks” — every set/clear/test idiom and more.' },
+    { type: 'course', title: 'CS50x — Buffer overflow & memory bugs', url: 'https://cs50.harvard.edu/x/', note: 'How out-of-bounds writes corrupt memory and become security holes.' },
   ],
   'os-processes': [
     { type: 'video', title: 'CS50 — Operating Systems concepts', url: 'https://cs50.harvard.edu/x/', note: 'Context for how the OS sits between your code and the hardware.' },
