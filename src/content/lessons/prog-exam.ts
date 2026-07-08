@@ -7,7 +7,7 @@ export const progExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — think like the interpreter',
       body: [
-        'Fourteen questions across the whole module — variables, loops, functions, arrays, recursion, debugging — all NEW, no repeats from the lesson quizzes. No code runner this time: trace every snippet in your head, the way the machine would.',
+        'Eighteen questions across the whole module — variables, loops, functions, arrays, recursion, debugging, pointers and bits — all NEW, no repeats from the lesson quizzes. No code runner this time: trace every snippet in your head, the way the machine would.',
         'Score 80% and Programming Fundamentals is sealed. Below that costs nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -214,6 +214,73 @@ export const progExamLesson: Lesson = {
         'The base case is fine — it would stop the recursion at 0. The program dies of memory exhaustion long before arriving there.',
         'Both can count arbitrarily high — the difference is memory per step: constant for the loop, linear in depth for recursion.',
         'The call stack lives in RAM and has a fixed size — disk never enters the picture.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A pointer `p` holds the address 3000, and the value stored at address 3000 is 42. What is `*p`, and what is `p`?',
+      options: [
+        '`*p` is 42 (the value at the address); `p` is 3000 (the address itself)',
+        '`*p` is 3000; `p` is 42',
+        'Both `*p` and `p` are 42',
+        'Both `*p` and `p` are 3000',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: `p` holds the address (3000); dereferencing with `*` follows it to the box and reads 42. The pointer is the signpost; `*p` is the house.',
+        'Reversed — `p` is the address you stored, and `*p` follows it. You can’t get 3000 by dereferencing.',
+        '`p` is the address (3000), not the value; only `*p` is 42.',
+        '`*p` reads THROUGH the address to the value 42; it isn’t the address again.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Trace the bits. `reg` starts at `0b1010`. You run `reg = reg | (1 << 0)` then `reg = reg & ~(1 << 3)`. What is `reg` now (in binary)?',
+      options: ['0b0011', '0b1011', '0b0010', '0b1010'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: `1 << 0` = `0b0001`, so OR sets bit 0 → `0b1011`. Then `~(1 << 3)` clears bit 3 → `0b0011`. Set with OR, clear with AND-NOT.',
+        '`0b1011` is only the first step (bit 0 set) — you forgot the second op clears bit 3.',
+        '`0b0010` clears bit 3 but drops the bit-0 set — the OR should have turned bit 0 on.',
+        '`0b1010` is the starting value — both operations changed it.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A function does `int *p = malloc(40); ... return p;` and the caller uses `p` much later. A second function does `int arr[10]; return arr;` (returning the local array’s address). Which pointer is safe to use later?',
+      options: [
+        'Only the malloc’d one — heap memory lives until freed; the local array’s stack space is reclaimed on return',
+        'Only the local array — stack memory is faster and safer',
+        'Both — a returned pointer is always valid',
+        'Neither — C can never return a pointer',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the heap block persists until you `free` it, so returning its pointer is fine. The local array vanishes with its stack frame — its returned address dangles.',
+        'The local array is the DANGEROUS one — its memory is reused by the next call.',
+        'Only the heap pointer is valid; the stack one dangles. “Always valid” is exactly the trap.',
+        'C returns pointers routinely — the rule is that the memory must outlive the function, which heap allocation guarantees.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A C loop writes to `arr[i]` for `i` from 0 to 10 inclusive, but `arr` has only 10 elements. What kind of bug is this, and what’s the danger?',
+      options: [
+        'An off-by-one buffer overflow — `arr[10]` is out of bounds and corrupts whatever memory sits after the array',
+        'A memory leak — the extra write is never freed',
+        'Nothing — arrays automatically grow to fit',
+        'A syntax error the compiler will catch',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: valid indices are 0..9, so `arr[10]` writes one past the end — an off-by-one overflow that silently corrupts adjacent memory (and can be an exploit).',
+        'A leak is un-freed allocation; this is an out-of-bounds WRITE, a different and more dangerous class of bug.',
+        'C arrays are fixed-size and never grow — the write simply lands outside them.',
+        'C does no bounds checking, so it compiles cleanly and fails only at runtime — that’s exactly what makes it dangerous.',
       ],
     },
   ],
