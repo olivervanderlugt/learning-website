@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { Handle, Position } from '@xyflow/react'
 import type { NodeProps, Node } from '@xyflow/react'
 import type { NodeStatus, Subject } from '../types'
@@ -75,6 +76,8 @@ export type SkillNodeData = {
   isExam?: boolean
   /** Mastered but due for a spaced-repetition review. */
   due?: boolean
+  /** 0..1 gentle mastery-decay: how far past due (drives a subtle amber wilt). */
+  decay?: number
 }
 
 export type SkillFlowNode = Node<SkillNodeData, 'skill'>
@@ -84,9 +87,23 @@ export function SkillNode({ data, selected }: NodeProps<SkillFlowNode>) {
   const later = data.status === 'later'
   const known = data.status === 'known'
   const mastered = data.status === 'mastered'
+  const due = mastered && !!data.due
+  const decay = due ? Math.min(1, Math.max(0, data.decay ?? 0)) : 0
+
+  // Gentle mastery-decay: a due node wilts as it goes stale — a widening amber
+  // ring + glow and a slight desaturation. Never touches XP or status; a quick
+  // review resets it. `selected` keeps its own slate ring (handled below).
+  const decayStyle: CSSProperties =
+    due && !selected
+      ? {
+          boxShadow: `0 0 0 2px rgba(251,191,36,${(0.45 + 0.35 * decay).toFixed(3)}), 0 0 ${(8 + 16 * decay).toFixed(1)}px rgba(251,191,36,${(0.18 + 0.4 * decay).toFixed(3)})`,
+          filter: decay > 0 ? `saturate(${(1 - 0.45 * decay).toFixed(3)}) brightness(${(1 - 0.1 * decay).toFixed(3)})` : undefined,
+        }
+      : {}
 
   return (
     <div
+      style={decayStyle}
       className={[
         'w-48 rounded-xl border-2 px-3 py-2.5 transition-all duration-200',
         later
@@ -94,12 +111,14 @@ export function SkillNode({ data, selected }: NodeProps<SkillFlowNode>) {
           : `${s.border} bg-slate-900 ${known ? 'border-dashed' : ''} ${data.status === 'available' && data.hasLesson ? s.glow : ''}`,
         // slate-100 flips with the theme (near-white on dark, near-black on light)
         // so the selection ring stays visible in both — ring-white vanished on light.
-        selected ? 'ring-2 ring-slate-100/70' : mastered && data.due ? 'ring-2 ring-amber-400/70' : '',
+        selected ? 'ring-2 ring-slate-100/70' : '',
         'cursor-pointer hover:opacity-100',
       ].join(' ')}
       title={
-        mastered && data.due
-          ? 'Due for review — re-pass the quiz to keep it fresh'
+        due
+          ? decay > 0.5
+            ? 'Going stale — a quick review will lock it back in'
+            : 'Due for review — re-pass the quiz to keep it fresh'
           : later
             ? 'Playable now — but we suggest its prerequisites first'
             : known

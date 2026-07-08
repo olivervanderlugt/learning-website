@@ -5,7 +5,9 @@ import SettingsPanel from './components/SettingsPanel'
 import RoadmapView from './components/RoadmapView'
 import ReviewQueue from './components/ReviewQueue'
 import ProgressPanel from './components/ProgressPanel'
+import CumulativeReviewFlow from './components/CumulativeReviewFlow'
 import AchievementToasts from './components/AchievementToasts'
+import { cumulativeReviewEligible } from './components/cumulativeReview'
 import { useStore } from './store'
 
 function App() {
@@ -13,7 +15,11 @@ function App() {
   const theme = useStore((s) => s.theme)
   const toggleTheme = useStore((s) => s.toggleTheme)
   const backToMap = useStore((s) => s.backToMap)
+  const masteredNodeIds = useStore((s) => s.masteredNodeIds)
+  const startCumulativeReview = useStore((s) => s.startCumulativeReview)
   const [roadmapOpen, setRoadmapOpen] = useState(false)
+
+  const canCumulativeReview = cumulativeReviewEligible(masteredNodeIds)
 
   // Apply theme class to <html> so the light-mode CSS variables take effect.
   useEffect(() => {
@@ -32,7 +38,7 @@ function App() {
           </h1>
         </div>
         <div className="flex items-center gap-4">
-          {view.name === 'lesson' && (
+          {view.name !== 'map' && (
             <button
               onClick={backToMap}
               className="rounded-lg border border-slate-700 px-3 py-1.5 text-sm text-slate-300 hover:bg-slate-800"
@@ -41,6 +47,15 @@ function App() {
             </button>
           )}
           <ReviewQueue />
+          {canCumulativeReview && view.name !== 'cumulativeReview' && (
+            <button
+              onClick={startCumulativeReview}
+              title="A short mixed quiz sampled across everything you've mastered — keeps knowledge fresh"
+              className="rounded-lg border border-violet-500/50 bg-violet-500/10 px-3 py-1.5 text-sm font-semibold text-violet-300 hover:bg-violet-500/20"
+            >
+              🎓 Review mix
+            </button>
+          )}
           <button
             onClick={() => setRoadmapOpen((o) => !o)}
             title={roadmapOpen ? 'Back to the map' : 'Roadmap & coming soon'}
@@ -66,10 +81,12 @@ function App() {
       </header>
 
       <main className="relative min-h-0 flex-1">
-        {view.name === 'map' || !view.nodeId ? (
-          <SkillTreeView />
-        ) : (
+        {view.name === 'cumulativeReview' ? (
+          <CumulativeReviewFlow />
+        ) : view.name === 'lesson' && view.nodeId ? (
           <LessonPlayer key={view.nodeId} nodeId={view.nodeId} />
+        ) : (
+          <SkillTreeView />
         )}
         {roadmapOpen && <RoadmapView onClose={() => setRoadmapOpen(false)} />}
         <AchievementToasts />
