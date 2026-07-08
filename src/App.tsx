@@ -4,12 +4,12 @@ import LessonPlayer from './components/LessonPlayer'
 import SettingsPanel from './components/SettingsPanel'
 import RoadmapView from './components/RoadmapView'
 import ReviewQueue from './components/ReviewQueue'
+import ProgressPanel from './components/ProgressPanel'
 import AchievementToasts from './components/AchievementToasts'
 import { useStore } from './store'
 
 function App() {
   const view = useStore((s) => s.view)
-  const xp = useStore((s) => s.xp)
   const theme = useStore((s) => s.theme)
   const toggleTheme = useStore((s) => s.toggleTheme)
   const backToMap = useStore((s) => s.backToMap)
@@ -52,9 +52,7 @@ function App() {
           >
             🧭 Roadmap
           </button>
-          <div className="rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-semibold text-amber-300">
-            ⚡ {xp} XP
-          </div>
+          <ProgressPanel />
           <button
             onClick={toggleTheme}
             aria-label="Toggle light/dark theme"
