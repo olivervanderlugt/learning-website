@@ -486,13 +486,71 @@ export const nodes: KnowledgeNode[] = [
     y: 800,
     hasLesson: true,
   },
+
+  // ---- math-stats chain (col x2040, y1300-1680 — in the street BELOW the
+  // prog-data→robo-ros corridor, right of math-exam, feeding up into it). The
+  // v2 reserved slot (x2520) is gone: math-mv took x2520 y400-800 (2026-07-07),
+  // and the prog-data→robo-ros mega-corridor sags through y1080-1350 across the
+  // whole mid-map, so nothing 3-tall clears it ABOVE. The clean home is the
+  // below-corridor street: a near-vertical drop below the math-prob column
+  // (incoming math-prob-3→math-stats stays a clean vertical, x2056→2136), left
+  // of the linalg-3→robo-kinematics diagonal, above the robotics band. Found by
+  // a margin-maximizing search (scripts-style bezier check); zero crossings +
+  // zero new tights in BOTH tiers, stats-3→math-exam sweeps up-left cleanly.
+  // Statistics/inference: the language of the Kalman covariance Ollie already
+  // built, and direct SBI-y2 prep. Intro (math-stats) is tier-0; -2/-3 Depth.
+  // Prereq = math-prob-3 (distributions/EV/Bayes done there); cross-LINKS (not
+  // prereqs, per convention) to robo-estimation (covariance = KF uncertainty)
+  // and math-linalg-4 (least squares = regression).
+  {
+    id: 'math-stats',
+    title: 'Variance, Covariance & the Covariance Matrix',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Variance measures spread; covariance measures whether two variables move together; correlation normalizes it to [−1, 1] — and stacking them into a matrix is exactly how a Kalman filter stores its uncertainty.',
+    whyItMatters:
+      'The covariance matrix IS the uncertainty ellipse in your robot’s state estimate — this is the language sensor fusion speaks.',
+    prereqIds: ['math-prob-3'],
+    x: 2040,
+    y: 1300,
+    hasLesson: true,
+  },
+  {
+    id: 'math-stats-2',
+    title: 'The Central Limit Theorem & Estimation',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Averaging tames randomness: the sample mean turns bell-shaped whatever the source (CLT), and its standard error shrinks like σ/√n — 100 readings are 10× more precise than one, not 100×.',
+    whyItMatters:
+      'The √n law is the exact toll every robot pays to average away sensor noise, and every A/B test pays for enough data.',
+    prereqIds: ['math-stats'],
+    x: 2040,
+    y: 1490,
+    hasLesson: true,
+  },
+  {
+    id: 'math-stats-3',
+    title: 'Hypothesis Tests & Regression',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Is this real or noise? Assume a null, measure how many standard errors away you landed (z/t), read a p-value — and fit-and-test a least-squares line, the same fit from linear algebra now doing statistics.',
+    whyItMatters:
+      'This is the precise toolkit for “did my robot — or my product — actually get better, or did I get lucky?”',
+    prereqIds: ['math-stats-2'],
+    x: 2040,
+    y: 1680,
+    hasLesson: true,
+  },
   {
     id: 'math-exam',
     title: 'Module Exam: Math',
     subject: 'math',
     domainId: 'math',
     description:
-      'Fresh mixed questions across logic, vectors & matrices, probability, calculus, differential equations and multivariable calculus — the deeper rules, integrals, determinants, Bayes, stability, gradients and Jacobians. From memory. 80% to pass.',
+      'Fresh mixed questions across logic, vectors & matrices, probability, statistics, calculus, differential equations and multivariable calculus — the deeper rules, integrals, determinants, Bayes, covariance, the CLT, p-values, stability, gradients and Jacobians. From memory. 80% to pass.',
     whyItMatters:
       'Robotics runs on all of these at once; the exam checks they coexist in your head, not just in separate lessons.',
     prereqIds: [
@@ -514,6 +572,9 @@ export const nodes: KnowledgeNode[] = [
       'math-mv',
       'math-mv-2',
       'math-mv-3',
+      'math-stats',
+      'math-stats-2',
+      'math-stats-3',
     ],
     x: 1500,
     y: 1560,
@@ -1556,6 +1617,21 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'video', title: 'Khan Academy — Lagrange multipliers & optimization', url: 'https://www.khanacademy.org/math/multivariable-calculus/applications-of-multivariable-derivatives', note: 'Constrained optimization built up geometrically from tangent contours.' },
     { type: 'video', title: '3Blue1Brown — Gradient descent revisited', url: 'https://www.youtube.com/watch?v=IHZwWFHWa-w', note: 'Descent as walking downhill on a loss surface — the code screen made visual.' },
     { type: 'course', title: 'MIT 18.02SC — Lagrange multipliers', url: 'https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/', note: 'The constrained-optimization unit with exams and solutions.' },
+  ],
+  'math-stats': [
+    { type: 'interactive', title: 'Seeing Theory — Correlation & the covariance matrix', url: 'https://seeing-theory.brown.edu/regression-analysis/index.html#section2', note: 'A live correlation matrix on the Iris data — the closest interactive to the covariance/correlation idea in this lesson.' },
+    { type: 'video', title: 'StatQuest — Covariance, Clearly Explained!!!', url: 'https://www.youtube.com/watch?v=qtaqvPAeEJY', note: 'Covariance built from scratch, then normalized into correlation — pairs exactly with the code screen.' },
+    { type: 'course', title: 'MIT 18.05 — Class 7: joint distributions, covariance & correlation', url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/', note: 'The real course, with full problem-set AND exam solutions free — the best free stats problem bank there is.' },
+  ],
+  'math-stats-2': [
+    { type: 'video', title: '3Blue1Brown — But what is the Central Limit Theorem?', url: 'https://www.3blue1brown.com/lessons/clt', note: 'The best visual explainer of why averages go bell-shaped and tighten as √n.' },
+    { type: 'interactive', title: 'Seeing Theory — the CLT sampler & confidence intervals', url: 'https://seeing-theory.brown.edu/probability-distributions/index.html#section3', note: 'Draw samples and watch the distribution of the mean form a bell in real time.' },
+    { type: 'course', title: 'MIT 18.05 — Class 6b: LLN, CLT & estimation (with solutions)', url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/', note: 'Problem sets and exams with full worked solutions — drill the standard-error problems here.' },
+  ],
+  'math-stats-3': [
+    { type: 'video', title: 'StatQuest — p-values: what they are and how to interpret them', url: 'https://www.youtube.com/watch?v=vemZtEM63GY', note: 'Nails the #1 p-value misconception this lesson warns about (+ his Linear Regression video for the fit).' },
+    { type: 'interactive', title: 'Seeing Theory — Regression (drag points, watch OLS + SSE update)', url: 'https://seeing-theory.brown.edu/regression-analysis/index.html#section1', note: 'Move points on Anscombe’s quartet and see the least-squares line and error respond live.' },
+    { type: 'book', title: 'OpenIntro Statistics (free PDF + R labs, Ch 7–8)', url: 'https://www.openintro.org/book/os/', note: 'Name-your-price ($0) textbook; odd-numbered exercise answers free, with labs for t-tests and regression.' },
   ],
   'robo-kinematics-2': [
     { type: 'course', title: 'Modern Robotics — Ch. 3 (Rigid-Body Motions)', url: 'https://hades.mech.northwestern.edu/index.php/Modern_Robotics', note: 'Lynch & Park’s free book + lightboard videos: rotations, transforms, the undergrad canon.' },

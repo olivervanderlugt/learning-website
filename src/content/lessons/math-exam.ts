@@ -7,7 +7,7 @@ export const mathExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — math that moves robots',
       body: [
-        'Twenty-six questions spanning logic, vectors, matrices, rank & least squares, the SVD, probability, calculus, differential equations and multivariable calculus — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
+        'Thirty questions spanning logic, vectors, matrices, rank & least squares, the SVD, probability, statistics, calculus, differential equations and multivariable calculus — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
         'Score 80% and the module is sealed. Below that? You lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -428,6 +428,68 @@ export const mathExamLesson: Lesson = {
         'A non-zero determinant only rules out EXACT collapse; conditioning (the singular-value ratio) is what governs numerical safety.',
         'It is not exactly singular (det = 0.02 ≠ 0), but it is dangerously close in the conditioning sense.',
         'The condition number is precisely the measure of how badly inversion amplifies error — it is the key quantity here.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A robot stores its position uncertainty as a 2×2 covariance matrix. What sits on the diagonal, and what property must the matrix always have?',
+      options: [
+        'The variances of x and y sit on the diagonal, and the matrix is symmetric (cov(x, y) = cov(y, x))',
+        'The means of x and y sit on the diagonal, and the matrix is anti-symmetric',
+        'The correlations sit on the diagonal, always equal to 0',
+        'The covariances sit on the diagonal, and the matrix can be any shape',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the (i, i) entry is cov(variable i, itself) = its variance, and since cov(x, y) = cov(y, x) the matrix is symmetric (and positive-semidefinite).',
+        'Means are not stored in a covariance matrix, and covariance matrices are symmetric, not anti-symmetric.',
+        'A correlation MATRIX has 1s on its diagonal; a covariance matrix has variances there, and off-diagonal correlations need not be 0.',
+        'Variances (not the cross-covariances) sit on the diagonal, and the matrix is always square and symmetric.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'One sensor reading has a standard deviation of 6 cm. You average 36 readings. What is the standard error of that average?',
+      options: ['1 cm', '6 cm', '0.17 cm', '3 cm'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: SE = σ/√n = 6/√36 = 6/6 = 1 cm — 36 readings cut the error 6-fold (√36), not 36-fold.',
+        '6 cm is the single-reading spread; averaging must reduce it.',
+        '0.17 cm divides by n = 36 instead of √36 — the classic 1/n-vs-1/√n error.',
+        '3 cm would be σ/√4; here n = 36, so you divide by √36 = 6, giving 1 cm.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'You change your controller and a test reports p = 0.02 for the improvement. What is the correct interpretation?',
+      options: [
+        'If the change truly did nothing, a result this extreme would occur only 2% of the time',
+        'There is a 2% chance the change did nothing',
+        'There is a 98% chance the change is a real improvement',
+        'The controller improved by 2%',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the p-value is P(data this extreme | null), computed assuming no effect — a statement about the data, not the null’s truth.',
+        'That flips the conditional; p is not the probability the null is true.',
+        'Same inversion — p doesn’t give the probability the alternative (real improvement) is true.',
+        'p-values measure surprise under the null, not effect SIZE; the 2% is a probability, not a percentage improvement.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'You fit a least-squares line to data where cov(x, y) = 6 and var(x) = 3. What is the slope of the best-fit line?',
+      options: ['2', '0.5', '18', '3'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: slope = cov(x, y) / var(x) = 6 / 3 = 2 — the rise in y per unit x.',
+        '0.5 is the reciprocal (var(x)/cov), which has the wrong units and value.',
+        '18 multiplies instead of dividing; the slope divides covariance by the variance of x.',
+        '3 is var(x) alone; the slope is the ratio cov/var(x) = 2.',
       ],
     },
   ],
