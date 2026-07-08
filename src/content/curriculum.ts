@@ -682,16 +682,67 @@ export const nodes: KnowledgeNode[] = [
     y: 420,
     hasLesson: true,
   },
+
+  // ---- phys-statics chain (col x4740, y260-620 — reserved slot right of energy,
+  // ABOVE the Electronics domain which occupies x4660 y1420+). Statics &
+  // mechanics of materials, seeding a future MechE domain. Intro (phys-statics)
+  // is tier-0; -2/-3 are Depth. Prereq = phys-forces-3 (FBDs/equilibrium build
+  // on Newton's laws + torque). The incoming edge from phys-forces-3 (4100,420)
+  // sweeps up-right to phys-statics; shifted to x4740 (past phys-energy's
+  // x-range) so BOTH the tier-0 (phys-forces→) and tier-1 (phys-forces-3→)
+  // incoming edges clear phys-energy — margin-max bezier search, zero crossings. Source: MIT 2.001 + The Efficient Engineer + engineeringstatics.org.
+  {
+    id: 'phys-statics',
+    title: 'Free-Body Diagrams & Equilibrium',
+    subject: 'physics',
+    domainId: 'physics',
+    description:
+      'Anything at rest obeys two rules: forces sum to zero (ΣF = 0) and moments sum to zero (ΣM = 0). Draw a free-body diagram, take moments about a support, and the reaction forces fall out.',
+    whyItMatters:
+      'A robot chassis is a structure before it’s a machine — sizing its supports and joints starts with exactly this force-and-moment balance.',
+    prereqIds: ['phys-forces-3'],
+    x: 4740,
+    y: 260,
+    hasLesson: true,
+  },
+  {
+    id: 'phys-statics-2',
+    title: 'Stress, Strain & Material Limits',
+    subject: 'physics',
+    domainId: 'physics',
+    description:
+      'What actually breaks material is stress (σ = F/A), not raw force. Strain ε = ΔL/L, Hooke’s law σ = E·ε, the elastic-vs-plastic yield point, and the safety factor that keeps a part in the recoverable region.',
+    whyItMatters:
+      'Every structural member on a robot is sized by comparing F/A against the material’s yield — this is how you stop a bracket bending.',
+    prereqIds: ['phys-statics'],
+    x: 4740,
+    y: 440,
+    hasLesson: true,
+  },
+  {
+    id: 'phys-statics-3',
+    title: 'Bending & Torsion: Sizing a Beam and a Shaft',
+    subject: 'physics',
+    domainId: 'physics',
+    description:
+      'Why beams are deep, not wide (bending stress σ = 6M/(b·h²), the h³ second moment of area, the I-beam) — and why shafts are tubes (torsion τ = T·r/J, the r⁴ scaling), the exact math for sizing a robot’s drive shaft.',
+    whyItMatters:
+      'A motor that out-torques its thin shaft shears it off — bending and torsion sizing is the difference between a robot that holds together and one that doesn’t.',
+    prereqIds: ['phys-statics-2'],
+    x: 4740,
+    y: 620,
+    hasLesson: true,
+  },
   {
     id: 'phys-exam',
     title: 'Module Exam: Physics',
     subject: 'physics',
     domainId: 'physics',
     description:
-      'Eighteen fresh questions across forces, kinematics, momentum, rotation, energy, Ohm’s law, Kirchhoff, dividers and RC/induction — with numbers, units and the classic traps. From memory. 80% to pass.',
+      'Twenty-two fresh questions across forces, kinematics, momentum, rotation, energy, Ohm’s law, Kirchhoff, dividers, RC/induction and statics (equilibrium, stress/strain, bending) — with numbers, units and the classic traps. From memory. 80% to pass.',
     whyItMatters:
-      'Whether your robot climbs the ramp is decided by exactly these equations — better to fail them here than in hardware.',
-    prereqIds: ['phys-forces', 'phys-forces-2', 'phys-forces-3', 'phys-energy', 'phys-electricity', 'phys-electricity-2', 'phys-electricity-3'],
+      'Whether your robot climbs the ramp — or holds together under load — is decided by exactly these equations, better to fail them here than in hardware.',
+    prereqIds: ['phys-forces', 'phys-forces-2', 'phys-forces-3', 'phys-energy', 'phys-electricity', 'phys-electricity-2', 'phys-electricity-3', 'phys-statics', 'phys-statics-2', 'phys-statics-3'],
     x: 4380,
     y: 850,
     hasLesson: true,
@@ -1739,6 +1790,21 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'video', title: 'Ben Eater — Capacitors, transistors & clocks', url: 'https://eater.net/', note: 'He builds RC timing and transistor switches on breadboards — theory made physical.' },
     { type: 'interactive', title: 'Falstad CircuitJS — RC & inductors', url: 'https://www.falstad.com/circuit/', note: 'Watch a capacitor charge on its exponential curve and see induction live.' },
     { type: 'course', title: 'MIT 8.02 — Faraday’s law & induction', url: 'https://ocw.mit.edu/courses/8-02-physics-ii-electricity-and-magnetism-spring-2007/', note: 'Induction, RC/RL circuits and the physics behind motors.' },
+  ],
+  'phys-statics': [
+    { type: 'video', title: 'The Efficient Engineer — Free Body Diagrams & Equilibrium', url: 'https://www.youtube.com/@TheEfficientEngineer', note: 'Exceptional animated statics: FBDs, moments and equilibrium — the clearest free intro.' },
+    { type: 'interactive', title: 'engineeringstatics.org (free, self-checking)', url: 'https://engineeringstatics.org/', note: 'A full open statics textbook with interactive, self-checking problems — drill reactions and moments here.' },
+    { type: 'course', title: 'MIT 2.001 — Mechanics & Materials I', url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/', note: 'The real course: equilibrium → trusses → stress/strain → bending → torsion, with lecture notes and psets.' },
+  ],
+  'phys-statics-2': [
+    { type: 'video', title: 'The Efficient Engineer — Stress, Strain & Young’s Modulus', url: 'https://www.youtube.com/@TheEfficientEngineer', note: 'Animated stress-strain curves, Hooke’s law and yield — pairs exactly with this lesson.' },
+    { type: 'interactive', title: 'engineeringstatics.org — stress & strain', url: 'https://engineeringstatics.org/', note: 'Self-checking problems on axial stress, strain and elongation.' },
+    { type: 'course', title: 'MIT 2.001 — stress/strain & material behaviour', url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/', note: 'The stress/strain, elasticity and failure units with worked psets.' },
+  ],
+  'phys-statics-3': [
+    { type: 'video', title: 'The Efficient Engineer — Bending Stress & Torsion', url: 'https://www.youtube.com/@TheEfficientEngineer', note: 'Why beams are deep (second moment of area) and shafts are tubes (polar J) — beautifully visualized.' },
+    { type: 'course', title: 'MIT 2.001 — beam bending & torsion', url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/', note: 'Shear/bending diagrams, beam deflection and torsion, with problem sets.' },
+    { type: 'interactive', title: 'SkyCiv Beam / free beam calculators', url: 'https://skyciv.com/free-beam-calculator/', note: 'Drop loads on a beam and read reactions, shear, bending moment and stress live.' },
   ],
   'robo-estimation': [
     { type: 'article', title: 'How a Kalman filter works, in pictures (bzarg)', url: 'https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/', note: 'THE best first read on Kalman filters — start here, it builds the exact intuition of this lesson.' },
