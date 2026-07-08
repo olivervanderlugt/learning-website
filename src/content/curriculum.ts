@@ -15,6 +15,7 @@ export const domains: Domain[] = [
   { id: 'robotics-bridge', title: 'Robotics Bridge', prereqDomainIds: ['how-computers-work', 'physics'] },
   { id: 'history', title: 'History of Science & Technology', prereqDomainIds: [] },
   { id: 'chemistry', title: 'Chemistry', prereqDomainIds: [] },
+  { id: 'electronics', title: 'Electronics & Circuit Design', prereqDomainIds: ['physics'] },
 ]
 
 // Layout (2026-07 refactor — "streets" edition, built for depth-chain growth):
@@ -486,13 +487,71 @@ export const nodes: KnowledgeNode[] = [
     y: 800,
     hasLesson: true,
   },
+
+  // ---- math-stats chain (col x2040, y1300-1680 — in the street BELOW the
+  // prog-data→robo-ros corridor, right of math-exam, feeding up into it). The
+  // v2 reserved slot (x2520) is gone: math-mv took x2520 y400-800 (2026-07-07),
+  // and the prog-data→robo-ros mega-corridor sags through y1080-1350 across the
+  // whole mid-map, so nothing 3-tall clears it ABOVE. The clean home is the
+  // below-corridor street: a near-vertical drop below the math-prob column
+  // (incoming math-prob-3→math-stats stays a clean vertical, x2056→2136), left
+  // of the linalg-3→robo-kinematics diagonal, above the robotics band. Found by
+  // a margin-maximizing search (scripts-style bezier check); zero crossings +
+  // zero new tights in BOTH tiers, stats-3→math-exam sweeps up-left cleanly.
+  // Statistics/inference: the language of the Kalman covariance Ollie already
+  // built, and direct SBI-y2 prep. Intro (math-stats) is tier-0; -2/-3 Depth.
+  // Prereq = math-prob-3 (distributions/EV/Bayes done there); cross-LINKS (not
+  // prereqs, per convention) to robo-estimation (covariance = KF uncertainty)
+  // and math-linalg-4 (least squares = regression).
+  {
+    id: 'math-stats',
+    title: 'Variance, Covariance & the Covariance Matrix',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Variance measures spread; covariance measures whether two variables move together; correlation normalizes it to [−1, 1] — and stacking them into a matrix is exactly how a Kalman filter stores its uncertainty.',
+    whyItMatters:
+      'The covariance matrix IS the uncertainty ellipse in your robot’s state estimate — this is the language sensor fusion speaks.',
+    prereqIds: ['math-prob-3'],
+    x: 2040,
+    y: 1300,
+    hasLesson: true,
+  },
+  {
+    id: 'math-stats-2',
+    title: 'The Central Limit Theorem & Estimation',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Averaging tames randomness: the sample mean turns bell-shaped whatever the source (CLT), and its standard error shrinks like σ/√n — 100 readings are 10× more precise than one, not 100×.',
+    whyItMatters:
+      'The √n law is the exact toll every robot pays to average away sensor noise, and every A/B test pays for enough data.',
+    prereqIds: ['math-stats'],
+    x: 2040,
+    y: 1490,
+    hasLesson: true,
+  },
+  {
+    id: 'math-stats-3',
+    title: 'Hypothesis Tests & Regression',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Is this real or noise? Assume a null, measure how many standard errors away you landed (z/t), read a p-value — and fit-and-test a least-squares line, the same fit from linear algebra now doing statistics.',
+    whyItMatters:
+      'This is the precise toolkit for “did my robot — or my product — actually get better, or did I get lucky?”',
+    prereqIds: ['math-stats-2'],
+    x: 2040,
+    y: 1680,
+    hasLesson: true,
+  },
   {
     id: 'math-exam',
     title: 'Module Exam: Math',
     subject: 'math',
     domainId: 'math',
     description:
-      'Fresh mixed questions across logic, vectors & matrices, probability, calculus, differential equations and multivariable calculus — the deeper rules, integrals, determinants, Bayes, stability, gradients and Jacobians. From memory. 80% to pass.',
+      'Fresh mixed questions across logic, vectors & matrices, probability, statistics, calculus, differential equations and multivariable calculus — the deeper rules, integrals, determinants, Bayes, covariance, the CLT, p-values, stability, gradients and Jacobians. From memory. 80% to pass.',
     whyItMatters:
       'Robotics runs on all of these at once; the exam checks they coexist in your head, not just in separate lessons.',
     prereqIds: [
@@ -514,6 +573,9 @@ export const nodes: KnowledgeNode[] = [
       'math-mv',
       'math-mv-2',
       'math-mv-3',
+      'math-stats',
+      'math-stats-2',
+      'math-stats-3',
     ],
     x: 1500,
     y: 1560,
@@ -620,16 +682,67 @@ export const nodes: KnowledgeNode[] = [
     y: 420,
     hasLesson: true,
   },
+
+  // ---- phys-statics chain (col x4740, y260-620 — reserved slot right of energy,
+  // ABOVE the Electronics domain which occupies x4660 y1420+). Statics &
+  // mechanics of materials, seeding a future MechE domain. Intro (phys-statics)
+  // is tier-0; -2/-3 are Depth. Prereq = phys-forces-3 (FBDs/equilibrium build
+  // on Newton's laws + torque). The incoming edge from phys-forces-3 (4100,420)
+  // sweeps up-right to phys-statics; shifted to x4740 (past phys-energy's
+  // x-range) so BOTH the tier-0 (phys-forces→) and tier-1 (phys-forces-3→)
+  // incoming edges clear phys-energy — margin-max bezier search, zero crossings. Source: MIT 2.001 + The Efficient Engineer + engineeringstatics.org.
+  {
+    id: 'phys-statics',
+    title: 'Free-Body Diagrams & Equilibrium',
+    subject: 'physics',
+    domainId: 'physics',
+    description:
+      'Anything at rest obeys two rules: forces sum to zero (ΣF = 0) and moments sum to zero (ΣM = 0). Draw a free-body diagram, take moments about a support, and the reaction forces fall out.',
+    whyItMatters:
+      'A robot chassis is a structure before it’s a machine — sizing its supports and joints starts with exactly this force-and-moment balance.',
+    prereqIds: ['phys-forces-3'],
+    x: 4740,
+    y: 260,
+    hasLesson: true,
+  },
+  {
+    id: 'phys-statics-2',
+    title: 'Stress, Strain & Material Limits',
+    subject: 'physics',
+    domainId: 'physics',
+    description:
+      'What actually breaks material is stress (σ = F/A), not raw force. Strain ε = ΔL/L, Hooke’s law σ = E·ε, the elastic-vs-plastic yield point, and the safety factor that keeps a part in the recoverable region.',
+    whyItMatters:
+      'Every structural member on a robot is sized by comparing F/A against the material’s yield — this is how you stop a bracket bending.',
+    prereqIds: ['phys-statics'],
+    x: 4740,
+    y: 440,
+    hasLesson: true,
+  },
+  {
+    id: 'phys-statics-3',
+    title: 'Bending & Torsion: Sizing a Beam and a Shaft',
+    subject: 'physics',
+    domainId: 'physics',
+    description:
+      'Why beams are deep, not wide (bending stress σ = 6M/(b·h²), the h³ second moment of area, the I-beam) — and why shafts are tubes (torsion τ = T·r/J, the r⁴ scaling), the exact math for sizing a robot’s drive shaft.',
+    whyItMatters:
+      'A motor that out-torques its thin shaft shears it off — bending and torsion sizing is the difference between a robot that holds together and one that doesn’t.',
+    prereqIds: ['phys-statics-2'],
+    x: 4740,
+    y: 620,
+    hasLesson: true,
+  },
   {
     id: 'phys-exam',
     title: 'Module Exam: Physics',
     subject: 'physics',
     domainId: 'physics',
     description:
-      'Eighteen fresh questions across forces, kinematics, momentum, rotation, energy, Ohm’s law, Kirchhoff, dividers and RC/induction — with numbers, units and the classic traps. From memory. 80% to pass.',
+      'Twenty-two fresh questions across forces, kinematics, momentum, rotation, energy, Ohm’s law, Kirchhoff, dividers, RC/induction and statics (equilibrium, stress/strain, bending) — with numbers, units and the classic traps. From memory. 80% to pass.',
     whyItMatters:
-      'Whether your robot climbs the ramp is decided by exactly these equations — better to fail them here than in hardware.',
-    prereqIds: ['phys-forces', 'phys-forces-2', 'phys-forces-3', 'phys-energy', 'phys-electricity', 'phys-electricity-2', 'phys-electricity-3'],
+      'Whether your robot climbs the ramp — or holds together under load — is decided by exactly these equations, better to fail them here than in hardware.',
+    prereqIds: ['phys-forces', 'phys-forces-2', 'phys-forces-3', 'phys-energy', 'phys-electricity', 'phys-electricity-2', 'phys-electricity-3', 'phys-statics', 'phys-statics-2', 'phys-statics-3'],
     x: 4380,
     y: 850,
     hasLesson: true,
@@ -938,6 +1051,23 @@ export const nodes: KnowledgeNode[] = [
     hasLesson: true,
   },
   {
+    // robo-control-4 — reserved slot (2950,2300), continuing the control column
+    // straight below robo-control-3. Depth (tier 1). The classical-control
+    // capstone: transfer functions/poles → Bode/frequency response → LQR.
+    id: 'robo-control-4',
+    title: 'Poles, Bode & LQR: Classical Control',
+    subject: 'robotics',
+    domainId: 'robotics-bridge',
+    description:
+      'The classical view of the same system: transfer functions and POLES (left half-plane = stable), the Bode plot (bandwidth, gain/phase margin), and LQR — letting a cost function choose the optimal feedback gain u = −K·x.',
+    whyItMatters:
+      'Pole locations, stability margins and LQR are the vocabulary every real control engineer designs and argues in — the bridge from hand-tuned PID to provably-good control.',
+    prereqIds: ['robo-control-3'],
+    x: 2950,
+    y: 2300,
+    hasLesson: true,
+  },
+  {
     id: 'robo-embedded',
     title: 'Embedded Systems & Microcontrollers',
     subject: 'engineering',
@@ -1055,7 +1185,7 @@ export const nodes: KnowledgeNode[] = [
     subject: 'robotics',
     domainId: 'robotics-bridge',
     description:
-      'Twenty-two fresh questions across sensing, control & tuning, state space, kinematics, transforms, the Jacobian, Kalman estimation & sensor fusion, embedded systems and ROS — the capstone check on the whole bridge. 80% to pass.',
+      'Twenty-six fresh questions across sensing, control & tuning, state space, poles/Bode/LQR, kinematics, transforms, the Jacobian, Kalman estimation & sensor fusion, embedded systems and ROS — the capstone check on the whole bridge. 80% to pass.',
     whyItMatters:
       'This module is where every other subject converges into an actual robot — passing it from memory means the convergence happened in your head too.',
     prereqIds: [
@@ -1063,6 +1193,7 @@ export const nodes: KnowledgeNode[] = [
       'robo-control',
       'robo-control-2',
       'robo-control-3',
+      'robo-control-4',
       'robo-kinematics',
       'robo-kinematics-2',
       'robo-kinematics-3',
@@ -1376,6 +1507,74 @@ export const nodes: KnowledgeNode[] = [
     hasLesson: true,
     isExam: true,
   },
+
+  // ---- Electronics & Circuit Design (NEW domain, orange). Reserved slot
+  // x4660, y850+ — the open pocket between the physics column (x4380, phys-exam
+  // at y850) and the chemistry island (x4950). The engineering layer on top of
+  // phys-electricity: designing with components → the transistor & op-amp →
+  // driving a motor. Prereq of elec-components = phys-electricity-3 (which
+  // already teaches capacitors/RC/transistor-as-switch); the incoming corridor
+  // from phys-electricity-3 (3500,620) is the one real layout risk (it must
+  // clear phys-exam at 4380,850) — the chain sits low enough (y1420+) that the
+  // edge sags BELOW phys-exam (found via a margin-max bezier search). elec-motors cross-LINKS robo-embedded &
+  // phys-electricity-3. phys-statics (chain 4) takes x4660 y220-620 above this.
+  {
+    id: 'elec-components',
+    title: 'Designing with Components: Dividers, Loading & Networks',
+    subject: 'electronics',
+    domainId: 'electronics',
+    description:
+      'Real circuits are resistor networks you design: the voltage divider Vout = Vin·R₂/(R₁+R₂) is the workhorse, but connect a load across R₂ and the output SAGS — “loading,” the first thing that bites a beginner.',
+    whyItMatters:
+      'Every resistive sensor (thermistor, potentiometer, flex sensor) is a divider you read — and loading is why your reading drifts.',
+    prereqIds: ['phys-electricity-3'],
+    x: 4660,
+    y: 1420,
+    hasLesson: true,
+  },
+  {
+    id: 'elec-transistors',
+    title: 'The Transistor & the Op-Amp: Switch, Amplifier, Building Block',
+    subject: 'electronics',
+    domainId: 'electronics',
+    description:
+      'A transistor lets a tiny signal control a large current (switch or amplifier); wrap an op-amp in negative feedback and its two golden rules — no input current, inputs forced equal — make gain a matter of just two resistors.',
+    whyItMatters:
+      'An op-amp conditions every analog sensor before the ADC; the MOSFET is what an MCU pin uses to switch real power.',
+    prereqIds: ['elec-components'],
+    x: 4660,
+    y: 1600,
+    hasLesson: true,
+  },
+  {
+    id: 'elec-motors',
+    title: 'Driving a Motor: PWM, the H-Bridge & Flyback',
+    subject: 'electronics',
+    domainId: 'electronics',
+    description:
+      'An MCU pin can’t source motor current, and a motor is an inductive load that kicks back a voltage spike — so you use transistors (PWM for speed, an H-bridge of four for direction) plus a flyback diode to catch the spike.',
+    whyItMatters:
+      'This is the literal circuit between your robot’s brain and its wheels — the on-ramp from physics to hardware you can build.',
+    prereqIds: ['elec-transistors'],
+    x: 4660,
+    y: 1780,
+    hasLesson: true,
+  },
+  {
+    id: 'elec-exam',
+    title: 'Module Exam: Electronics',
+    subject: 'electronics',
+    domainId: 'electronics',
+    description:
+      'Ten fresh questions across dividers & loading, KCL, the op-amp’s golden rules and gains, the MOSFET switch, the H-bridge, PWM and flyback — the whole engineering layer, from memory. 80% to pass.',
+    whyItMatters:
+      'Reading a driver datasheet or debugging a sensor interface means recalling this cold — the exam is where it sticks.',
+    prereqIds: ['elec-components', 'elec-transistors', 'elec-motors'],
+    x: 4520,
+    y: 1960,
+    hasLesson: true,
+    isExam: true,
+  },
 ]
 
 
@@ -1557,6 +1756,21 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'video', title: '3Blue1Brown — Gradient descent revisited', url: 'https://www.youtube.com/watch?v=IHZwWFHWa-w', note: 'Descent as walking downhill on a loss surface — the code screen made visual.' },
     { type: 'course', title: 'MIT 18.02SC — Lagrange multipliers', url: 'https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/', note: 'The constrained-optimization unit with exams and solutions.' },
   ],
+  'math-stats': [
+    { type: 'interactive', title: 'Seeing Theory — Correlation & the covariance matrix', url: 'https://seeing-theory.brown.edu/regression-analysis/index.html#section2', note: 'A live correlation matrix on the Iris data — the closest interactive to the covariance/correlation idea in this lesson.' },
+    { type: 'video', title: 'StatQuest — Covariance, Clearly Explained!!!', url: 'https://www.youtube.com/watch?v=qtaqvPAeEJY', note: 'Covariance built from scratch, then normalized into correlation — pairs exactly with the code screen.' },
+    { type: 'course', title: 'MIT 18.05 — Class 7: joint distributions, covariance & correlation', url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/', note: 'The real course, with full problem-set AND exam solutions free — the best free stats problem bank there is.' },
+  ],
+  'math-stats-2': [
+    { type: 'video', title: '3Blue1Brown — But what is the Central Limit Theorem?', url: 'https://www.3blue1brown.com/lessons/clt', note: 'The best visual explainer of why averages go bell-shaped and tighten as √n.' },
+    { type: 'interactive', title: 'Seeing Theory — the CLT sampler & confidence intervals', url: 'https://seeing-theory.brown.edu/probability-distributions/index.html#section3', note: 'Draw samples and watch the distribution of the mean form a bell in real time.' },
+    { type: 'course', title: 'MIT 18.05 — Class 6b: LLN, CLT & estimation (with solutions)', url: 'https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/', note: 'Problem sets and exams with full worked solutions — drill the standard-error problems here.' },
+  ],
+  'math-stats-3': [
+    { type: 'video', title: 'StatQuest — p-values: what they are and how to interpret them', url: 'https://www.youtube.com/watch?v=vemZtEM63GY', note: 'Nails the #1 p-value misconception this lesson warns about (+ his Linear Regression video for the fit).' },
+    { type: 'interactive', title: 'Seeing Theory — Regression (drag points, watch OLS + SSE update)', url: 'https://seeing-theory.brown.edu/regression-analysis/index.html#section1', note: 'Move points on Anscombe’s quartet and see the least-squares line and error respond live.' },
+    { type: 'book', title: 'OpenIntro Statistics (free PDF + R labs, Ch 7–8)', url: 'https://www.openintro.org/book/os/', note: 'Name-your-price ($0) textbook; odd-numbered exercise answers free, with labs for t-tests and regression.' },
+  ],
   'robo-kinematics-2': [
     { type: 'course', title: 'Modern Robotics — Ch. 3 (Rigid-Body Motions)', url: 'https://hades.mech.northwestern.edu/index.php/Modern_Robotics', note: 'Lynch & Park’s free book + lightboard videos: rotations, transforms, the undergrad canon.' },
     { type: 'interactive', title: 'Ben Eater — Visualizing quaternions/rotations', url: 'https://eater.net/quaternions', note: 'A gorgeous interactive explorable for how 3D rotations actually compose.' },
@@ -1576,6 +1790,21 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'video', title: 'Ben Eater — Capacitors, transistors & clocks', url: 'https://eater.net/', note: 'He builds RC timing and transistor switches on breadboards — theory made physical.' },
     { type: 'interactive', title: 'Falstad CircuitJS — RC & inductors', url: 'https://www.falstad.com/circuit/', note: 'Watch a capacitor charge on its exponential curve and see induction live.' },
     { type: 'course', title: 'MIT 8.02 — Faraday’s law & induction', url: 'https://ocw.mit.edu/courses/8-02-physics-ii-electricity-and-magnetism-spring-2007/', note: 'Induction, RC/RL circuits and the physics behind motors.' },
+  ],
+  'phys-statics': [
+    { type: 'video', title: 'The Efficient Engineer — Free Body Diagrams & Equilibrium', url: 'https://www.youtube.com/@TheEfficientEngineer', note: 'Exceptional animated statics: FBDs, moments and equilibrium — the clearest free intro.' },
+    { type: 'interactive', title: 'engineeringstatics.org (free, self-checking)', url: 'https://engineeringstatics.org/', note: 'A full open statics textbook with interactive, self-checking problems — drill reactions and moments here.' },
+    { type: 'course', title: 'MIT 2.001 — Mechanics & Materials I', url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/', note: 'The real course: equilibrium → trusses → stress/strain → bending → torsion, with lecture notes and psets.' },
+  ],
+  'phys-statics-2': [
+    { type: 'video', title: 'The Efficient Engineer — Stress, Strain & Young’s Modulus', url: 'https://www.youtube.com/@TheEfficientEngineer', note: 'Animated stress-strain curves, Hooke’s law and yield — pairs exactly with this lesson.' },
+    { type: 'interactive', title: 'engineeringstatics.org — stress & strain', url: 'https://engineeringstatics.org/', note: 'Self-checking problems on axial stress, strain and elongation.' },
+    { type: 'course', title: 'MIT 2.001 — stress/strain & material behaviour', url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/', note: 'The stress/strain, elasticity and failure units with worked psets.' },
+  ],
+  'phys-statics-3': [
+    { type: 'video', title: 'The Efficient Engineer — Bending Stress & Torsion', url: 'https://www.youtube.com/@TheEfficientEngineer', note: 'Why beams are deep (second moment of area) and shafts are tubes (polar J) — beautifully visualized.' },
+    { type: 'course', title: 'MIT 2.001 — beam bending & torsion', url: 'https://ocw.mit.edu/courses/2-001-mechanics-materials-i-fall-2006/', note: 'Shear/bending diagrams, beam deflection and torsion, with problem sets.' },
+    { type: 'interactive', title: 'SkyCiv Beam / free beam calculators', url: 'https://skyciv.com/free-beam-calculator/', note: 'Drop loads on a beam and read reactions, shear, bending moment and stress live.' },
   ],
   'robo-estimation': [
     { type: 'article', title: 'How a Kalman filter works, in pictures (bzarg)', url: 'https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/', note: 'THE best first read on Kalman filters — start here, it builds the exact intuition of this lesson.' },
@@ -1597,6 +1826,11 @@ const resourcesByNode: Record<string, Resource[]> = {
   'robo-control-3': [
     { type: 'video', title: 'MATLAB Tech Talks — State Space (series)', url: 'https://www.mathworks.com/videos/series/state-space.html', note: 'Brian Douglas takes x′ = Ax + Bu from this lesson’s sketch to full working control.' },
     { type: 'article', title: 'How a Kalman Filter Works, in Pictures', url: 'https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/', note: 'The legendary illustrated walkthrough of the predict-then-correct dance.' },
+  ],
+  'robo-control-4': [
+    { type: 'video', title: 'MATLAB Tech Talks — Bode plots & frequency response', url: 'https://www.mathworks.com/videos/tech-talks/controls.html', note: 'Brian Douglas’s control index: the Bode (×9) and State Space (×5) series cover poles, margins and design, beautifully animated.' },
+    { type: 'course', title: 'MIT 2.004 — Dynamics & Control II (psets + full solutions)', url: 'https://ocw.mit.edu/courses/2-004-dynamics-and-control-ii-spring-2008/', note: 'The real course: transfer functions, time & frequency response, feedback compensation — problem sets WITH worked solutions.' },
+    { type: 'book', title: 'Underactuated Robotics — LQR (Russ Tedrake, free)', url: 'https://underactuated.mit.edu/', note: 'The definitive free treatment of LQR and optimal control for robots — the stretch goal once the intuition here lands.' },
   ],
   'robo-embedded': [
     { type: 'video', title: 'Ben Eater — 6502 computer (series)', url: 'https://eater.net/6502', note: 'Build and program a real retro computer — embedded systems from first principles.' },
@@ -1644,6 +1878,21 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'video', title: 'Real Engineering — The truth about carbon fiber', url: 'https://www.youtube.com/watch?v=QO9Ledxlx-c', note: 'Why composites dominate aerospace and drones — specific strength made visual.' },
     { type: 'interactive', title: 'PhET — Battery-Resistor Circuit', url: 'https://phet.colorado.edu/en/simulations/battery-resistor-circuit', note: 'Connects this lesson’s electrochemistry to the circuits you already know.' },
   ],
+  'elec-components': [
+    { type: 'interactive', title: 'Falstad CircuitJS (live circuit simulator)', url: 'https://www.falstad.com/circuit/', note: 'Draw a divider, add a load resistor and WATCH the output sag — the definitive free sandbox for predict→observe.' },
+    { type: 'book', title: 'Ultimate Electronics — Voltage Dividers', url: 'https://ultimateelectronicsbook.com/voltage-dividers/', note: 'Dividers, Thévenin and loading with runnable in-page simulations — the best free treatment.' },
+    { type: 'course', title: 'MIT 6.002 — Circuits and Electronics (free)', url: 'https://ocw.mit.edu/courses/6-002-circuits-and-electronics-spring-2007/', note: 'The real first course in circuits & electronics when you want full depth.' },
+  ],
+  'elec-transistors': [
+    { type: 'book', title: 'Ultimate Electronics — The Ideal Op-Amp', url: 'https://ultimateelectronicsbook.com/ideal-op-amp/', note: 'The clearest free ideal-op-amp/virtual-ground treatment (+ its Inverting Amplifier chapter).' },
+    { type: 'video', title: 'EEVblog #600 — What is an Operational Amplifier?', url: 'https://www.youtube.com/watch?v=7FYHt5XviKc', note: 'The canonical free op-amp video — intuition first, then the golden rules.' },
+    { type: 'article', title: 'electronics-tutorials.ws — MOSFET as a Switch', url: 'https://www.electronics-tutorials.ws/transistor/tran_7.html', note: 'Fills the transistor half: cutoff/saturation, V_GS threshold, R_DS(on) (its op-amp series is great too).' },
+  ],
+  'elec-motors': [
+    { type: 'article', title: 'All About Circuits — H-bridge DC motor control (PWM, shoot-through, dead-time)', url: 'https://www.allaboutcircuits.com/technical-articles/h-bridge-dc-motor-control-complementary-pulse-width-modulation-pwm-shoot-through-dead-time-pwm/', note: 'The cleanest free H-bridge article — diagonal pairs, complementary PWM, why dead-time matters.' },
+    { type: 'article', title: 'Northwestern Mechatronics Wiki — Driving a DC motor with an H-bridge', url: 'https://hades.mech.northwestern.edu/index.php/Driving_a_high_current_DC_Motor_using_an_H-bridge', note: 'Practical: back-EMF, freewheeling diodes and why 20 kHz PWM.' },
+    { type: 'video', title: 'DroneBot Workshop — L298N H-bridge + Arduino', url: 'https://dronebotworkshop.com/dc-motors-l298n-h-bridge/', note: 'Hands-on with a real driver IC — wiring, PWM speed and direction control.' },
+  ],
 }
 
 for (const n of nodes) {
@@ -1669,6 +1918,7 @@ export const domainLabels: { id: string; title: string; x: number; y: number }[]
   { id: 'label-sec', title: 'Security & Crypto', x: 0, y: 2390 },
   { id: 'label-hist', title: 'History of Science & Tech', x: 4950, y: -60 },
   { id: 'label-chem', title: 'Chemistry', x: 4950, y: 440 },
+  { id: 'label-elec', title: 'Electronics & Circuit Design', x: 4520, y: 1360 },
 ]
 
 export const XP_PER_NODE = 100

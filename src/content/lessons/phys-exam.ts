@@ -7,7 +7,7 @@ export const physExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — the laws your robot obeys',
       body: [
-        'Eighteen questions spanning forces, kinematics, momentum, rotation, energy, Ohm’s law, Kirchhoff, dividers and RC/induction — all NEW scenarios, no repeats from the lesson quizzes. No sims, no notes: pure retrieval from memory.',
+        'Twenty-two questions spanning forces, kinematics, momentum, rotation, energy, Ohm’s law, Kirchhoff, dividers, RC/induction and statics (equilibrium, stress/strain, bending) — all NEW scenarios, no repeats from the lesson quizzes. No sims, no notes: pure retrieval from memory.',
         'Score 80% and physics is sealed. Fall short? It costs nothing — you’ll see exactly which law slipped, review it, and retake.',
       ],
     },
@@ -278,6 +278,68 @@ export const physExamLesson: Lesson = {
         'The supply voltage is set by the battery, not by the motor spinning up.',
         'Warming changes resistance only slightly; the dominant effect is the rising back-EMF from rotation.',
         'Friction is mechanical — the electrical current is throttled by the induced back-EMF, not friction.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A 6 m beam rests on supports A (left) and B (right). A 600 N load sits 2 m from A. Taking moments about A, what is the reaction at B?',
+      options: ['200 N', '400 N', '600 N', '300 N'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: moments about A give R_B·6 = 600·2, so R_B = 1200/6 = 200 N (and R_A = 400 N).',
+        '400 N is the reaction at A (the closer support), not B.',
+        '600 N is the whole load; the two supports share it.',
+        '300 N would be an even split, but the load is at 2 m, not the 3 m midpoint.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A steel rod under a 20 kN load has a cross-sectional area of 2 cm² (2×10⁻⁴ m²). What is the axial stress?',
+      options: ['100 MPa', '40 MPa', '10 MPa', '400 MPa'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: σ = F/A = 20000 / (2×10⁻⁴) = 1×10⁸ Pa = 100 MPa.',
+        '40 MPa uses the wrong area; 20000/(2×10⁻⁴) = 10⁸ Pa = 100 MPa.',
+        '10 MPa is off by a factor of 10 — recheck 20000/(2×10⁻⁴).',
+        '400 MPa would need a quarter of the area; here it’s 100 MPa.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A steel bracket is loaded until the stress exceeds its yield strength, then unloaded. What is its condition?',
+      options: [
+        'Permanently deformed — past yield the deformation is plastic and does not spring back',
+        'Back to its exact original shape',
+        'Fractured into pieces',
+        'Unchanged — steel never yields',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: beyond the yield point deformation becomes plastic (permanent), so the bracket stays bent even after the load is removed.',
+        'Full recovery happens only if the stress stayed BELOW yield (elastic region).',
+        'Fracture is beyond the higher ultimate strength; just past yield it’s bent, not broken.',
+        'Steel yields once stress passes its yield strength — that’s exactly what happened here.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'To make a rectangular beam much stiffer in bending, which change helps MOST (its second moment of area is I = b·h³/12)?',
+      options: [
+        'Increase its depth h — I grows with the cube of depth',
+        'Increase its width b — that has the biggest effect',
+        'Make it shorter in width only',
+        'Depth and width help exactly equally',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: I ∝ h³, so adding depth is far more effective than adding width (which only helps linearly) — the reason beams are tall and I-beams put material in the flanges.',
+        'Width b appears to the first power in I; depth’s cube dependence beats it decisively.',
+        'Reducing width lowers stiffness; you want more depth for bending resistance.',
+        'They are not equal — h enters as a cube, b only linearly.',
       ],
     },
   ],

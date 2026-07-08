@@ -22,6 +22,7 @@ import { roboSensingLesson } from './robo-sensing'
 import { roboControlLesson } from './robo-control'
 import { roboControl2Lesson } from './robo-control-2'
 import { roboControl3Lesson } from './robo-control-3'
+import { roboControl4Lesson } from './robo-control-4'
 import { roboKinematicsLesson } from './robo-kinematics'
 import { progFunctionsLesson } from './prog-functions'
 import { progDataLesson } from './prog-data'
@@ -86,6 +87,16 @@ import { physElectricity3Lesson } from './phys-electricity-3'
 import { mathMvLesson } from './math-mv'
 import { mathMv2Lesson } from './math-mv-2'
 import { mathMv3Lesson } from './math-mv-3'
+import { mathStatsLesson } from './math-stats'
+import { mathStats2Lesson } from './math-stats-2'
+import { mathStats3Lesson } from './math-stats-3'
+import { elecComponentsLesson } from './elec-components'
+import { elecTransistorsLesson } from './elec-transistors'
+import { elecMotorsLesson } from './elec-motors'
+import { elecExamLesson } from './elec-exam'
+import { physStaticsLesson } from './phys-statics'
+import { physStatics2Lesson } from './phys-statics-2'
+import { physStatics3Lesson } from './phys-statics-3'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -111,6 +122,7 @@ export const lessons: Record<string, Lesson> = {
   'robo-control': roboControlLesson,
   'robo-control-2': roboControl2Lesson,
   'robo-control-3': roboControl3Lesson,
+  'robo-control-4': roboControl4Lesson,
   'robo-kinematics': roboKinematicsLesson,
   'prog-functions': progFunctionsLesson,
   'prog-data': progDataLesson,
@@ -175,4 +187,14 @@ export const lessons: Record<string, Lesson> = {
   'math-mv': mathMvLesson,
   'math-mv-2': mathMv2Lesson,
   'math-mv-3': mathMv3Lesson,
+  'math-stats': mathStatsLesson,
+  'math-stats-2': mathStats2Lesson,
+  'math-stats-3': mathStats3Lesson,
+  'elec-components': elecComponentsLesson,
+  'elec-transistors': elecTransistorsLesson,
+  'elec-motors': elecMotorsLesson,
+  'elec-exam': elecExamLesson,
+  'phys-statics': physStaticsLesson,
+  'phys-statics-2': physStatics2Lesson,
+  'phys-statics-3': physStatics3Lesson,
 }

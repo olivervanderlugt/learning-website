@@ -191,13 +191,23 @@ To restart the dev server: `export PATH="$HOME/.local/node/bin:$PATH"` then `cd 
 
 **math-linalg-4/-5 CHAIN SHIPPED (2026-07-08) — see the ✅ backlog entry above for full detail.** Rank/column-space/least-squares (-4) → SVD/pseudoinverse (-5), 2 lessons at x1490 (y620/835), math-exam 22→26, plus a pre-existing code-runner `print`-redeclaration bug fixed in -3/-4/-5. All green + browser-verified. Currently 87 playable nodes, 24 tier-1 Depth lessons across 12 chains.
 
+**v2 GAP-ANALYSIS BATCH (2026-07-08) — ALL 4 CHAINS SHIPPED ✅.** `docs/curriculum-gap-analysis-v2.md` specced a four-chain batch; all four are now built, committed and browser-verified end-to-end (predict → code live-run matching → quiz → mastered +100 XP) on branch `build-chains`, each in its own commit:
+- ✅ **math-stats** (×3): variance/covariance → CLT/√n estimation → hypothesis tests/regression. At x2040 y1300/1490/1680 (the v2 reserved x2520 slot was gone — math-mv took it and the prog-data→robo-ros corridor saturates the mid-map; found a clean slot in the below-corridor street via a margin-max bezier search). math-exam 26→30.
+- ✅ **robo-control-4** (single node): poles → Bode → LQR (scalar-LQR Riccati code screen). At (2950,2300). robo-exam 22→26 (also fixed its stale intro count).
+- ✅ **Electronics** (NEW subject `electronics`, orange): elec-components → elec-transistors → elec-motors + elec-exam. Full new-subject checklist wired (Subject type, SkillNode styles/names, SkillTreeView hex+minimap hexLight, index.css orange-300). At x4660 y1420/1600/1780 (exam 4520,1960) — dropped low so the phys-electricity-3→elec-components corridor sags below phys-exam.
+- ✅ **phys-statics** (×3): FBDs/equilibrium (reactions code screen 75/25, 50/50, 25/75) → stress/strain & material limits (σ=F/A, ΔL; 100MPa/1mm vs 50MPa/0.5mm) → bending & torsion (σ=6M/bh²; 6.0→1.5 MPa, the h² depth lever). Subject `physics` (amber). At x4740 y260/440/620 (shifted right of phys-energy so BOTH tier-0 and tier-1 incoming edges clear it). phys-exam 18→22. Seeds a future MechE domain. Source: MIT 2.001 + The Efficient Engineer + engineeringstatics.org.
+
+Map is at ZERO crossings in BOTH view tiers throughout; every code screen Node-verified. **Now ~97 playable nodes.**
+
+**Note on the v2 doc:** it only ever contained §1 (Electronics) and §2 (math-stats) — §3 (robo-control-4) and §4 (phys-statics) were never written, so those two were built from v1 gap-analysis + CLAUDE.md backlog + domain knowledge (all sources still real & cited in `resourcesByNode`).
+
 Next priorities:
-1. **Continue the unblocked math depth chains:** **math-stats** (variance/covariance → CLT → hypothesis tests/regression; the language of Kalman filters + direct SBI-y2 prep + founder A/B tests; 18.05 + Seeing Theory; reserved slot x2520 below mv, y≥1000). Follow the proven chain pattern (concept → worked-fading → independent, ONE Node-verified code screen — and just call the injected `print()`, do NOT declare `const print`; extraPractice ≥4, resources, grow math-exam ~4 fresh Qs, add new nodes to math-exam prereqs) and run `node scripts/check-map-layout.mjs` (must be zero crossings in BOTH tiers).
-2. **Engineering breadth — Electronics domain fully teed up** (HANDOFF item 2): ~3 intro nodes (components&circuits → transistors&op-amps → motor drivers/H-bridge) hanging off phys-electricity-3; reserved slot x4660+/y850+; follow the "new subject" checklist.
-3. **Phase 2 — robo-control-4** (transfer functions/poles → Bode → LQR): reserved slot (2950,2300) continuing the control column.
-4. **Phase 2 — phys-statics chain** (FBDs/equilibrium → stress-strain → beam bending; seeds MechE): reserved slot x4660/y220-620.
-5. Deploy to Vercel (manual steps above) for a permanent/mobile URL.
-6. Spaced-repetition follow-ups when bored of content: cumulative cross-domain review exams, gentle mastery-decay visuals.
+1. **Merge `build-chains` → `main`** (or open a PR). The whole v2 batch lives on `build-chains`, not `main`.
+2. Deploy to Vercel (manual steps above) for a permanent/mobile URL.
+3. **Engineering breadth follow-through:** Electronics is live; a **Mechanical Engineering basics** domain (statics&loads → gears/linkages → materials&making) is the natural next new-subject — phys-statics already seeds it. Also queued: chem-quant (stoichiometry → thermochemistry → electrochemistry/batteries), prog-c, os-concurrency (see the Phase 2–4 backlog above).
+4. Spaced-repetition follow-ups when bored of content: cumulative cross-domain review exams, gentle mastery-decay visuals.
+
+**Branch note:** the entire v2 batch (math-stats, robo-control-4, Electronics, phys-statics) is committed on `build-chains`, NOT `main` — merge/PR when ready.
 
 Bigger arc (see "Roadmap to bachelor depth" above): after breadth, deepen each node (Stage 1) → rigor/proofs (Stage 2) → labs/projects (Stage 3) → spaced-repetition retention (Stage 4) → cross-domain capstones + business track (Stage 5).
 

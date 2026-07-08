@@ -7,7 +7,7 @@ export const roboExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — close the loop',
       body: [
-        'This is the capstone domain — sense, control & tuning, state space, kinematics, transforms, the Jacobian, embedded brains and robot software, tied into one exam. Eighteen NEW questions, no repeats from the lessons, answered from memory.',
+        'This is the capstone domain — sense, control & tuning, state space, poles/Bode/LQR, kinematics, transforms, the Jacobian, Kalman estimation, embedded brains and robot software, tied into one exam. Twenty-six NEW questions, no repeats from the lessons, answered from memory.',
         'Score 80% and the bridge to robotics is sealed. Miss it? Costs nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -400,6 +400,78 @@ export const roboExamLesson: Lesson = {
         'It approximates rather than ignores; the Jacobian captures the local slope precisely.',
         'The robot’s physical path is unchanged — only the MATH is locally linearized.',
         'Handling nonlinear sensors is the entire reason the EKF exists.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A controller places your system’s closed-loop poles at s = −4 ± 2j. How will it behave?',
+      options: [
+        'Stable with mild ringing — the negative real part (−4) decays while the imaginary part (±2) oscillates',
+        'Unstable — a complex pole always means it blows up',
+        'A pure exponential decay with no oscillation',
+        'Sustained oscillation at constant amplitude forever',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the real part −4 is negative, so the response decays (stable); the ±2 imaginary part adds a decaying oscillation e^(−4t)·cos(2t).',
+        'Only a POSITIVE real part makes a pole diverge — the imaginary part alone just adds oscillation.',
+        'The imaginary part guarantees some oscillation; a pure exponential needs a real pole with zero imaginary part.',
+        'Constant-amplitude oscillation needs poles on the imaginary axis (real part 0); here the real part is −4, so it decays.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Adding a slow, laggy sensor to a stable feedback loop erodes its phase margin. Why is that dangerous?',
+      options: [
+        'Extra phase lag pushes the loop toward −180° with gain ≥ 1, the self-reinforcing condition where it starts to oscillate',
+        'It increases steady-state error but never affects stability',
+        'Extra lag always makes a loop MORE stable',
+        'It raises the bandwidth, which is always unsafe',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: phase margin is the cushion of lag before the loop hits −180° at gain 1; the sensor’s lag spends that cushion, and at zero margin the loop oscillates.',
+        'Lag directly threatens stability by consuming phase margin — this is exactly why loop rate and sensor speed matter.',
+        'Lag never helps stability; it only erodes margin.',
+        'Bandwidth isn’t what changes here — added lag reduces the phase-margin cushion.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'An LQR design uses the cost J = ∫(xᵀQx + uᵀRu)dt. If you sharply INCREASE R, the resulting controller becomes…',
+      options: [
+        'Gentler — control effort is now expensive, so the optimal gain shrinks and the response slows',
+        'More aggressive — big R always means big gains',
+        'Unchanged — R has no influence on the gain',
+        'Unstable — raising R destabilizes the loop',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: R penalizes effort, so a large R makes the optimizer spend less control, producing a smaller gain K and a slower, gentler closed-loop response.',
+        'It is the reverse — expensive control (large R) yields SMALLER gains; cheap control (small R) yields aggressive ones.',
+        'R is a primary knob: the Riccati solution and hence K depend directly on it.',
+        'LQR is guaranteed to stabilize a controllable system for any positive R — larger R just makes it gentler, not unstable.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Why are a transfer function’s poles and its state-space A-matrix eigenvalues “two names for the same thing”?',
+      options: [
+        'Both are the roots that set the system’s natural modes, so the negative-real-part stability test is identical in either view',
+        'They describe unrelated systems that merely look alike',
+        'Poles govern stability but eigenvalues do not',
+        'Only eigenvalues can represent oscillation',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the denominator roots of G(s) equal the eigenvalues of A, so “all poles/eigenvalues in the left half-plane” is one stability criterion wearing two notations.',
+        'They are two representations of the SAME system — that is precisely why the tests agree.',
+        'Both decide stability by the same negative-real-part rule, because they are the same numbers.',
+        'A complex pole and a complex eigenvalue are identical; both capture oscillation.',
       ],
     },
   ],
