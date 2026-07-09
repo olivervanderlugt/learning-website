@@ -16,6 +16,7 @@ export const domains: Domain[] = [
   { id: 'history', title: 'History of Science & Technology', prereqDomainIds: [] },
   { id: 'chemistry', title: 'Chemistry', prereqDomainIds: [] },
   { id: 'electronics', title: 'Electronics & Circuit Design', prereqDomainIds: ['physics'] },
+  { id: 'mechanical-engineering', title: 'Mechanical Engineering', prereqDomainIds: ['physics'] },
 ]
 
 // Layout (2026-07 refactor — "streets" edition, built for depth-chain growth):
@@ -1648,6 +1649,70 @@ export const nodes: KnowledgeNode[] = [
     isExam: true,
   },
 
+  // ---- Mechanical Engineering (NEW domain, blue) — the machine side of a robot:
+  // mechanisms + making, deliberately scoped AWAY from phys-statics (which already
+  // owns FBDs/stress/strain/bending). A prereq-free island (like Chemistry) in the
+  // open bottom-right pocket: vertical column x5100, y1500-2100, below chem-exam
+  // (4950,1350) and right of Electronics (x4660). All three are tier-0 intros
+  // (domain-breadth, like Electronics/Chemistry).
+  {
+    id: 'meche-machines',
+    title: 'Simple Machines & Mechanical Advantage',
+    subject: 'mechanical',
+    domainId: 'mechanical-engineering',
+    description:
+      'Levers, pulleys and ramps trade force for distance: mechanical advantage multiplies your force, but work in always equals work out. The bargain behind every machine.',
+    whyItMatters:
+      'A robot arm’s gearing, a gripper’s jaw force and a winch’s pull are all mechanical-advantage trades — force up, speed down, energy conserved.',
+    prereqIds: [],
+    x: 5100,
+    y: 1500,
+    hasLesson: true,
+  },
+  {
+    id: 'meche-gears',
+    title: 'Gears, Linkages & Mechanisms',
+    subject: 'mechanical',
+    domainId: 'mechanical-engineering',
+    description:
+      'Gear ratios trade torque for speed; gear trains, four-bar linkages and cams reshape motion — rotary to linear, fast to strong, one path to another.',
+    whyItMatters:
+      'Every actuator on a robot drives a gearbox or linkage; the ratio you pick decides whether the joint is fast or forceful.',
+    prereqIds: ['meche-machines'],
+    x: 5100,
+    y: 1700,
+    hasLesson: true,
+  },
+  {
+    id: 'meche-making',
+    title: 'CAD, Tolerances & Manufacturing',
+    subject: 'mechanical',
+    domainId: 'mechanical-engineering',
+    description:
+      'Turn a design into a real part: 3D modelling, the tolerances and fits that make parts assemble, and how they’re actually made — 3D printing, machining, moulding.',
+    whyItMatters:
+      'A robot is physical before it’s code; knowing tolerances and processes is what lets your CAD become a part that actually fits.',
+    prereqIds: ['meche-gears'],
+    x: 5100,
+    y: 1900,
+    hasLesson: true,
+  },
+  {
+    id: 'meche-exam',
+    title: 'Module Exam: Mechanical Engineering',
+    subject: 'mechanical',
+    domainId: 'mechanical-engineering',
+    description:
+      'Ten fresh questions across machines, mechanical advantage, gear ratios, linkages, tolerances and manufacturing — compute the trades by hand. 80% to pass.',
+    whyItMatters:
+      'Sizing a gearbox or picking a fit is the everyday math of building a robot — retrieving it cold is what these questions train.',
+    prereqIds: ['meche-machines', 'meche-gears', 'meche-making'],
+    x: 5100,
+    y: 2100,
+    hasLesson: true,
+    isExam: true,
+  },
+
   // ---- Electronics & Circuit Design (NEW domain, orange). Reserved slot
   // x4660, y850+ — the open pocket between the physics column (x4380, phys-exam
   // at y850) and the chemistry island (x4950). The engineering layer on top of
@@ -2062,6 +2127,18 @@ const resourcesByNode: Record<string, Resource[]> = {
   'chem-quant-3': [
     { type: 'video', title: 'Engineerguy — How a battery works', url: 'https://www.youtube.com/watch?v=9OVtk6G2TnQ', note: 'Redox → voltage → real lithium cells, from teardown to chemistry.' },
     { type: 'article', title: 'Battery University — fundamentals', url: 'https://batteryuniversity.com/articles', note: 'The practical reference on cell voltage, capacity, C-rate and chemistry trade-offs for real packs.' },
+  ],
+  'meche-machines': [
+    { type: 'video', title: 'The Efficient Engineer — Work, energy & machines', url: 'https://www.youtube.com/@TheEfficientEngineer', note: 'Clear, visual mechanical-engineering fundamentals — mechanical advantage and energy.' },
+    { type: 'interactive', title: 'PhET — Balancing Act & pulleys', url: 'https://phet.colorado.edu/en/simulations/filter?subjects=motion', note: 'Play with levers and torques to feel the force–distance trade directly.' },
+  ],
+  'meche-gears': [
+    { type: 'interactive', title: 'Gears simulator (visual gear-ratio playground)', url: 'https://geargenerator.com/', note: 'Build gear trains and watch the ratios and speeds compound in real time.' },
+    { type: 'video', title: 'Engineerguy — How gears work / Bartosz Ciechanowski — Gears', url: 'https://ciechanow.ski/gears/', note: 'Ciechanowski’s interactive essay is the best intuition-builder for gears anywhere.' },
+  ],
+  'meche-making': [
+    { type: 'course', title: 'MIT 2.008 — Design & Manufacturing', url: 'https://ocw.mit.edu/courses/2-008-design-and-manufacturing-ii-spring-2004/', note: 'How real parts get made: processes, tolerances and design-for-manufacture.' },
+    { type: 'article', title: 'GD&T & tolerances basics (Fictiv/engineering guides)', url: 'https://www.fictiv.com/articles/gdt-basics', note: 'Practical primer on tolerances, fits and geometric dimensioning for real parts.' },
   ],
   'elec-components': [
     { type: 'interactive', title: 'Falstad CircuitJS (live circuit simulator)', url: 'https://www.falstad.com/circuit/', note: 'Draw a divider, add a load resistor and WATCH the output sag — the definitive free sandbox for predict→observe.' },

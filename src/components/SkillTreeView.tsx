@@ -38,6 +38,7 @@ const subjectHex: Record<Subject, string> = {
   history: '#e879f9',
   chemistry: '#2dd4bf',
   electronics: '#fb923c',
+  mechanical: '#60a5fa',
 }
 
 /** Darker subject shades for the minimap on light backgrounds (mirrors html.light in index.css). */
@@ -50,6 +51,7 @@ const subjectHexLight: Record<Subject, string> = {
   history: '#a21caf',
   chemistry: '#0f766e',
   electronics: '#c2410c',
+  mechanical: '#1d4ed8',
 }
 
 const NODE_W = 192

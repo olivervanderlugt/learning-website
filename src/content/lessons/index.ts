@@ -44,6 +44,10 @@ import { chemMaterialsLesson } from './chem-materials'
 import { chemQuantLesson } from './chem-quant'
 import { chemQuant2Lesson } from './chem-quant-2'
 import { chemQuant3Lesson } from './chem-quant-3'
+import { mecheMachinesLesson } from './meche-machines'
+import { mecheGearsLesson } from './meche-gears'
+import { mecheMakingLesson } from './meche-making'
+import { mecheExamLesson } from './meche-exam'
 import { algoBigoLesson } from './algo-bigo'
 import { algoStructuresLesson } from './algo-structures'
 import { algoGraphsLesson } from './algo-graphs'
@@ -153,6 +157,10 @@ export const lessons: Record<string, Lesson> = {
   'chem-quant': chemQuantLesson,
   'chem-quant-2': chemQuant2Lesson,
   'chem-quant-3': chemQuant3Lesson,
+  'meche-machines': mecheMachinesLesson,
+  'meche-gears': mecheGearsLesson,
+  'meche-making': mecheMakingLesson,
+  'meche-exam': mecheExamLesson,
   'algo-bigo': algoBigoLesson,
   'algo-structures': algoStructuresLesson,
   'algo-graphs': algoGraphsLesson,

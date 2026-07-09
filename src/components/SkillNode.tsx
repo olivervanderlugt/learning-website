@@ -63,6 +63,13 @@ export const subjectStyles: Record<
     badge: 'bg-orange-500/15 text-orange-300',
     glow: 'shadow-[0_0_18px_rgba(251,146,60,0.35)]',
   },
+  mechanical: {
+    border: 'border-blue-400',
+    text: 'text-blue-300',
+    dot: 'bg-blue-400',
+    badge: 'bg-blue-500/15 text-blue-300',
+    glow: 'shadow-[0_0_18px_rgba(96,165,250,0.35)]',
+  },
 }
 
 export const subjectNames: Record<Subject, string> = {
@@ -74,6 +81,7 @@ export const subjectNames: Record<Subject, string> = {
   history: 'History',
   chemistry: 'Chemistry',
   electronics: 'Electronics',
+  mechanical: 'Mechanical',
 }
 
 export type SkillNodeData = {
