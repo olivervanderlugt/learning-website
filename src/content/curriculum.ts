@@ -1043,6 +1043,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['net-protocols'],
     x: -280,
     y: 1900,
+    tier: 1,
     hasLesson: true,
   },
   {
@@ -1057,6 +1058,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['net-sockets'],
     x: -280,
     y: 2100,
+    tier: 1,
     hasLesson: true,
   },
   {
@@ -1071,6 +1073,7 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['net-tcp'],
     x: -280,
     y: 2300,
+    tier: 1,
     hasLesson: true,
   },
   {
