@@ -1426,18 +1426,50 @@ export const nodes: KnowledgeNode[] = [
     y: 2900,
     hasLesson: true,
   },
+  // ai-learning depth chain: the intro hand-waves loss/gradient/overfitting;
+  // these do the real math. Hung DOWN-RIGHT of ai-learning into the open
+  // corridor before the robo-estimation column (x2280); ai-exam dropped to
+  // y3300 so the chain bottom + ai-neural + ai-search fan cleanly into it.
+  {
+    id: 'ai-learning-2',
+    title: 'Linear Regression & Regularization',
+    subject: 'math',
+    domainId: 'ai-ml',
+    description:
+      'Fit a line with real MSE gradients, then fight overfitting with a weight penalty — the two levers under every model.',
+    whyItMatters:
+      'Sensor calibration, trajectory fitting and every ML baseline start exactly here: a loss, its gradient, and a regularizer.',
+    prereqIds: ['ai-learning'],
+    x: 1960,
+    y: 2900,
+    hasLesson: true,
+  },
+  {
+    id: 'ai-learning-3',
+    title: 'Backpropagation',
+    subject: 'math',
+    domainId: 'ai-ml',
+    description:
+      'Train a network by chaining local slopes backward — the chain rule from calculus, doing the heavy lifting of deep learning.',
+    whyItMatters:
+      'The grasp network on a robot arm learns by exactly this backward sweep — backprop IS how modern perception is trained.',
+    prereqIds: ['ai-learning-2'],
+    x: 1960,
+    y: 3100,
+    hasLesson: true,
+  },
   {
     id: 'ai-exam',
     title: 'Module Exam: AI & ML',
     subject: 'cs',
     domainId: 'ai-ml',
     description:
-      'Ten fresh questions across search, learning from data and neural networks — new scenarios, real gradient arithmetic. 80% to pass.',
+      'Fourteen fresh questions across search, learning from data, regression, backprop and neural networks — new scenarios, real gradient arithmetic. 80% to pass.',
     whyItMatters:
       'Perception and planning are the hardest half of any robot — this exam checks the foundations actually stuck.',
-    prereqIds: ['ai-search', 'ai-learning', 'ai-neural'],
+    prereqIds: ['ai-search', 'ai-learning', 'ai-learning-2', 'ai-learning-3', 'ai-neural'],
     x: 1400,
-    y: 3100,
+    y: 3300,
     hasLesson: true,
     isExam: true,
   },
@@ -1957,6 +1989,16 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'video', title: '3Blue1Brown — Gradient descent (ch. 2)', url: 'https://www.youtube.com/watch?v=IHZwWFHWa-w', note: 'The descent-a-landscape picture from this lesson, animated beautifully.' },
     { type: 'interactive', title: 'TensorFlow Playground', url: 'https://playground.tensorflow.org', note: 'Train tiny networks live in your browser — watch overfitting happen.' },
     { type: 'course', title: 'Karpathy — Zero to Hero (micrograd)', url: 'https://karpathy.ai/zero-to-hero.html', note: 'Build gradient descent + backprop from scratch in Python, line by line.' },
+  ],
+  'ai-learning-2': [
+    { type: 'video', title: 'StatQuest — Linear Regression, clearly explained', url: 'https://www.youtube.com/watch?v=nk2CQITm_eo', note: 'Least squares and R² from the ground up, with a friendly BAM.' },
+    { type: 'video', title: 'StatQuest — Regularization (Ridge & Lasso)', url: 'https://www.youtube.com/watch?v=Q81RR3yKn30', note: 'Why the weight penalty shrinks overfitting — L2 and L1 side by side.' },
+    { type: 'course', title: 'Andrew Ng — Machine Learning Specialization', url: 'https://www.coursera.org/specializations/machine-learning-introduction', note: 'The canonical first course: linear/logistic regression, gradients, regularization.' },
+  ],
+  'ai-learning-3': [
+    { type: 'video', title: '3Blue1Brown — Backpropagation, intuitively', url: 'https://www.youtube.com/watch?v=Ilg3gGewQ5U', note: 'What the backward pass is really nudging, animated.' },
+    { type: 'video', title: '3Blue1Brown — Backpropagation calculus', url: 'https://www.youtube.com/watch?v=tIeHLnjs5U8', note: 'The chain-rule bookkeeping, one layer at a time.' },
+    { type: 'course', title: 'Karpathy — The spelled-out intro to backprop (micrograd)', url: 'https://www.youtube.com/watch?v=VMj-3S1tku0', note: 'Build an autograd engine from scratch — exactly the backward pass you just coded.' },
   ],
   'ai-neural': [
     { type: 'video', title: '3Blue1Brown — Neural networks', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi', note: 'What a neural net actually IS, visually.' },

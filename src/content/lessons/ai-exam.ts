@@ -7,7 +7,7 @@ export const aiExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — think like the machine',
       body: [
-        'Ten questions across the whole AI & ML module — search, learning, neural nets — all NEW, no repeats from the lesson quizzes. No sims, no notes: retrieval from memory is the point.',
+        'Fourteen questions across the whole AI & ML module — search, learning, regression, backprop, neural nets — all NEW, no repeats from the lesson quizzes. No sims, no notes: retrieval from memory is the point.',
         'Score 80% and the module is sealed. Below that? You lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -123,6 +123,69 @@ export const aiExamLesson: Lesson = {
         'No amount of steps escapes a valley by pure descent — at the bottom the gradient is zero and the walk stops, even if a deeper valley sits one ridge away.',
         'Zero loss may not exist anywhere on the landscape (noisy data guarantees residual error) — descent finds a LOW point, not a perfect one.',
         'Nothing random about it — each step is the locally steepest descent. The critique is that it’s TOO disciplined: it never climbs, so it can’t leave a mediocre valley.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'A linear model over-predicts: ŷ = 8 for a point whose true y = 5, with input x = 2 and learning rate 0.1. Using the per-point weight gradient 2·(ŷ − y)·x, one step moves the slope w…',
+      options: [
+        'Down by 1.2 — the gradient is +12, and descent SUBTRACTS it, shrinking the slope so the next prediction is lower',
+        'Up by 1.2 — you add the gradient to correct the error',
+        'Down by 12 — you step by the raw gradient, ignoring the rate',
+        'It doesn’t move — the point is close enough',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: gradient = 2·(8 − 5)·2 = 12 (positive, because we over-predict), step = 0.1·12 = 1.2, and descent subtracts it → w drops by 1.2, pulling future predictions down toward y.',
+        'Adding the gradient is UPHILL — it would make the over-prediction worse. Descent always subtracts.',
+        'The learning rate scales every step; skipping it (moving 12) would wildly overshoot. The step is rate × gradient.',
+        'A nonzero error (ŷ − y = 3) gives a nonzero gradient, so the weight must move.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'A model overfits badly (train loss ≈ 0, validation loss high). You add L2 regularization λ·Σw². What’s the expected effect?',
+      options: [
+        'Weights shrink, training loss rises a little, validation loss drops — a simpler model that generalizes better',
+        'Both training and validation loss fall to zero',
+        'Weights grow to fit the data harder',
+        'Only training speed changes; the fit is identical',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the penalty’s gradient (2λw) pulls every weight toward zero unless the data insists, so the model gets simpler — worse on train, better on the unseen validation set. That gap closing is the goal.',
+        'Regularization deliberately RAISES training loss; you accept that to win on unseen data.',
+        'The penalty shrinks weights toward zero — it never inflates them.',
+        'λ changes the loss being optimized, so it changes the learned weights, not just speed.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'A net computes h = w₁·x, then ŷ = w₂·h, then loss L = (ŷ − t)². By the chain rule, ∂L/∂w₁ equals…',
+      options: [
+        '2(ŷ − t) · w₂ · x — multiply the local slopes along the whole path from L back to w₁',
+        '2(ŷ − t) — only the loss’s own slope matters',
+        '2(ŷ − t) · x — skip the middle layer',
+        'w₂ · x — drop the loss term',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: ∂L/∂ŷ = 2(ŷ−t), ∂ŷ/∂h = w₂, ∂h/∂w₁ = x. Backprop multiplies all three — a factor per operation on the path.',
+        'That’s ∂L/∂ŷ, only the first link — it hasn’t chained back through w₂ and x yet.',
+        'This skips ∂ŷ/∂h = w₂ — the middle layer is on the path, so its slope must be included.',
+        'Dropping the loss factor loses the error signal entirely — the gradient must start from 2(ŷ−t).',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Same net (h = w₁·x, ŷ = w₂·h, L = (ŷ − t)²) with x = 1, w₁ = 2, w₂ = 2, target t = 1. Compute ∂L/∂w₁.',
+      options: ['12', '6', '24', '3'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: forward h = 2, ŷ = 4, so ∂L/∂ŷ = 2(4−1) = 6; then ×w₂ (=2) gives ∂L/∂h = 12; then ×x (=1) gives ∂L/∂w₁ = 12.',
+        '6 is ∂L/∂ŷ — the first link only. You still have to chain through w₂ and x.',
+        '24 double-counts a factor — chain exactly one local slope per operation: 6 · w₂ · x = 6·2·1 = 12.',
+        '3 is (ŷ − t); the loss derivative brings a factor of 2 (→ 6), then the path multiplies w₂ and x.',
       ],
     },
     {

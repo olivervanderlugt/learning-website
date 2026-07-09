@@ -54,6 +54,8 @@ import { algoStructuresLesson } from './algo-structures'
 import { algoGraphsLesson } from './algo-graphs'
 import { aiSearchLesson } from './ai-search'
 import { aiLearningLesson } from './ai-learning'
+import { aiLearning2Lesson } from './ai-learning-2'
+import { aiLearning3Lesson } from './ai-learning-3'
 import { aiNeuralLesson } from './ai-neural'
 import { osProcessesLesson } from './os-processes'
 import { osMemoryLesson } from './os-memory'
@@ -168,6 +170,8 @@ export const lessons: Record<string, Lesson> = {
   'algo-graphs': algoGraphsLesson,
   'ai-search': aiSearchLesson,
   'ai-learning': aiLearningLesson,
+  'ai-learning-2': aiLearning2Lesson,
+  'ai-learning-3': aiLearning3Lesson,
   'ai-neural': aiNeuralLesson,
   'os-processes': osProcessesLesson,
   'os-memory': osMemoryLesson,
