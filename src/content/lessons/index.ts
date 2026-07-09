@@ -52,6 +52,9 @@ import { mecheExamLesson } from './meche-exam'
 import { algoBigoLesson } from './algo-bigo'
 import { algoStructuresLesson } from './algo-structures'
 import { algoGraphsLesson } from './algo-graphs'
+import { algoSortingLesson } from './algo-sorting'
+import { algoPathsLesson } from './algo-paths'
+import { algoDpLesson } from './algo-dp'
 import { aiSearchLesson } from './ai-search'
 import { aiLearningLesson } from './ai-learning'
 import { aiLearning2Lesson } from './ai-learning-2'
@@ -171,6 +174,9 @@ export const lessons: Record<string, Lesson> = {
   'algo-bigo': algoBigoLesson,
   'algo-structures': algoStructuresLesson,
   'algo-graphs': algoGraphsLesson,
+  'algo-sorting': algoSortingLesson,
+  'algo-paths': algoPathsLesson,
+  'algo-dp': algoDpLesson,
   'ai-search': aiSearchLesson,
   'ai-learning': aiLearningLesson,
   'ai-learning-2': aiLearning2Lesson,

@@ -966,18 +966,69 @@ export const nodes: KnowledgeNode[] = [
     y: 1900,
     hasLesson: true,
   },
+  // Algorithms depth chain (tier 1). ai-search was moved right to (1400,2500)
+  // to free the algo-graphs→ai-search corridor at x1120, letting algo-paths/dp
+  // drop straight down; algo-sorting takes algo-exam's old (870,2100) spot and
+  // the exam moved to the cluster bottom. Sorting←structures, paths←graphs,
+  // dp←sorting (D&C → overlapping subproblems). Exam edges: only paths→exam and
+  // dp→exam show (the rest are transitively redundant).
+  {
+    id: 'algo-sorting',
+    title: 'Sorting & Divide-and-Conquer',
+    subject: 'cs',
+    domainId: 'algorithms',
+    description:
+      'Merge sort’s split-recurse-merge, the recurrence that gives O(n log n), the comparison lower bound, stability and quicksort’s trade.',
+    whyItMatters:
+      'The divide-and-conquer shape here reappears in FFTs, geometry and fast multiplication — and a stable O(n log n) sort underlies half of data processing.',
+    prereqIds: ['algo-structures'],
+    x: 620,
+    y: 2100,
+    tier: 1,
+    hasLesson: true,
+  },
+  {
+    id: 'algo-dp',
+    title: 'Dynamic Programming',
+    subject: 'cs',
+    domainId: 'algorithms',
+    description:
+      'Overlapping subproblems + optimal substructure: memoize or tabulate to turn exponential recursion into a fast linear pass.',
+    whyItMatters:
+      'Route optimization, sequence alignment, diff tools and many planning problems are all dynamic programming underneath.',
+    prereqIds: ['algo-sorting'],
+    x: 620,
+    y: 2300,
+    tier: 1,
+    hasLesson: true,
+  },
+  {
+    id: 'algo-paths',
+    title: 'Weighted Shortest Paths: Dijkstra',
+    subject: 'cs',
+    domainId: 'algorithms',
+    description:
+      'From fewest-hops (BFS) to lowest-cost: relaxation, the greedy proof, why negative edges break it, and heaps that make it fast.',
+    whyItMatters:
+      'Dijkstra (with a heuristic, as A*) is literally the math inside a robot’s route planner and every GPS.',
+    prereqIds: ['algo-graphs'],
+    x: 970,
+    y: 2300,
+    tier: 1,
+    hasLesson: true,
+  },
   {
     id: 'algo-exam',
     title: 'Module Exam: Algorithms',
     subject: 'cs',
     domainId: 'algorithms',
     description:
-      'Ten fresh questions across Big-O, data structures and pathfinding — classify new code, pick the right container, reason about A*. 80% to pass.',
+      'Fourteen fresh questions across Big-O, data structures, pathfinding, sorting, shortest paths and dynamic programming — new code and hand traces. 80% to pass.',
     whyItMatters:
       'Choosing the wrong structure or blowing up quadratically is the classic way robot code dies at scale — this exam is the vaccine.',
-    prereqIds: ['algo-bigo', 'algo-structures', 'algo-graphs'],
-    x: 870,
-    y: 2100,
+    prereqIds: ['algo-bigo', 'algo-structures', 'algo-graphs', 'algo-sorting', 'algo-paths', 'algo-dp'],
+    x: 820,
+    y: 2700,
     hasLesson: true,
     isExam: true,
   },
@@ -1424,7 +1475,7 @@ export const nodes: KnowledgeNode[] = [
     whyItMatters:
       'Theory tells you which robot features are impossible before you waste a month on them — worth retrieving precisely.',
     prereqIds: ['theory-fsm', 'theory-turing', 'theory-complexity'],
-    x: 840,
+    x: 1360,
     y: 2300,
     hasLesson: true,
     isExam: true,
@@ -2214,6 +2265,21 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'article', title: 'Red Blob Games — Introduction to A*', url: 'https://www.redblobgames.com/pathfinding/a-star/introduction.html', note: 'THE interactive A* tutorial — beautiful, gentle, definitive.' },
     { type: 'video', title: 'Computerphile — A* search', url: 'https://www.youtube.com/watch?v=ySN5Wnu88nE', note: 'A* explained on a whiteboard in 14 minutes — ideal right after the sim.' },
     { type: 'interactive', title: 'PathFinding.js visualizer', url: 'https://qiao.github.io/PathFinding.js/visual/', note: 'The deluxe version of this lesson’s game: BFS, Dijkstra, A* and more on big grids.' },
+  ],
+  'algo-sorting': [
+    { type: 'interactive', title: 'VisuAlgo — Sorting', url: 'https://visualgo.net/en/sorting', note: 'Watch merge sort, quicksort and friends animate step by step.' },
+    { type: 'video', title: 'MIT 6.006 — Divide & Conquer / Merge Sort', url: 'https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/', note: 'The recurrence and the n log n proof from the canonical course.' },
+    { type: 'article', title: 'Sorting algorithms visualized (Toptal)', url: 'https://www.toptal.com/developers/sorting-algorithms', note: 'Side-by-side races that make the complexity differences visceral.' },
+  ],
+  'algo-paths': [
+    { type: 'article', title: 'Red Blob Games — Dijkstra & A*', url: 'https://www.redblobgames.com/pathfinding/a-star/introduction.html', note: 'The interactive companion: from BFS to Dijkstra to A*, gorgeously.' },
+    { type: 'video', title: 'Computerphile — Dijkstra’s algorithm', url: 'https://www.youtube.com/watch?v=GazC3A4OQTE', note: 'Relaxation and the greedy idea on a whiteboard.' },
+    { type: 'course', title: 'MIT 6.006 — Shortest Paths (Dijkstra, Bellman–Ford)', url: 'https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/', note: 'Full lectures + psets with solutions on weighted shortest paths.' },
+  ],
+  'algo-dp': [
+    { type: 'video', title: 'MIT 6.006 — Dynamic Programming (Erik Demaine)', url: 'https://www.youtube.com/watch?v=OQ5jsbhAv_M', note: 'The clearest “what IS dynamic programming” lecture, from overlapping subproblems up.' },
+    { type: 'interactive', title: 'VisuAlgo — DP problems', url: 'https://visualgo.net/en/recursion', note: 'See the recursion tree and how memoization prunes it.' },
+    { type: 'article', title: 'Coin change & edit distance (GeeksforGeeks)', url: 'https://www.geeksforgeeks.org/dynamic-programming/', note: 'Worked DP classics to practice the table-filling pattern.' },
   ],
   'hist-scientific-revolution': [
     { type: 'video', title: 'Crash Course History of Science #1–14', url: 'https://www.youtube.com/playlist?list=PL8dPuuaLjXtNppY8ZHMPDH5TKK2UpU8Ng', note: 'The full arc from ancient knowledge to Newton, 12 minutes at a time.' },
