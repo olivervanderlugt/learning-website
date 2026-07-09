@@ -17,6 +17,7 @@ import { mathProbLesson } from './math-prob'
 import { mathProb2Lesson } from './math-prob-2'
 import { mathProb3Lesson } from './math-prob-3'
 import { physForcesLesson } from './phys-forces'
+import { physFirstPrinciplesLesson } from './phys-first-principles'
 import { physElectricityLesson } from './phys-electricity'
 import { roboSensingLesson } from './robo-sensing'
 import { roboControlLesson } from './robo-control'
@@ -129,6 +130,7 @@ export const lessons: Record<string, Lesson> = {
   'math-prob': mathProbLesson,
   'math-prob-2': mathProb2Lesson,
   'math-prob-3': mathProb3Lesson,
+  'phys-first-principles': physFirstPrinciplesLesson,
   'phys-forces': physForcesLesson,
   'phys-electricity': physElectricityLesson,
   'robo-sensing': roboSensingLesson,

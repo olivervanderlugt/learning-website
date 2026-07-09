@@ -633,6 +633,23 @@ export const nodes: KnowledgeNode[] = [
 
   // ---- Physics (x3500-4570: elec col x3500, forces top, forces-depth x4100, energy x4380) ----
   {
+    id: 'phys-first-principles',
+    title: 'Thinking from First Principles',
+    subject: 'physics',
+    domainId: 'physics',
+    description:
+      'The physicist’s core habit: break a problem down to bedrock truths and reason UP from them, instead of copying by analogy. The mindset that makes the whole map smaller.',
+    whyItMatters:
+      'It’s how physicists derive instead of memorize, how engineers hit “impossible” specs, and how founders find openings everyone else copied past — Ollie’s whole trajectory.',
+    // Physics ENTRY POINT: sits above phys-forces (its dependent), so the suggested
+    // path opens with "learn how to think before the content." Prereq-free root;
+    // its edge to phys-exam is transitively hidden via phys-forces. Tier-0.
+    prereqIds: [],
+    x: 3800,
+    y: -200,
+    hasLesson: true,
+  },
+  {
     id: 'phys-forces',
     title: 'Forces & Motion',
     subject: 'physics',
@@ -641,7 +658,7 @@ export const nodes: KnowledgeNode[] = [
       'Newton’s laws: why things start moving, stop moving, and push back when shoved.',
     whyItMatters:
       'Torque, friction and inertia decide whether your robot climbs the ramp or tips over on it.',
-    prereqIds: [],
+    prereqIds: ['phys-first-principles'],
     x: 3800,
     y: 0,
     hasLesson: true,
@@ -787,10 +804,10 @@ export const nodes: KnowledgeNode[] = [
     subject: 'physics',
     domainId: 'physics',
     description:
-      'Twenty-two fresh questions across forces, kinematics, momentum, rotation, energy, Ohm’s law, Kirchhoff, dividers, RC/induction and statics (equilibrium, stress/strain, bending) — with numbers, units and the classic traps. From memory. 80% to pass.',
+      'Twenty-three fresh questions across first-principles reasoning, forces, kinematics, momentum, rotation, energy, Ohm’s law, Kirchhoff, dividers, RC/induction and statics (equilibrium, stress/strain, bending) — with numbers, units and the classic traps. From memory. 80% to pass.',
     whyItMatters:
       'Whether your robot climbs the ramp — or holds together under load — is decided by exactly these equations, better to fail them here than in hardware.',
-    prereqIds: ['phys-forces', 'phys-forces-2', 'phys-forces-3', 'phys-energy', 'phys-electricity', 'phys-electricity-2', 'phys-electricity-3', 'phys-statics', 'phys-statics-2', 'phys-statics-3'],
+    prereqIds: ['phys-first-principles', 'phys-forces', 'phys-forces-2', 'phys-forces-3', 'phys-energy', 'phys-electricity', 'phys-electricity-2', 'phys-electricity-3', 'phys-statics', 'phys-statics-2', 'phys-statics-3'],
     x: 4380,
     y: 850,
     hasLesson: true,
@@ -1953,6 +1970,10 @@ const resourcesByNode: Record<string, Resource[]> = {
   'robo-control': [
     { type: 'video', title: 'Brian Douglas — Understanding PID (MATLAB)', url: 'https://www.youtube.com/watch?v=wkfEZmsQqiA', note: 'The classic PID explanation every robotics engineer has watched.' },
     { type: 'video', title: 'Brian Douglas — Control systems channel', url: 'https://www.youtube.com/user/ControlLectures', note: 'A whole free control-theory education, one animation at a time.' },
+  ],
+  'phys-first-principles': [
+    { type: 'video', title: 'Feynman — “What do we know?” / Ways of thinking', url: 'https://www.youtube.com/watch?v=NM-zWTU7X-k', note: 'Feynman on how a scientist reasons from what’s actually known — first principles in his own words.' },
+    { type: 'article', title: 'First-principles thinking (mental-model primer)', url: 'https://fs.blog/first-principles/', note: 'Farnam Street’s clear write-up, including the Musk battery-cost example this lesson uses.' },
   ],
   'phys-forces-2': [
     { type: 'video', title: 'Walter Lewin — 8.01 Lecture 4 (Projectile Motion)', url: 'https://www.youtube.com/playlist?list=PLyQSN7X0ro203puVhQsmCj9qhlFQ-As8e', note: 'MIT’s legendary lecturer derives and demonstrates suvat and projectiles live in the lecture hall.' },

@@ -7,7 +7,7 @@ export const physExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — the laws your robot obeys',
       body: [
-        'Twenty-two questions spanning forces, kinematics, momentum, rotation, energy, Ohm’s law, Kirchhoff, dividers, RC/induction and statics (equilibrium, stress/strain, bending) — all NEW scenarios, no repeats from the lesson quizzes. No sims, no notes: pure retrieval from memory.',
+        'Twenty-three questions spanning first-principles reasoning, forces, kinematics, momentum, rotation, energy, Ohm’s law, Kirchhoff, dividers, RC/induction and statics (equilibrium, stress/strain, bending) — all NEW scenarios, no repeats from the lesson quizzes. No sims, no notes: pure retrieval from memory.',
         'Score 80% and physics is sealed. Fall short? It costs nothing — you’ll see exactly which law slipped, review it, and retake.',
       ],
     },
@@ -340,6 +340,24 @@ export const physExamLesson: Lesson = {
         'Width b appears to the first power in I; depth’s cube dependence beats it decisively.',
         'Reducing width lowers stiffness; you want more depth for bending resistance.',
         'They are not equal — h enters as a cube, b only linearly.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A car’s braking distance follows d ∝ v² (distance grows with the square of speed). At 50 km/h it needs 12 m to stop. Reasoning from first principles, roughly how far does it need at 100 km/h?',
+      options: [
+        '48 m — doubling the speed quadruples the distance (2² = 4)',
+        '24 m — double the speed, double the distance',
+        '12 m — braking distance doesn’t change',
+        '36 m — three times the distance',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: d ∝ v², so 2× the speed is 2² = 4× the distance → 12 × 4 = 48 m. The “double→double” analogy badly underestimates it, which is why speed is so dangerous.',
+        '24 m assumes distance is proportional to speed — but the v² law makes it grow with the SQUARE, so doubling speed quadruples distance.',
+        'Braking distance depends strongly on speed through v²; it very much changes.',
+        '36 m is 3×, but doubling the speed gives 2² = 4×, not 3× — read the exponent.',
       ],
     },
   ],
