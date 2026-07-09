@@ -5,9 +5,9 @@ export const netExamLesson: Lesson = {
   screens: [
     {
       kind: 'explain',
-      title: 'Module exam — the whole network in ten questions',
+      title: 'Module exam — the whole network in fourteen questions',
       body: [
-        'Ten questions spanning the whole domain — layers, packets, protocols — all NEW, no repeats from the lesson quizzes. No notes: retrieval from memory is the point.',
+        'Fourteen questions spanning the whole domain — layers, packets, protocols, sockets, TCP and local networking — all NEW, no repeats from the lesson quizzes. No notes: retrieval from memory is the point.',
         'Score 80% and Networks is sealed. Below that? You lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -179,6 +179,74 @@ export const netExamLesson: Lesson = {
         'QoS 0 messages can vanish silently — the e-stop is the one message the fleet can’t afford to lose. Milliseconds of ack overhead beat a robot that never stops.',
         'TCP protects a live connection’s byte stream, but if a robot’s link drops mid-delivery, a QoS 0 message dies with it — QoS adds acknowledgment ABOVE the transport, surviving reconnects.',
         'Blind repetition still confirms nothing — QoS 1 retries until acknowledged, which is both cheaper and an actual guarantee.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Your server calls recv() on a TCP socket and gets only half of a length-prefixed message. What is the correct handling?',
+      options: [
+        'Buffer the partial bytes and keep recv-ing until a full frame (length + that many bytes) has arrived, then process it',
+        'Discard the half — TCP will resend the whole message',
+        'Process it immediately; recv always returns a complete message',
+        'Switch to UDP so messages arrive whole',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: TCP is a byte stream, so a read can stop mid-message. You accumulate bytes and only act once the framed length is satisfied.',
+        'TCP already delivered those bytes correctly — they’re not lost, just incomplete; discarding them corrupts the stream.',
+        'recv gives whatever bytes are available — it has no notion of your message boundaries.',
+        'UDP keeps datagrams whole but can lose them; the fix here is application-layer buffering, not changing transport.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'A TCP sender’s congestion window has grown 4, 5, 6 and then a packet is lost. Under AIMD, what is the window immediately after?',
+      options: [
+        '3 — multiplicative decrease halves 6 (floor), backing off hard on the congestion signal',
+        '5 — subtract one, since only one packet was lost',
+        '7 — keep growing; one loss is noise',
+        '1 — reset all the way to the start',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: 6 halved (floor) is 3. Cutting hard on loss while growing slowly is what makes many senders converge to a stable, fair share.',
+        'Additive decrease backs off too slowly to relieve a congested link — AIMD halves.',
+        'Ignoring loss worsens congestion; loss is precisely the back-off trigger.',
+        'A full reset to 1 follows a timeout, not a single detected loss (which triggers a halving).',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'You must push a firmware update to a robot over the network. TCP or UDP?',
+      options: [
+        'TCP — a firmware image is useless with any missing or reordered bytes, and it can tolerate the transfer taking a moment',
+        'UDP — firmware updates need the lowest latency',
+        'UDP — because the file is large',
+        'Either — corruption doesn’t matter for firmware',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: correctness dominates — one flipped or missing byte can brick the device. Delay is fine; loss is not, which is exactly TCP’s trade.',
+        'Latency is irrelevant for a one-time flash; UDP’s losses would corrupt the image.',
+        'Size doesn’t change the need for every byte to arrive intact and in order.',
+        'A corrupted firmware image is catastrophic — integrity is the whole point.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Two hosts 10.0.0.60 and 10.0.0.200 sit behind a /25 mask (last-octet mask value 128). Same subnet?',
+      options: [
+        'No — 60 AND 128 = 0 but 200 AND 128 = 128, so they’re in different halves (0–127 vs 128–255)',
+        'Yes — the first three octets match, so /25 is irrelevant',
+        'Yes — all 10.x addresses share one subnet',
+        'Can’t tell without the gateway',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: /25 splits the last octet at 128. 60 is in block 0–127 and 200 is in 128–255 — different network parts, so they route via the gateway.',
+        'The mask, not the dotted prefix, decides — /25 subdivides the last octet regardless of matching octets.',
+        '10.x is carved into many subnets; sharing “10.” says nothing about locality.',
+        'The mask alone determines the subnet split; the gateway is where off-subnet traffic goes, not part of the test.',
       ],
     },
   ],

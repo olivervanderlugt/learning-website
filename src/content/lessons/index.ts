@@ -66,6 +66,9 @@ import { osConcurrency3Lesson } from './os-concurrency-3'
 import { netStackLesson } from './net-stack'
 import { netPacketsLesson } from './net-packets'
 import { netProtocolsLesson } from './net-protocols'
+import { netSocketsLesson } from './net-sockets'
+import { netTcpLesson } from './net-tcp'
+import { netRoutingLesson } from './net-routing'
 import { dbRelationalLesson } from './db-relational'
 import { dbSqlLesson } from './db-sql'
 import { dbTransactionsLesson } from './db-transactions'
@@ -182,6 +185,9 @@ export const lessons: Record<string, Lesson> = {
   'net-stack': netStackLesson,
   'net-packets': netPacketsLesson,
   'net-protocols': netProtocolsLesson,
+  'net-sockets': netSocketsLesson,
+  'net-tcp': netTcpLesson,
+  'net-routing': netRoutingLesson,
   'db-relational': dbRelationalLesson,
   'db-sql': dbSqlLesson,
   'db-transactions': dbTransactionsLesson,

@@ -1025,18 +1025,66 @@ export const nodes: KnowledgeNode[] = [
     y: 1900,
     hasLesson: true,
   },
+  // Networks depth chain: hands-on transport. Grown LEFTWARD (x-280, where
+  // net-exam already lived) — networks is the leftmost domain, so this is the
+  // natural open pocket. Placing it at x300 (right of the spine) collided with
+  // the prog-data→db-relational sweep (~38px pierce). Feeds net-exam at bottom;
+  // the old net-*→exam edges are transitively redundant (auto-hidden), so only
+  // net-routing→exam shows.
+  {
+    id: 'net-sockets',
+    title: 'Sockets: The Programmable Endpoint',
+    subject: 'cs',
+    domainId: 'networks',
+    description:
+      'Where your code actually plugs into the network: IP + port endpoints, the client–server pattern, and framing a raw byte stream into messages.',
+    whyItMatters:
+      'Every ROS node, camera feed and telemetry stream your robot opens is a socket send/recv underneath.',
+    prereqIds: ['net-protocols'],
+    x: -280,
+    y: 1900,
+    hasLesson: true,
+  },
+  {
+    id: 'net-tcp',
+    title: 'TCP: Reliability & Congestion',
+    subject: 'cs',
+    domainId: 'networks',
+    description:
+      'How a reliable ordered stream is built on a lossy network: handshake, ACKs & retransmission, and the AIMD sawtooth that keeps the internet from collapsing.',
+    whyItMatters:
+      'TCP’s retransmit-and-wait is exactly why a laggy video freezes then jumps — and why real-time robot data avoids it.',
+    prereqIds: ['net-sockets'],
+    x: -280,
+    y: 2100,
+    hasLesson: true,
+  },
+  {
+    id: 'net-routing',
+    title: 'Subnets, UDP vs TCP & the Local Network',
+    subject: 'cs',
+    domainId: 'networks',
+    description:
+      'The local-vs-remote decision (masks & bitwise AND), ARP/DHCP/NAT, and choosing TCP or UDP on purpose for a robot on a LAN.',
+    whyItMatters:
+      'A wrong IP/mask/gateway is the #1 “why won’t my robot connect?” bug — and multicast quirks are why ROS 2 finds nodes on Ethernet but not Wi-Fi.',
+    prereqIds: ['net-tcp'],
+    x: -280,
+    y: 2300,
+    hasLesson: true,
+  },
   {
     id: 'net-exam',
     title: 'Module Exam: Networks',
     subject: 'cs',
     domainId: 'networks',
     description:
-      'Ten fresh questions across layers, packets and protocols — new scenarios, from memory. 80% to pass.',
+      'Fourteen fresh questions across layers, packets, protocols, sockets, TCP and local networking — new scenarios, from memory. 80% to pass.',
     whyItMatters:
       'When your robot drops off the network mid-mission, this is the mental model you will debug with.',
-    prereqIds: ['net-stack', 'net-packets', 'net-protocols'],
+    prereqIds: ['net-stack', 'net-packets', 'net-protocols', 'net-sockets', 'net-tcp', 'net-routing'],
     x: -280,
-    y: 2100,
+    y: 2500,
     hasLesson: true,
     isExam: true,
   },
@@ -1944,6 +1992,18 @@ const resourcesByNode: Record<string, Resource[]> = {
   'net-protocols': [
     { type: 'article', title: 'MQTT Essentials (HiveMQ series)', url: 'https://www.hivemq.com/mqtt-essentials/', note: 'The standard pub/sub-for-IoT tutorial series — QoS, last will, all of it.' },
     { type: 'video', title: 'Computerphile — HTTP & the web', url: 'https://www.youtube.com/watch?v=tb8gHvYlCFs', note: 'Request/response from first principles.' },
+  ],
+  'net-sockets': [
+    { type: 'article', title: 'Beej’s Guide to Network Programming', url: 'https://beej.us/guide/bgnet/', note: 'The legendary, friendly sockets tutorial — client/server, TCP vs UDP, in C.' },
+    { type: 'video', title: 'Ben Eater — how a socket connection works', url: 'https://www.youtube.com/watch?v=0Oe_ich8vJ0', note: 'Watch a real TCP session on the wire, byte by byte.' },
+  ],
+  'net-tcp': [
+    { type: 'video', title: 'Computerphile — TCP congestion control', url: 'https://www.youtube.com/watch?v=WT1_-fJ0Xoc', note: 'The AIMD sawtooth and why the internet stays stable under load.' },
+    { type: 'course', title: 'Kurose & Ross — Computer Networking (transport layer)', url: 'https://gaia.cs.umass.edu/kurose_ross/interactive/', note: 'Interactive problems on reliable transport, ACKs and congestion — with solutions.' },
+  ],
+  'net-routing': [
+    { type: 'interactive', title: 'SubnettingPractice — CIDR & masks', url: 'https://subnettingpractice.com/', note: 'Drill subnet masks until the bitwise AND is second nature.' },
+    { type: 'video', title: 'PowerCert — Subnetting, ARP, DHCP & NAT', url: 'https://www.youtube.com/watch?v=BWZ-MHIhqjM', note: 'Clear animated walk-throughs of every local-network piece in this lesson.' },
   ],
   'db-relational': [
     { type: 'course', title: 'SQLBolt — interactive lessons', url: 'https://sqlbolt.com', note: 'Learn tables and queries by typing real SQL in the browser — start here.' },
