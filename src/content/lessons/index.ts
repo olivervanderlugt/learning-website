@@ -33,6 +33,8 @@ import { progCLesson } from './prog-c'
 import { progC2Lesson } from './prog-c-2'
 import { progC3Lesson } from './prog-c-3'
 import { mathLogicLesson } from './math-logic'
+import { mathLogic2Lesson } from './math-logic-2'
+import { mathLogic3Lesson } from './math-logic-3'
 import { physEnergyLesson } from './phys-energy'
 import { roboEmbeddedLesson } from './robo-embedded'
 import { roboRosLesson } from './robo-ros'
@@ -155,6 +157,8 @@ export const lessons: Record<string, Lesson> = {
   'prog-c-2': progC2Lesson,
   'prog-c-3': progC3Lesson,
   'math-logic': mathLogicLesson,
+  'math-logic-2': mathLogic2Lesson,
+  'math-logic-3': mathLogic3Lesson,
   'phys-energy': physEnergyLesson,
   'robo-embedded': roboEmbeddedLesson,
   'robo-ros': roboRosLesson,

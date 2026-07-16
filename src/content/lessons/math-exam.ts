@@ -7,7 +7,7 @@ export const mathExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — math that moves robots',
       body: [
-        'Thirty questions spanning logic, vectors, matrices, rank & least squares, the SVD, probability, statistics, calculus, differential equations and multivariable calculus — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
+        'Thirty-four questions spanning logic, sets & functions, proof technique, vectors, matrices, rank & least squares, the SVD, probability, statistics, calculus, differential equations and multivariable calculus — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
         'Score 80% and the module is sealed. Below that? You lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -490,6 +490,73 @@ export const mathExamLesson: Lesson = {
         '0.5 is the reciprocal (var(x)/cov), which has the wrong units and value.',
         '18 multiplies instead of dividing; the slope divides covariance by the variance of x.',
         '3 is var(x) alone; the slope is the ratio cov/var(x) = 2.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Two sensor whitelists: A allows IDs {2, 4, 6, 8} and B allows {6, 8, 10}. A reading is accepted if it’s on EITHER list. How many distinct IDs does the combined system accept?',
+      options: ['5', '7', '2', '4'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the union is {2, 4, 6, 8, 10} — inclusion–exclusion gives |A| + |B| − |A ∩ B| = 4 + 3 − 2 = 5 (6 and 8 are shared, counted once).',
+        '7 = 4 + 3 double-counts the two shared IDs (6 and 8); the union subtracts the overlap.',
+        '2 is the size of the overlap A ∩ B alone, not the union.',
+        '4 is |A| alone; “either list” means the union of both.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A hash maps thousands of possible packets onto 256 slots, so distinct packets sometimes land in the same slot. In function terms, the hash is therefore NOT…',
+      options: [
+        'injective — distinct inputs share an output, so you can’t invert it to recover the packet',
+        'a function — a function can’t have repeated outputs',
+        'surjective — it must miss some slots',
+        'defined — collisions make it undefined',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: a collision is two inputs with one output, which breaks injectivity — exactly why a hash can’t be reversed to the original.',
+        'It’s still a genuine function: each input has ONE output. Repeated outputs across inputs are allowed.',
+        'Nothing forces a hash to miss slots; a good one hits all 256. The property collisions destroy is injectivity, not surjectivity.',
+        'It’s perfectly well-defined — each packet gets a definite slot; collisions just mean the mapping isn’t one-to-one.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'To prove “if n² is even then n is even”, the cleanest route is the CONTRAPOSITIVE. Which statement do you prove instead?',
+      options: [
+        'If n is odd, then n² is odd',
+        'If n is even, then n² is even',
+        'If n² is odd, then n is even',
+        'If n is even, then n² is odd',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the contrapositive of “A → B” is “not-B → not-A” — “if n is odd (not even), then n² is odd (not even)”, and n = 2k+1 gives n² = 2(2k²+2k)+1, odd. It’s logically equivalent to the original.',
+        'That’s the converse-ish restatement, not the contrapositive, and it doesn’t prove the target statement.',
+        'This mixes the pieces up — it negates one side and swaps wrongly; it isn’t the contrapositive.',
+        'Simply false (an even n has an even square) and not the contrapositive form.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A proof by induction shows a formula holds for n = 1 and that “holding for n forces holding for n+1”. Why does that establish it for ALL positive integers?',
+      options: [
+        'The base case starts the ladder and the step passes truth from each rung to the next, so every rung is reached',
+        'Because it was checked for enough values to be statistically certain',
+        'Because n+1 is always larger than n',
+        'Because contradiction rules out every counterexample directly',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: base case (n=1 true) plus the step (n true ⇒ n+1 true) chains truth up through every integer — the domino principle covering infinitely many cases.',
+        'Induction is not statistical; a finite number of checks never certifies all n — the step is what generalises.',
+        '“n+1 > n” is just counting; it’s the IMPLICATION n ⇒ n+1, together with the base, that does the work.',
+        'That describes contradiction, a different technique; induction works by propagating truth upward, not by refuting counterexamples.',
       ],
     },
   ],

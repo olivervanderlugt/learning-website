@@ -48,7 +48,9 @@ export const domains: Domain[] = [
 //   robo-control-4    → (2950,2300), continuing the control column
 //   phys-statics      → col x4660, y220-620 (right of energy)
 //   Electronics domain→ x4660+, y850+ (hangs off phys-electricity-3)
-//   math-logic-2/-3   → col x1120, y200/400 (below logic)
+//   math-logic-2/-3   → PLACED at x1300, y200/400 (NOT straight below logic —
+//                       the x1120 apex is pierced by math-logic→algo-bigo;
+//                       drifted right into the logic↔linalg corridor)
 // When a chain lands, exams repoint to the chain bottom (transitive filter
 // hides the old edge) — then re-verify both tiers with the bezier checker.
 // Rules that keep edges readable: no edge between same-x nodes that aren't
@@ -280,6 +282,45 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: [],
     x: 1120,
     y: 0,
+    hasLesson: true,
+  },
+  // math-logic depth chain (tier 1, Stage-2 proof bridge): sets/relations/
+  // functions → proof technique (induction/contradiction/contrapositive).
+  // NOT straight below math-logic — that apex is edge-dense: math-logic's
+  // down-left edge to algo-bigo (620,1500) pierces a x1120 column (checker),
+  // and its down-right edge to theory-fsm (1456,1700) straddles it. Drifted
+  // RIGHT to x1300, into the clear top-of-map corridor between math-logic and
+  // math-linalg: clears algo-bigo (sweeps to x~1080 by y480) and theory-fsm
+  // (still ~x1210-1237 at y200-480, well left of 1300); logic-3→math-exam
+  // (1500,1560) stays left of the linalg-4/5 column (x1490). math-exam repoints
+  // to chain-bottom math-logic-3; algo-bigo & theory-fsm stay ← math-logic
+  // (they need intro logic, not proofs). Zero crossings both tiers.
+  {
+    id: 'math-logic-2',
+    title: 'Sets, Relations & Functions',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'Sets and their union/intersection/complement (AND/OR/NOT again), subsets, and functions — the exactly-one-output rule, and what injective/surjective/bijective mean.',
+    whyItMatters:
+      'A robot’s reachable states are a set, obstacles carve out a subset, and every control law u = f(state) must be a genuine function — determinism IS the function property.',
+    prereqIds: ['math-logic'],
+    x: 1300,
+    y: 200,
+    hasLesson: true,
+  },
+  {
+    id: 'math-logic-3',
+    title: 'Proof: Induction, Contradiction & Contrapositive',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'How to prove a claim for ALL n, not just the cases you tried: direct proof, contrapositive, proof by contradiction, and mathematical induction (the domino principle).',
+    whyItMatters:
+      'The gap between “passes my tests” and “provably correct” — and recursion is just induction executed, so this makes your recursive code trustworthy.',
+    prereqIds: ['math-logic-2'],
+    x: 1300,
+    y: 400,
     hasLesson: true,
   },
   {
@@ -604,6 +645,8 @@ export const nodes: KnowledgeNode[] = [
       'Robotics runs on all of these at once; the exam checks they coexist in your head, not just in separate lessons.',
     prereqIds: [
       'math-logic',
+      'math-logic-2',
+      'math-logic-3',
       'math-linalg',
       'math-linalg-2',
       'math-linalg-3',
@@ -1955,6 +1998,16 @@ const resourcesByNode: Record<string, Resource[]> = {
   ],
   'math-logic': [
     { type: 'course', title: 'Brilliant — Logic', url: 'https://brilliant.org/courses/logic-deduction/', note: 'Interactive puzzles in the same predict-first style as this app (paid).' },
+  ],
+  'math-logic-2': [
+    { type: 'book', title: 'Book of Proof — Sets, Functions & Relations (free)', url: 'https://www.people.vcu.edu/~rhammack/BookOfProof/', note: 'Richard Hammack’s free textbook; Chapters 1, 11 and 12 are the exact sets/relations/functions material, with exercises and solutions.' },
+    { type: 'video', title: 'The Bright Side of Mathematics — Sets & functions', url: 'https://www.youtube.com/playlist?list=PLBh2i93oe2quABbNq4I_-hyjhW8eOdgrO', note: 'Short, clean “start learning mathematics” series covering set operations, injective/surjective/bijective.' },
+    { type: 'course', title: 'MIT 6.042J — Mathematics for Computer Science', url: 'https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015/', note: 'The canonical free CS-math course; the sets, relations and functions units, with problem sets and exams.' },
+  ],
+  'math-logic-3': [
+    { type: 'book', title: 'Book of Proof — Induction, Contradiction & Contrapositive (free)', url: 'https://www.people.vcu.edu/~rhammack/BookOfProof/', note: 'Chapters 5–10 are exactly direct proof, contrapositive, contradiction and induction — the gold-standard free intro to proof, with answers.' },
+    { type: 'video', title: '3Blue1Brown — the inductive-proof intuition', url: 'https://www.youtube.com/watch?v=Ic1qJI9E-uk', note: 'Not proof-technique-labelled, but the “find the pattern, then prove it holds forever” mindset animated.' },
+    { type: 'course', title: 'MIT 6.042J — Induction & proof', url: 'https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015/', note: 'The induction and proof-method lectures, with graded problem sets — the real bachelor bar for this material, free.' },
   ],
   'math-linalg': [
     { type: 'video', title: '3Blue1Brown — Essence of Linear Algebra', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab', note: 'The gold standard. Watch it twice; robotics runs on these animations.' },
