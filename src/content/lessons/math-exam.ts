@@ -7,7 +7,7 @@ export const mathExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — math that moves robots',
       body: [
-        'Thirty-four questions spanning logic, sets & functions, proof technique, vectors, matrices, rank & least squares, the SVD, probability, statistics, calculus, differential equations and multivariable calculus — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
+        'Thirty-eight questions spanning logic, sets & functions, proof technique, vectors, matrices, rank & least squares, the SVD, probability, statistics, calculus, limits & continuity, integration techniques, Taylor series, differential equations and multivariable calculus — all NEW, no repeats from the lesson quizzes. No notes, no calculator: retrieval from memory is the point.',
         'Score 80% and the module is sealed. Below that? You lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -557,6 +557,72 @@ export const mathExamLesson: Lesson = {
         'Induction is not statistical; a finite number of checks never certifies all n — the step is what generalises.',
         '“n+1 > n” is just counting; it’s the IMPLICATION n ⇒ n+1, together with the base, that does the work.',
         'That describes contradiction, a different technique; induction works by propagating truth upward, not by refuting counterexamples.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question: 'Evaluate lim(x→5) (x² − 25)/(x − 5).',
+      options: ['10', '0', 'Undefined — it is 0/0', '5'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: factor the top as (x − 5)(x + 5), cancel the (x − 5), and the expression becomes x + 5 → 10 as x → 5.',
+        'Direct substitution gives 0/0, but that indeterminate form is removable — cancelling reveals the limit is 10, not 0.',
+        '0/0 means "look closer", not "no answer": the common factor cancels and the limit is a clean 10.',
+        '5 is the value x approaches, not the limit of the expression, which simplifies to x + 5 → 10.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'For f(x) = (x − 2)/(x² − 4), what kind of point is x = 2? (Note x² − 4 = (x − 2)(x + 2).)',
+      options: [
+        'A removable hole — it simplifies to 1/(x + 2), whose limit at x = 2 is 1/4',
+        'An infinite blow-up to ±∞',
+        'A jump discontinuity',
+        'A point of perfect continuity',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the shared (x − 2) cancels, leaving 1/(x + 2), which is finite at x = 2 (equal to 1/4). The 0/0 is a removable hole you can patch with f(2) = 1/4.',
+        'It would blow up if the denominator alone vanished, but the numerator vanishes too — the factors cancel, leaving a finite limit. (The genuine blow-up is at x = −2.)',
+        'A jump needs disagreeing one-sided limits; here both sides approach 1/4, so it is removable.',
+        'The original function is undefined at x = 2 (0/0), so it is discontinuous there — just healably so.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'To evaluate ∫x²·eˣ dx by integration by parts, what first choice of u makes progress?',
+      options: [
+        'u = x²  (differentiating drops the power to 2x, simplifying the leftover integral)',
+        'u = eˣ  (its derivative never simplifies)',
+        'u = x²·eˣ  (the whole integrand)',
+        'Use partial fractions instead',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: pick u = x² and dv = eˣ dx. Differentiating x² to 2x lowers the power, so repeating parts once more finishes it — the algebraic factor is the right u (the "A" in LIATE).',
+        'Choosing u = eˣ leaves the polynomial to integrate and the exponential to differentiate — the power never goes away, so you make no progress.',
+        'Taking u as the entire integrand defeats the purpose of splitting the product; you must divide it into u and dv.',
+        'Partial fractions is for ratios of polynomials; there is no rational function here, so it does not apply.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'You approximate sin(x) by the first term of its Taylor series, sin(x) ≈ x. When is this approximation most trustworthy?',
+      options: [
+        'When x is small (near 0) — the dropped x³/6 term is then negligible',
+        'When x is large — bigger angles fit the line better',
+        'For every x equally, since it is a series',
+        'Only exactly at x = π',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the next term is −x³/6, which is tiny for small x but grows fast as x increases — so sin(x) ≈ x is excellent near 0 and degrades as x moves away.',
+        'The opposite: for large x the neglected cubic term is large and the straight line diverges badly from the sine wave.',
+        'A truncated series is not uniformly accurate; it is a local approximation, best near the expansion point (here 0).',
+        'sin(x) ≈ x is accurate near 0, not at π (where sin π = 0 but the approximation gives π ≈ 3.14).',
       ],
     },
   ],
