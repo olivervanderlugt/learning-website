@@ -121,6 +121,9 @@ import { elecExamLesson } from './elec-exam'
 import { physStaticsLesson } from './phys-statics'
 import { physStatics2Lesson } from './phys-statics-2'
 import { physStatics3Lesson } from './phys-statics-3'
+import { progPythonLesson } from './prog-python'
+import { progPython2Lesson } from './prog-python-2'
+import { progPython3Lesson } from './prog-python-3'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -245,4 +248,7 @@ export const lessons: Record<string, Lesson> = {
   'phys-statics': physStaticsLesson,
   'phys-statics-2': physStatics2Lesson,
   'phys-statics-3': physStatics3Lesson,
+  'prog-python': progPythonLesson,
+  'prog-python-2': progPython2Lesson,
+  'prog-python-3': progPython3Lesson,
 }

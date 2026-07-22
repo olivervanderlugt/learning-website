@@ -7,7 +7,7 @@ export const progExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — think like the interpreter',
       body: [
-        'Eighteen questions across the whole module — variables, loops, functions, arrays, recursion, debugging, pointers and bits — all NEW, no repeats from the lesson quizzes. No code runner this time: trace every snippet in your head, the way the machine would.',
+        'Twenty-two questions across the whole module — variables, loops, functions, arrays, recursion, debugging, pointers, bits and Python — all NEW, no repeats from the lesson quizzes. No code runner this time: trace every snippet in your head, the way the machine would.',
         'Score 80% and Programming Fundamentals is sealed. Below that costs nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -281,6 +281,78 @@ export const progExamLesson: Lesson = {
         'A leak is un-freed allocation; this is an out-of-bounds WRITE, a different and more dangerous class of bug.',
         'C arrays are fixed-size and never grow — the write simply lands outside them.',
         'C does no bounds checking, so it compiles cleanly and fails only at runtime — that’s exactly what makes it dangerous.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Project A pins a library at version 1.0; project B needs version 2.0 of the SAME library. Install both system-wide and they clash. How does giving each project its own virtual environment fix this?',
+      options: [
+        'Each venv holds its own isolated set of installed packages, so A keeps 1.0 and B keeps 2.0 without ever colliding',
+        'The venv makes Python run faster, and the speed-up sidesteps the version clash',
+        'Activating a venv upgrades the system Python to the newest library version everywhere',
+        'You merge both projects into a single shared venv so they use one copy of the library',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: a venv is a per-project sandbox of packages. Two projects, two venvs, two independent copies of the library — the conflict simply can’t happen.',
+        'Speed has nothing to do with it — a venv changes WHERE packages install (a private folder), not how fast code runs.',
+        'The opposite of isolation: a venv deliberately leaves the system Python untouched, precisely so per-project installs can differ.',
+        'One shared venv recreates the exact clash — a single environment can only hold one version of a given library at a time.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Read this traceback. Which line names the actual error, and which line is the code that raised it?\n\nTraceback (most recent call last):\n  File "drive.py", line 12, in <module>\n    move(step)\n  File "drive.py", line 7, in move\n    return 100 / speed\nZeroDivisionError: division by zero',
+      options: [
+        'The BOTTOM line names the error (ZeroDivisionError); the line right above it, return 100 / speed, is the code that raised it',
+        'The TOP line (line 12, in <module>) names the error, because a traceback reads top to bottom',
+        'The move(step) call is the culprit, since it appears first and calls everything else',
+        'A traceback only shows the file name — you cannot tell which line failed from it',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: read a traceback bottom-up. The last line is the exception and its message; the frame just above it is the deepest call — return 100 / speed — where it actually blew up.',
+        'Top-down is backwards: the top frame is the OUTERMOST call (<module>). The real failure is at the bottom, deepest in the call chain.',
+        'move(step) is only the caller on the way in — it is not where the division by zero happened. Follow the stack down to the raising line.',
+        'The traceback pinpoints it exactly: file drive.py, line 7, inside move. That specificity is the whole point of reading it.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A program runs `with open("log.txt", "w") as f:` and then an exception is thrown INSIDE the with-block, before it finishes. What does the `with` statement guarantee?',
+      options: [
+        'The file is still closed automatically as the block is exited — `with` closes it whether the block finishes normally or blows up',
+        'Nothing — the exception skips the close, so the file leaks open',
+        'The exception is swallowed and the program keeps running past the block',
+        'The partly written file is automatically rolled back to its previous contents',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: that is exactly what a context manager is for — its cleanup (closing the file) runs on the way out of the block, even when an exception tears the block short.',
+        'The leak is what `with` PREVENTS — a plain `f = open(...)` could leak on an exception, which is the whole reason to use `with`.',
+        '`with` closes the file but does NOT suppress the error — the exception still propagates out; it just leaves a properly closed file behind.',
+        'There is no rollback — opening in "w" already truncated the file, and `with` only guarantees the close, not any undo of the writes.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'What does `re.findall(r"\\d+", "unit 3 has 27 bolts and 4 gears")` return?',
+      options: [
+        "['3', '27', '4'] — a list of every run of consecutive digits, each as a string",
+        '[3, 27, 4] — a list of integers, since the digits are numbers',
+        "['3274'] — every digit in the text concatenated into one string",
+        "'3' — just the first match found",
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: \\d+ matches one-or-more digits greedily, and findall returns EVERY non-overlapping run — "3", "27", "4" — always as strings, never converted to numbers.',
+        'findall returns strings, not ints — regex works on text. You would have to call int() on each to get numbers.',
+        'Each match is a separate maximal digit-run; findall keeps them as separate list items, it does not glue them together.',
+        "'3' would be re.search(...).group() — the FIRST match. findall collects ALL of them into a list.",
       ],
     },
   ],
