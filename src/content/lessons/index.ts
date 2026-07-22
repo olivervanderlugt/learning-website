@@ -124,6 +124,9 @@ import { physStatics3Lesson } from './phys-statics-3'
 import { progPythonLesson } from './prog-python'
 import { progPython2Lesson } from './prog-python-2'
 import { progPython3Lesson } from './prog-python-3'
+import { toolShellLesson } from './tool-shell'
+import { toolGitLesson } from './tool-git'
+import { toolsExamLesson } from './tools-exam'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -251,4 +254,7 @@ export const lessons: Record<string, Lesson> = {
   'prog-python': progPythonLesson,
   'prog-python-2': progPython2Lesson,
   'prog-python-3': progPython3Lesson,
+  'tool-shell': toolShellLesson,
+  'tool-git': toolGitLesson,
+  'tools-exam': toolsExamLesson,
 }
