@@ -145,6 +145,9 @@ export const nodes: KnowledgeNode[] = [
     x: 560,
     y: 0,
     hasLesson: true,
+    // Teaches if/else + loops hands-on; types touched only as strings/numbers.
+    skills: ['control-flow'],
+    skillsPartial: ['variables-and-data-types'],
   },
   {
     id: 'prog-functions',
@@ -159,6 +162,8 @@ export const nodes: KnowledgeNode[] = [
     x: 560,
     y: 200,
     hasLesson: true,
+    // Free (non-method) functions and abstraction, taught hands-on.
+    skills: ['functions'],
   },
   {
     id: 'prog-data',
@@ -173,6 +178,8 @@ export const nodes: KnowledgeNode[] = [
     x: 560,
     y: 400,
     hasLesson: true,
+    // Arrays + object records at intro level; stacks/hash-maps only previewed.
+    skillsPartial: ['data-structures'],
   },
   // Depth chain (Stage 1): deepens below-LEFT of prog-data (col x300) so the
   // east/south-bound corridors out of prog-data/-3 (→db, →algo, →os, →ros)
@@ -205,6 +212,9 @@ export const nodes: KnowledgeNode[] = [
     x: 240,
     y: 820,
     hasLesson: true,
+    // Debugging is taught in depth; testing is concept-only (hand-rolled ===, no framework).
+    skills: ['debugging'],
+    skillsPartial: ['unit-tests', 'automated-testing'],
   },
   // prog-c chain (Stage 1 CS-systems): pointers → malloc/linked-list → bits/bugs.
   // Placed in the reserved x0 column (y440-840), ABOVE prog-exam and LEFT of the
@@ -224,6 +234,8 @@ export const nodes: KnowledgeNode[] = [
     x: 0,
     y: 440,
     hasLesson: true,
+    // Real C: pointers, the memory model, & vs *, arrays as pointer arithmetic.
+    skills: ['c'],
   },
   {
     id: 'prog-c-2',
@@ -238,6 +250,8 @@ export const nodes: KnowledgeNode[] = [
     x: 0,
     y: 640,
     hasLesson: true,
+    // C plus manual heap management: malloc/free, structs, linked list, leaks.
+    skills: ['c', 'memory-management'],
   },
   {
     id: 'prog-c-3',
@@ -252,6 +266,8 @@ export const nodes: KnowledgeNode[] = [
     x: 0,
     y: 840,
     hasLesson: true,
+    // C bit manipulation plus the classic memory bugs (overflow, use-after-free, leaks).
+    skills: ['c', 'memory-management'],
   },
   {
     id: 'prog-exam',
@@ -980,6 +996,8 @@ export const nodes: KnowledgeNode[] = [
     x: 620,
     y: 1500,
     hasLesson: true,
+    // Complexity analysis hands-on (growth families, worst-case) — core algorithmic reasoning.
+    skills: ['algorithms'],
   },
   {
     id: 'algo-structures',
@@ -994,6 +1012,8 @@ export const nodes: KnowledgeNode[] = [
     x: 870,
     y: 1700,
     hasLesson: true,
+    // Arrays, stacks, queues, hash maps taught with their cost trade-offs — usable data structures.
+    skills: ['data-structures'],
   },
   {
     id: 'algo-graphs',
@@ -1008,6 +1028,8 @@ export const nodes: KnowledgeNode[] = [
     x: 1120,
     y: 1900,
     hasLesson: true,
+    // BFS/Dijkstra/A* graph search taught to usable depth (with a playable pathfinder).
+    skills: ['algorithms'],
   },
   // Algorithms depth chain (tier 1). ai-search was moved right to (1400,2500)
   // to free the algo-graphs→ai-search corridor at x1120, letting algo-paths/dp
@@ -1029,6 +1051,8 @@ export const nodes: KnowledgeNode[] = [
     y: 2100,
     tier: 1,
     hasLesson: true,
+    // Merge sort implemented, recurrence, lower bound, stability — algorithm design at depth.
+    skills: ['algorithms'],
   },
   {
     id: 'algo-dp',
@@ -1044,6 +1068,8 @@ export const nodes: KnowledgeNode[] = [
     y: 2300,
     tier: 1,
     hasLesson: true,
+    // Dynamic programming: memoization/tabulation coded to usable depth.
+    skills: ['algorithms'],
   },
   {
     id: 'algo-paths',
@@ -1059,6 +1085,8 @@ export const nodes: KnowledgeNode[] = [
     y: 2300,
     tier: 1,
     hasLesson: true,
+    // Dijkstra's relaxation coded, greedy proof, A* — shortest-path algorithm at depth.
+    skills: ['algorithms'],
   },
   {
     id: 'algo-exam',
@@ -1118,6 +1146,8 @@ export const nodes: KnowledgeNode[] = [
     x: 0,
     y: 1900,
     hasLesson: true,
+    // Only GET appears (as illustration) + status codes; the method verbs are never taught.
+    skillsPartial: ['http-methods'],
   },
   // Networks depth chain: hands-on transport. Grown LEFTWARD (x-280, where
   // net-exam already lived) — networks is the leftmost domain, so this is the
@@ -1200,6 +1230,8 @@ export const nodes: KnowledgeNode[] = [
     x: 300,
     y: 2700,
     hasLesson: true,
+    // Tables/keys/JOIN-as-lookup only; normalisation as an informal principle, no ER/decomposition.
+    skillsPartial: ['database-design', 'normalisation'],
   },
   {
     id: 'db-sql',
@@ -1214,6 +1246,8 @@ export const nodes: KnowledgeNode[] = [
     x: 300,
     y: 2900,
     hasLesson: true,
+    // SELECT/WHERE/JOIN hands-on; GROUP BY conceptual; no DDL, no subqueries.
+    skillsPartial: ['sql'],
   },
   {
     id: 'db-transactions',
@@ -2115,6 +2149,7 @@ const resourcesByNode: Record<string, Resource[]> = {
   'db-relational': [
     { type: 'course', title: 'SQLBolt — interactive lessons', url: 'https://sqlbolt.com', note: 'Learn tables and queries by typing real SQL in the browser — start here.' },
     { type: 'article', title: 'SQLite — When to use', url: 'https://www.sqlite.org/whentouse.html', note: 'Why a single-file database powers phones, planes and (soon) your robot logs.' },
+    { type: 'course', title: 'freeCodeCamp — Relational Database Certification (free)', url: 'https://www.freecodecamp.org/learn/relational-database/', note: 'Build real schemas in PostgreSQL from the Bash shell — the hands-on schema-design, normalisation and Git practice this lesson only introduces.' },
   ],
   'db-sql': [
     { type: 'course', title: 'SQLBolt — SELECT/WHERE/JOIN drills', url: 'https://sqlbolt.com', note: 'Interactive practice for every verb in this lesson.' },

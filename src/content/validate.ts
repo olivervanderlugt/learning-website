@@ -1,4 +1,5 @@
 import { domains, nodes, nodeById } from './curriculum'
+import { essentialSkills } from './skills'
 import { lessons } from './lessons'
 import { puzzles } from './puzzles'
 import { games } from '../components/games'
@@ -31,6 +32,21 @@ export function validateContent(): string[] {
       if (!/^https?:\/\//.test(r.url)) err(`Node ${n.id} resource "${r.title}" has a non-http url`)
       if (!r.note?.trim()) err(`Node ${n.id} resource "${r.title}" has no note`)
     }
+  }
+
+  // --- Employability skill tags: ids resolve, no field overlap, no dup taxonomy ---
+  const skillIds = new Set<string>()
+  for (const sk of essentialSkills) {
+    if (skillIds.has(sk.id)) err(`Duplicate essential-skill id: ${sk.id}`)
+    skillIds.add(sk.id)
+  }
+  for (const n of nodes) {
+    for (const s of n.skills ?? [])
+      if (!skillIds.has(s)) err(`Node ${n.id} tags unknown skill "${s}" in skills`)
+    for (const s of n.skillsPartial ?? [])
+      if (!skillIds.has(s)) err(`Node ${n.id} tags unknown skill "${s}" in skillsPartial`)
+    for (const s of n.skills ?? [])
+      if (n.skillsPartial?.includes(s)) err(`Node ${n.id} tags skill "${s}" in both skills and skillsPartial`)
   }
 
   // --- Exams must ask FRESH questions, never reuse a lesson quiz verbatim ---

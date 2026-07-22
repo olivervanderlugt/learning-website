@@ -5,6 +5,7 @@ import SettingsPanel from './components/SettingsPanel'
 import RoadmapView from './components/RoadmapView'
 import ReviewQueue from './components/ReviewQueue'
 import ProgressPanel from './components/ProgressPanel'
+import SkillsPanel from './components/SkillsPanel'
 import CumulativeReviewFlow from './components/CumulativeReviewFlow'
 import AchievementToasts from './components/AchievementToasts'
 import { cumulativeReviewEligible } from './components/cumulativeReview'
@@ -18,6 +19,7 @@ function App() {
   const masteredNodeIds = useStore((s) => s.masteredNodeIds)
   const startCumulativeReview = useStore((s) => s.startCumulativeReview)
   const [roadmapOpen, setRoadmapOpen] = useState(false)
+  const [skillsOpen, setSkillsOpen] = useState(false)
 
   const canCumulativeReview = cumulativeReviewEligible(masteredNodeIds)
 
@@ -67,6 +69,17 @@ function App() {
           >
             🧭 Roadmap
           </button>
+          <button
+            onClick={() => setSkillsOpen((o) => !o)}
+            title={skillsOpen ? 'Back to the map' : 'Employability skills coverage'}
+            className={`rounded-lg border px-3 py-1.5 text-sm transition ${
+              skillsOpen
+                ? 'border-cyan-500/50 bg-cyan-500/10 text-cyan-300'
+                : 'border-slate-700 text-slate-300 hover:bg-slate-800'
+            }`}
+          >
+            🎯 Skills
+          </button>
           <ProgressPanel />
           <button
             onClick={toggleTheme}
@@ -89,6 +102,7 @@ function App() {
           <SkillTreeView />
         )}
         {roadmapOpen && <RoadmapView onClose={() => setRoadmapOpen(false)} />}
+        {skillsOpen && <SkillsPanel onClose={() => setSkillsOpen(false)} />}
         <AchievementToasts />
       </main>
     </div>

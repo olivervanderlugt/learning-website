@@ -37,6 +37,10 @@ export interface KnowledgeNode {
   hasLesson?: boolean
   /** Node is a module exam (mixed retrieval test over several nodes). */
   isExam?: boolean
+  /** Employability skills this node teaches at usable depth (EssentialSkill ids). */
+  skills?: string[]
+  /** Skills this node touches without reaching usable depth (EssentialSkill ids). */
+  skillsPartial?: string[]
   /**
    * Content layer for the map's view selector: 0 = essentials/intro (default),
    * 1 = depth chain. Future stages claim higher tiers (2 = rigor, 3 = labs…).
@@ -52,6 +56,40 @@ export interface Domain {
   title: string
   /** Domain-level prerequisites (domain ids). */
   prereqDomainIds: string[]
+}
+
+// ---------- Employability skills (coverage lens) ----------
+
+export type SkillFamily =
+  | 'languages'
+  | 'programming-concepts'
+  | 'tooling-and-testing'
+  | 'data-and-databases'
+  | 'web-and-apis'
+  | 'analytics-and-bi'
+
+/** One skill from the employability reference set (see docs/employability-skills-coverage.md §3). */
+export interface EssentialSkill {
+  id: string
+  name: string
+  family: SkillFamily
+  /** Reference-course numbers evidencing this skill — provenance only, never tracked. */
+  sources: number[]
+}
+
+/** Coverage of a single skill by the graph — 'covered' teaches it at usable depth. */
+export type SkillCoverageState = 'gap' | 'partial' | 'covered'
+
+/** Derived per-skill coverage — computed on the fly from node tags + mastery, never stored. */
+export interface SkillCoverage {
+  skill: EssentialSkill
+  /** Nodes that teach this skill at usable depth (tagged in `skills`). */
+  nodeIds: string[]
+  /** Nodes that only touch this skill (tagged in `skillsPartial`). */
+  partialNodeIds: string[]
+  /** How many of the covering nodes the learner has mastered. */
+  masteredCount: number
+  state: SkillCoverageState
 }
 
 /**
