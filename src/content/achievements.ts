@@ -47,7 +47,10 @@ const depthChainIntros = [
 ]
 
 export function computeStats(p: ProgressSlice): Stats {
-  const mastered = new Set(p.masteredNodeIds)
+  // Guard against stale ids in a persisted/imported blob — count only real nodes,
+  // so mastered.size and the per-domain math never over-count deleted content.
+  const nodeIds = new Set(nodes.map((n) => n.id))
+  const mastered = new Set(p.masteredNodeIds.filter((id) => nodeIds.has(id)))
   const perDomain: DomainStat[] = domains.map((d) => {
     const ns = nodes.filter((n) => n.domainId === d.id)
     const exam = ns.find((n) => n.isExam)

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { MAX_TIER } from './content/curriculum'
+import { MAX_TIER, nodeById } from './content/curriculum'
 import type { NodeStatus, Progress, ReviewState } from './types'
 
 // ---- Spaced repetition (Stage 4) ----
@@ -173,11 +173,13 @@ export const useStore = create<AppState>()(
           isNum((x as ReviewState).lastSeen) && isNum((x as ReviewState).intervalDays)
         set((s) => ({
           version: 1,
-          xp: isNum(data.xp) ? data.xp : 0,
+          // XP is a non-negative integer; a hand-edited export could carry junk.
+          xp: isNum(data.xp) ? Math.max(0, Math.floor(data.xp)) : 0,
           completedScreens: strings(data.completedScreens),
           masteredNodeIds: strings(data.masteredNodeIds),
           knownNodeIds: strings(data.knownNodeIds),
-          quizScores: record(data.quizScores, isNum),
+          // Quiz scores are fractions in [0,1] — drop anything out of range.
+          quizScores: record(data.quizScores, (x): x is number => isNum(x) && x >= 0 && x <= 1),
           lessonProgress: record(data.lessonProgress, isNum),
           navStack: [],
           reviews: record(data.reviews, isReview),
@@ -221,6 +223,8 @@ export function dueReviewIds(
   now = Date.now(),
 ): string[] {
   return masteredNodeIds.filter((id) => {
+    // Ignore ids that no longer exist (a stale imported/persisted blob).
+    if (!nodeById.has(id)) return false
     const r = reviews[id]
     return r !== undefined && now >= r.lastSeen + r.intervalDays * DAY_MS
   })

@@ -254,9 +254,11 @@ function ResultsScreen({
       <ExtraPractice
         questions={lesson.extraPractice}
         onExit={() => setPracticing(false)}
-        onFinish={() => {
-          // Finishing the whole pool counts as a successful review too.
-          completeReview(nodeId, true)
+        onFinish={(passRate) => {
+          // Finishing the whole pool counts as a review — but only a SUCCESSFUL
+          // one if the learner actually got most of it right (same 0.8 bar as a
+          // quiz retake); answering wrong shouldn't push the next review out.
+          completeReview(nodeId, passRate >= 0.8)
           setPracticing(false)
         }}
       />
@@ -358,10 +360,12 @@ function ExtraPractice({
   questions: QuizQuestion[]
   /** Bail out early — does NOT count as a completed review. */
   onExit: () => void
-  /** Reached the end of the pool — counts as a completed review. */
-  onFinish: () => void
+  /** Reached the end of the pool — passRate is correct/total across the run. */
+  onFinish: (passRate: number) => void
 }) {
   const [i, setI] = useState(0)
+  // How many the learner got right across the run (onAnswer fires once/question).
+  const correct = useRef(0)
   const last = i === questions.length - 1
   // Stable object per question — QuizScreenView's option shuffle is keyed on the
   // screen object, so a fresh object every render would reshuffle mid-question
@@ -383,8 +387,10 @@ function ExtraPractice({
           screen={quizScreen}
           questionNumber={i + 1}
           totalQuestions={questions.length}
-          onAnswer={() => {}}
-          onDone={() => (last ? onFinish() : setI(i + 1))}
+          onAnswer={(ok) => {
+            if (ok) correct.current += 1
+          }}
+          onDone={() => (last ? onFinish(correct.current / questions.length) : setI(i + 1))}
         />
       </div>
     </div>

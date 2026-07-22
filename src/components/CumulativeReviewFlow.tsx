@@ -135,7 +135,7 @@ function CumulativeResults({
           {strong ? 'Knowledge holds up!' : 'Refreshed a few memories'}
         </h2>
         <p className="mt-2 text-slate-300">
-          {correct}/{total} correct across {new Set(items.map((i) => i.domainId)).size} subjects
+          {correct}/{total} correct across {new Set(items.map((i) => i.domainId)).size} domains
           <span className="ml-2 font-bold text-amber-300">{pct}%</span>
         </p>
         <p className="mt-2 text-xs leading-relaxed text-slate-500">

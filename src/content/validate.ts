@@ -47,6 +47,9 @@ export function validateContent(): string[] {
       if (!skillIds.has(s)) err(`Node ${n.id} tags unknown skill "${s}" in skillsPartial`)
     for (const s of n.skills ?? [])
       if (n.skillsPartial?.includes(s)) err(`Node ${n.id} tags skill "${s}" in both skills and skillsPartial`)
+    // Exams test, they don't teach — tags on an exam would silently inflate coverage.
+    if (n.isExam && ((n.skills?.length ?? 0) > 0 || (n.skillsPartial?.length ?? 0) > 0))
+      err(`Exam node ${n.id} carries skill tags (exams test, they don't teach — remove skills/skillsPartial)`)
   }
 
   // --- Exams must ask FRESH questions, never reuse a lesson quiz verbatim ---
@@ -153,6 +156,19 @@ function validateLesson(id: string, lesson: Lesson, err: (m: string) => void) {
   })
 
   if (quizCount === 0) err(`Lesson ${id} has no retrieval quiz (pedagogy requires ending quizzes)`)
+
+  // The quiz block must be the contiguous TAIL of the lesson: the player's
+  // resume/retry restarts from the first quiz index and assumes everything from
+  // there to the end is quiz. Enforce for future authoring (current data passes).
+  if (quizCount > 0) {
+    const kinds = lesson.screens.map((s) => s.kind)
+    if (kinds[kinds.length - 1] !== 'quiz')
+      err(`Lesson ${id} must end on a quiz (last screen is ${kinds[kinds.length - 1]})`)
+    const firstQuiz = kinds.indexOf('quiz')
+    for (let i = firstQuiz; i < kinds.length; i++)
+      if (kinds[i] !== 'quiz')
+        err(`Lesson ${id} has a non-quiz screen (${kinds[i]}) inside its quiz tail — the quiz block must be contiguous`)
+  }
 
   for (const [j, q] of (lesson.extraPractice ?? []).entries()) {
     if ((q.explanations?.length ?? 0) !== (q.options?.length ?? 0)) err(`Lesson ${id} extraPractice[${j}]: explanations/options mismatch`)

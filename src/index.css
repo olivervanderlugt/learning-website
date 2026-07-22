@@ -39,6 +39,18 @@ html.light {
   --color-orange-300: #c2410c;
   --color-blue-300: #1d4ed8;
 
+  /* -200 accents = text-on-tinted-fill (committed quiz answers, unlock/achievement chips);
+     one Tailwind stop up (600-level) from the -300 overrides so they stay legible on light tinted cards. */
+  --color-cyan-200: #0891b2;
+  --color-violet-200: #7c3aed;
+  --color-amber-200: #d97706;
+  --color-emerald-200: #059669;
+  --color-rose-200: #e11d48;
+  --color-fuchsia-200: #c026d3;
+  --color-teal-200: #0d9488;
+  --color-orange-200: #ea580c;
+  --color-blue-200: #2563eb;
+
   --color-cs: #0891b2;
   --color-math: #7c3aed;
   --color-physics: #b45309;
