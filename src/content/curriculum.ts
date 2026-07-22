@@ -269,16 +269,72 @@ export const nodes: KnowledgeNode[] = [
     // C bit manipulation plus the classic memory bugs (overflow, use-after-free, leaks).
     skills: ['c', 'memory-management'],
   },
+  // prog-python chain (Phase-5 employability): Python as a second language →
+  // exceptions/files → regex/pytest. Hangs off the HONEST prereq prog-data.
+  // Placed in the open right gutter, dropped LOW (y1000-1400) because the mid
+  // gutter (y~790/890) is swept by the math-logic→algo-bigo and
+  // prog-data→os-processes corridors — the checker confirms zero crossings and
+  // ~84px clearance in BOTH tiers here. No `code` screens (app runner is JS-only;
+  // mastery is quiz-based). No explicit tier: prog-python auto-0, -2/-3 auto-1.
+  {
+    id: 'prog-python',
+    title: 'Python: A Second Language',
+    subject: 'cs',
+    domainId: 'programming',
+    description:
+      'Learn Python by mapping it onto the JavaScript you already know — install it, run the REPL and files, create a venv, and translate JS→Python line by line.',
+    whyItMatters:
+      'Python is the language of ROS 2 tooling and rclpy node scripts, quick sensor-log-and-plot one-offs, and modern ML — the fastest way to prototype a robot idea.',
+    prereqIds: ['prog-data'],
+    x: 960,
+    y: 1000,
+    hasLesson: true,
+    // Second real language taught hands-on; the terminal/venv work touches Bash without teaching it.
+    skillsPartial: ['python', 'bash'],
+  },
+  {
+    id: 'prog-python-2',
+    title: 'Exceptions & Files: Programs That Survive Reality',
+    subject: 'cs',
+    domainId: 'programming',
+    description:
+      'Errors as typed values, reading a traceback bottom-up, try/except/else/finally (and why bare except is a trap), and safe file I/O with `with open(...)`.',
+    whyItMatters:
+      'Real sensors unplug and logs corrupt; robot code that names and handles each failure keeps running instead of crashing on the first bad line.',
+    prereqIds: ['prog-python'],
+    x: 960,
+    y: 1200,
+    hasLesson: true,
+    // Exceptions and file I/O taught at usable depth, in Python.
+    skills: ['python', 'exceptions', 'file-io'],
+  },
+  {
+    id: 'prog-python-3',
+    title: 'Regex & pytest: Text Patterns and Tested Code',
+    subject: 'cs',
+    domainId: 'programming',
+    description:
+      'Regex from zero (classes, quantifiers, anchors, groups) as an FSM in disguise, then pytest — writing `test_*` functions, running the suite, and edge-case-first testing.',
+    whyItMatters:
+      'Parsing telemetry and validating input is regex work, and an automated test suite is how a robot codebase ships a fix without silently breaking something else.',
+    prereqIds: ['prog-python-2'],
+    x: 960,
+    y: 1400,
+    hasLesson: true,
+    // Regex and real pytest (unit testing) at usable depth; automated-testing as a discipline stays partial.
+    skills: ['python', 'regular-expressions', 'unit-tests'],
+    skillsPartial: ['automated-testing'],
+  },
   {
     id: 'prog-exam',
     title: 'Module Exam: Programming',
     subject: 'cs',
     domainId: 'programming',
     description:
-      'Eighteen fresh questions across variables, control flow, functions, data structures, recursion, debugging, pointers and bits — including code you trace in your head. 80% to pass.',
+      'Twenty-two fresh questions across variables, control flow, functions, data structures, recursion, debugging, pointers, bits and Python — including code you trace in your head. 80% to pass.',
     whyItMatters:
       'If you can predict what code does without running it, you actually speak the language — that is what this exam checks.',
-    prereqIds: ['prog-variables', 'prog-functions', 'prog-data', 'prog-data-2', 'prog-data-3', 'prog-c', 'prog-c-2', 'prog-c-3'],
+    prereqIds: ['prog-variables', 'prog-functions', 'prog-data', 'prog-data-2', 'prog-data-3', 'prog-c', 'prog-c-2', 'prog-c-3', 'prog-python', 'prog-python-2', 'prog-python-3'],
     x: 0,
     y: 1020,
     hasLesson: true,
@@ -2097,6 +2153,21 @@ const resourcesByNode: Record<string, Resource[]> = {
   'prog-c-3': [
     { type: 'article', title: 'Bit manipulation — masks, shifts & register tricks', url: 'https://graphics.stanford.edu/~seander/bithacks.html', note: 'Stanford’s legendary “Bit Twiddling Hacks” — every set/clear/test idiom and more.' },
     { type: 'course', title: 'CS50x — Buffer overflow & memory bugs', url: 'https://cs50.harvard.edu/x/', note: 'How out-of-bounds writes corrupt memory and become security holes.' },
+  ],
+  'prog-python': [
+    { type: 'article', title: 'The Python Tutorial', url: 'https://docs.python.org/3/tutorial/', note: 'The official tutorial — the canonical reference for syntax, the REPL, and running files.' },
+    { type: 'course', title: 'CS50’s Introduction to Programming with Python', url: 'https://cs50.harvard.edu/python/', note: 'Free Harvard course; start here for a paced, project-driven path into Python.' },
+    { type: 'book', title: 'Automate the Boring Stuff with Python', url: 'https://automatetheboringstuff.com', note: 'Free online book — practical Python for real tasks, gentle and hands-on.' },
+  ],
+  'prog-python-2': [
+    { type: 'article', title: 'Errors and Exceptions', url: 'https://docs.python.org/3/tutorial/errors.html', note: 'Official tutorial chapter on try/except/else/finally and the exception hierarchy.' },
+    { type: 'article', title: 'Reading and Writing Files', url: 'https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files', note: 'Official reference for `with open(...)`, file modes, and iterating lines.' },
+    { type: 'book', title: 'Automate the Boring Stuff — Files & Debugging', url: 'https://automatetheboringstuff.com/2e/chapter9/', note: 'Worked file-handling and debugging examples in the same practical style.' },
+  ],
+  'prog-python-3': [
+    { type: 'article', title: 'Regular Expression HOWTO', url: 'https://docs.python.org/3/howto/regex.html', note: 'Official `re` walkthrough — classes, quantifiers, groups, search vs findall.' },
+    { type: 'interactive', title: 'regex101', url: 'https://regex101.com', note: 'Live regex tester with a match explainer — paste a pattern and watch it match.' },
+    { type: 'article', title: 'pytest documentation', url: 'https://docs.pytest.org', note: 'Official docs — install, test discovery, assertions, and running the suite.' },
   ],
   'os-processes': [
     { type: 'video', title: 'CS50 — Operating Systems concepts', url: 'https://cs50.harvard.edu/x/', note: 'Context for how the OS sits between your code and the hardware.' },
