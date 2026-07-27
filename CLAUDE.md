@@ -54,13 +54,11 @@ Vite + React + TS · Tailwind v4 (@tailwindcss/vite, no config file) · zustand+
 - Dark theme, vivid accent per subject: cs=cyan, math=violet, physics=amber, engineering=emerald, robotics=rose.
 - The `sandbox` Screen kind is defined but unused so far (adder lessons used gatePuzzles + games instead); free-play sandbox is a future feature.
 
-## Deploy (manual — gh CLI not installed)
-1. Create an empty repo on github.com (e.g. `learning-website`, private is fine). No README/gitignore.
-2. In `~/Claude/Projects/Learning website`:
-   `git remote add origin https://github.com/<username>/learning-website.git && git push -u origin main`
-   (or `master` — check `git branch`).
-3. On vercel.com: Add New → Project → import the repo. Vercel auto-detects Vite. Build command `npm run build`, output `dist` (defaults). Deploy.
-4. Every future `git push` auto-deploys.
+## GitHub & deploy
+- **Remote is LIVE (2026-07-27)**: `origin = git@github.com:olivervanderlugt/learning-website.git` (public repo). Auth from Ollie's MacBook = SSH deploy key (`~/.ssh/id_ed25519`, added as a repo deploy key with write access). Push with plain `git push` — commit each session as usual, then push so other devices stay in sync.
+- On another device: `git clone git@github.com:olivervanderlugt/learning-website.git && npm install` (that device needs its own GitHub auth — its own SSH key or HTTPS login).
+- Vercel (still TODO, now trivial): on vercel.com → Add New → Project → import the repo. Auto-detects Vite (build `npm run build`, output `dist`). Every future `git push` then auto-deploys.
+- gh CLI + Homebrew are NOT installed on this Mac.
 
 ## Newer conventions (added with the comprehensiveness pass)
 - `resources?: Resource[]` on KnowledgeNode → "Go deeper" links (video/interactive/article/book/course) in the detail panel; curated in `resourcesByNode` at the bottom of curriculum.ts.
