@@ -17,6 +17,7 @@ export const domains: Domain[] = [
   { id: 'chemistry', title: 'Chemistry', prereqDomainIds: [] },
   { id: 'electronics', title: 'Electronics & Circuit Design', prereqDomainIds: ['physics'] },
   { id: 'mechanical-engineering', title: 'Mechanical Engineering', prereqDomainIds: ['physics'] },
+  { id: 'applied-software', title: 'Applied Software Engineering', prereqDomainIds: ['programming'] },
 ]
 
 // Layout (2026-07 refactor — "streets" edition, built for depth-chain growth):
@@ -1375,6 +1376,63 @@ export const nodes: KnowledgeNode[] = [
     isExam: true,
   },
 
+  // ---- Applied Software Engineering (Phase-5 employability) — the developer
+  // tooling chain. NEW domain, subject `cs` (no new colour). Fresh cell in the
+  // open space BELOW the Security/DB clusters (x0-900, y≥3000). tool-shell hangs
+  // off the HONEST prereq prog-data (560,400) — a long southbound corridor that
+  // the bezier checker showed must thread the narrow lane between the Security
+  // column (x0-192) and the DB column (x300-492): a straight drop down the
+  // db↔algo gap only cleared algo-bigo by ~8px, so the chain routes down the
+  // sec↔db lane (edge centre ~216) and the nodes sit BELOW both columns
+  // (y≥3450, clear of sec-exam@3130 and db-exam@3380). Column x=120; exam bottom.
+  {
+    id: 'tool-shell',
+    title: 'The Shell: Talking to Your Computer',
+    subject: 'cs',
+    domainId: 'applied-software',
+    description:
+      'The text prompt behind every app: navigate with pwd/ls/cd, create and move files, compose tools with pipes and redirection, search with grep, and understand what a command even is.',
+    whyItMatters:
+      'Every robot deploy and debug session happens in a shell — over SSH into the robot, there are no windows to click, only the command line.',
+    prereqIds: ['prog-data'],
+    x: 120,
+    y: 3450,
+    hasLesson: true,
+    // The shell/command line taught at usable depth; this IS the Bash skill.
+    skills: ['bash'],
+  },
+  {
+    id: 'tool-git',
+    title: 'Git: A Time Machine for Code',
+    subject: 'cs',
+    domainId: 'applied-software',
+    description:
+      'Version control done right: snapshots not copies, init/add/commit, reading diffs and history, time-travel with checkout, branches as parallel universes, and pushing to GitHub.',
+    whyItMatters:
+      'Git is how robot code ships without bricking the robot — every change is reviewed, tracked, and revertible before it reaches real hardware.',
+    prereqIds: ['tool-shell'],
+    x: 120,
+    y: 3650,
+    hasLesson: true,
+    // Git taught at usable depth: the everyday workflow plus branching and remotes.
+    skills: ['git'],
+  },
+  {
+    id: 'tools-exam',
+    title: 'Module Exam: Applied Software',
+    subject: 'cs',
+    domainId: 'applied-software',
+    description:
+      'Ten fresh questions across the shell and the Git workflow — trace new commands and scenarios from memory. 80% to pass.',
+    whyItMatters:
+      'Shipping robot code means living in the shell and in Git — prove the everyday moves are second nature.',
+    prereqIds: ['tool-shell', 'tool-git'],
+    x: 120,
+    y: 3850,
+    hasLesson: true,
+    isExam: true,
+  },
+
   // ---- Robotics Bridge (x2280-3910, bands 1-2) — the CONVERGENCE cell ----
   // sensing top (3600,1400) under HCW/Physics; three columns below it:
   // kinematics x2560, control x2950 (control-4 slot at y2300), embedded/ros
@@ -2218,6 +2276,16 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'article', title: 'Regular Expression HOWTO', url: 'https://docs.python.org/3/howto/regex.html', note: 'Official `re` walkthrough — classes, quantifiers, groups, search vs findall.' },
     { type: 'interactive', title: 'regex101', url: 'https://regex101.com', note: 'Live regex tester with a match explainer — paste a pattern and watch it match.' },
     { type: 'article', title: 'pytest documentation', url: 'https://docs.pytest.org', note: 'Official docs — install, test discovery, assertions, and running the suite.' },
+  ],
+  'tool-shell': [
+    { type: 'course', title: 'MIT — The Missing Semester of Your CS Education', url: 'https://missing.csail.mit.edu/', note: 'The shell/command-line lectures — the course that teaches exactly the tools no class covers.' },
+    { type: 'interactive', title: 'explainshell.com', url: 'https://explainshell.com/', note: 'Paste any command and it breaks down every flag and pipe in plain English.' },
+    { type: 'book', title: 'The Linux Command Line (free)', url: 'https://linuxcommand.org/tlcl.php', note: 'William Shotts’ complete, friendly book on the shell — free PDF, works on macOS too.' },
+  ],
+  'tool-git': [
+    { type: 'book', title: 'Pro Git (free)', url: 'https://git-scm.com/book', note: 'The official Git book — the “Git Basics” and “Branching” chapters are the canonical explanation of everything here.' },
+    { type: 'interactive', title: 'Oh My Git!', url: 'https://ohmygit.org/', note: 'A free game that visualises commits and branches as you run real Git commands.' },
+    { type: 'interactive', title: 'Learn Git Branching', url: 'https://learngitbranching.js.org/', note: 'Interactive branch/merge visualiser — drill the parallel-universe model until it’s reflex.' },
   ],
   'os-processes': [
     { type: 'video', title: 'CS50 — Operating Systems concepts', url: 'https://cs50.harvard.edu/x/', note: 'Context for how the OS sits between your code and the hardware.' },
