@@ -12,6 +12,8 @@ import { mathLinalg5Lesson } from './math-linalg-5'
 import { mathCalculusLesson } from './math-calculus'
 import { mathCalculus2Lesson } from './math-calculus-2'
 import { mathCalculus3Lesson } from './math-calculus-3'
+import { mathCalculus4Lesson } from './math-calculus-4'
+import { mathCalculus5Lesson } from './math-calculus-5'
 import { progVariablesLesson } from './prog-variables'
 import { mathProbLesson } from './math-prob'
 import { mathProb2Lesson } from './math-prob-2'
@@ -139,6 +141,8 @@ export const lessons: Record<string, Lesson> = {
   'math-calculus': mathCalculusLesson,
   'math-calculus-2': mathCalculus2Lesson,
   'math-calculus-3': mathCalculus3Lesson,
+  'math-calculus-4': mathCalculus4Lesson,
+  'math-calculus-5': mathCalculus5Lesson,
   'prog-variables': progVariablesLesson,
   'math-prob': mathProbLesson,
   'math-prob-2': mathProb2Lesson,
