@@ -126,6 +126,9 @@ import { physStatics3Lesson } from './phys-statics-3'
 import { progPythonLesson } from './prog-python'
 import { progPython2Lesson } from './prog-python-2'
 import { progPython3Lesson } from './prog-python-3'
+import { progCsharpLesson } from './prog-csharp'
+import { progCsharp2Lesson } from './prog-csharp-2'
+import { progCsharp3Lesson } from './prog-csharp-3'
 import { toolShellLesson } from './tool-shell'
 import { toolGitLesson } from './tool-git'
 import { webHttpLesson } from './web-http'
@@ -261,6 +264,9 @@ export const lessons: Record<string, Lesson> = {
   'prog-python': progPythonLesson,
   'prog-python-2': progPython2Lesson,
   'prog-python-3': progPython3Lesson,
+  'prog-csharp': progCsharpLesson,
+  'prog-csharp-2': progCsharp2Lesson,
+  'prog-csharp-3': progCsharp3Lesson,
   'tool-shell': toolShellLesson,
   'tool-git': toolGitLesson,
   'web-http': webHttpLesson,

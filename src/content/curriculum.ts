@@ -326,16 +326,87 @@ export const nodes: KnowledgeNode[] = [
     skills: ['python', 'regular-expressions', 'unit-tests'],
     skillsPartial: ['automated-testing'],
   },
+  // prog-csharp chain (Phase-5 employability): the language → methods → .NET.
+  // A SECOND second-language on-ramp forking off the same honest prereq
+  // prog-data, sibling of prog-python rather than a continuation of it.
+  // LAYOUT: a parallel column at x-300, mirroring the prog-c column at x0 row
+  // for row (640/840) — the map's leftmost programming lane. A slot right of
+  // the python column (x1080-1240) was the obvious first guess and every
+  // variant failed the 25px bar: the incoming prog-data→prog-csharp edge and
+  // the outgoing prog-csharp-3→prog-exam edge both have to squeeze past the
+  // python column (best found 27px, with the node rects flush against
+  // prog-python). Relocating prog-exam to re-route those edges was searched too
+  // and made things strictly worse. x-300 y640/840/1040 clears everything by
+  // 43px with zero sub-30px items in either tier (scripted margin-max search).
+  // No `code` screens (app runner is JS-only; mastery is quiz-based, the proven
+  // prog-python local-toolchain pattern). Every command/output in the lessons
+  // was executed against a real .NET SDK 10.0.302. No explicit tier:
+  // prog-csharp auto-0, -2/-3 auto-1.
+  {
+    id: 'prog-csharp',
+    title: 'C#: Typed and Compiled',
+    subject: 'cs',
+    domainId: 'programming',
+    description:
+      'Install the .NET SDK, scaffold a project with `dotnet new console`, and meet a language that checks every type BEFORE it runs — declarations, integer division, control flow, and the culture trap that bites decimals.',
+    whyItMatters:
+      'C# is the language of Unity and most robot simulators, and a compiler that rejects a whole class of mistakes at your desk is the cheapest bug-fix you will ever get.',
+    prereqIds: ['prog-data'],
+    x: -300,
+    y: 640,
+    hasLesson: true,
+    // Teaches C# hands-on end to end. Types/casting get real coverage but not the
+    // full conversion story, so variables-and-data-types stays a touch; the SDK
+    // and CLI are used here but only EXPLAINED in prog-csharp-3.
+    skills: ['csharp'],
+    skillsPartial: ['variables-and-data-types', 'dotnet'],
+  },
+  {
+    id: 'prog-csharp-2',
+    title: 'Methods: Signatures, Overloads and Scope',
+    subject: 'cs',
+    domainId: 'programming',
+    description:
+      'The method signature as a compiler-enforced contract — parameters and return types, overload resolution, local scope and the call stack, static vs instance members, optional/named arguments and pass-by-value.',
+    whyItMatters:
+      'Every robot behaviour you write is a named, typed block of work someone else must call correctly — a signature is how you make that impossible to get wrong.',
+    prereqIds: ['prog-csharp'],
+    x: -300,
+    y: 840,
+    hasLesson: true,
+    // Methods at usable depth: signatures, overloading, scope, static vs instance,
+    // parameter passing — all executed against the real compiler.
+    skills: ['csharp', 'methods'],
+  },
+  {
+    id: 'prog-csharp-3',
+    title: '.NET: The Runtime, the CLI and When Things Break',
+    subject: 'cs',
+    domainId: 'programming',
+    description:
+      'SDK vs runtime, what `dotnet run` really does, IL and the JIT, namespaces and `using`, adding a real NuGet package, then exceptions — reading a .NET stack trace, try/catch/finally, and when to use TryParse instead.',
+    whyItMatters:
+      'Shipping code means knowing what the runtime needs, where the build output goes, and how to read the stack trace the robot prints at 3am.',
+    prereqIds: ['prog-csharp-2'],
+    x: -300,
+    y: 1040,
+    hasLesson: true,
+    // The .NET platform itself at usable depth (SDK/runtime split, build output,
+    // namespaces, NuGet). Exception handling and trace-reading are taught for
+    // real but the deep treatment lives in prog-python-2 / prog-data-3.
+    skills: ['csharp', 'dotnet'],
+    skillsPartial: ['exceptions', 'debugging'],
+  },
   {
     id: 'prog-exam',
     title: 'Module Exam: Programming',
     subject: 'cs',
     domainId: 'programming',
     description:
-      'Twenty-two fresh questions across variables, control flow, functions, data structures, recursion, debugging, pointers, bits and Python — including code you trace in your head. 80% to pass.',
+      'Twenty-six fresh questions across variables, control flow, functions, data structures, recursion, debugging, pointers, bits, Python and C#/.NET — including code you trace in your head. 80% to pass.',
     whyItMatters:
       'If you can predict what code does without running it, you actually speak the language — that is what this exam checks.',
-    prereqIds: ['prog-variables', 'prog-functions', 'prog-data', 'prog-data-2', 'prog-data-3', 'prog-c', 'prog-c-2', 'prog-c-3', 'prog-python', 'prog-python-2', 'prog-python-3'],
+    prereqIds: ['prog-variables', 'prog-functions', 'prog-data', 'prog-data-2', 'prog-data-3', 'prog-c', 'prog-c-2', 'prog-c-3', 'prog-python', 'prog-python-2', 'prog-python-3', 'prog-csharp', 'prog-csharp-2', 'prog-csharp-3'],
     x: 0,
     y: 1020,
     hasLesson: true,
@@ -2336,6 +2407,20 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'article', title: 'Regular Expression HOWTO', url: 'https://docs.python.org/3/howto/regex.html', note: 'Official `re` walkthrough — classes, quantifiers, groups, search vs findall.' },
     { type: 'interactive', title: 'regex101', url: 'https://regex101.com', note: 'Live regex tester with a match explainer — paste a pattern and watch it match.' },
     { type: 'article', title: 'pytest documentation', url: 'https://docs.pytest.org', note: 'Official docs — install, test discovery, assertions, and running the suite.' },
+  ],
+  'prog-csharp': [
+    { type: 'course', title: 'Foundational C# with Microsoft (free certification)', url: 'https://www.freecodecamp.org/learn/foundational-c-sharp-with-microsoft/', note: 'The course this chain is built from — Microsoft Learn modules plus a free Microsoft-branded certificate. Best recognition-per-hour in the whole reference list.' },
+    { type: 'article', title: 'A tour of the C# language', url: 'https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/', note: 'Microsoft’s own guided overview — types, statements and program structure, in the order you just learned them.' },
+    { type: 'course', title: 'Write your first code using C# (Get started with C#, Part 1)', url: 'https://learn.microsoft.com/en-us/training/paths/get-started-c-sharp-part-1/', note: 'Free Microsoft Learn path: six hands-on modules on syntax, literals, variables, string formatting and numeric operations.' },
+  ],
+  'prog-csharp-2': [
+    { type: 'article', title: 'Methods (C# programming guide)', url: 'https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/methods', note: 'The reference for signatures, overloading, optional/named arguments and `ref`/`out` — everything this lesson ran, written out properly.' },
+    { type: 'article', title: 'Top-level statements', url: 'https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/program-structure/top-level-statements', note: 'What the compiler wraps around your loose statements — the `Program.<Main>$` you will meet again in a stack trace.' },
+  ],
+  'prog-csharp-3': [
+    { type: 'article', title: 'What is .NET? An introduction', url: 'https://learn.microsoft.com/en-us/dotnet/core/introduction', note: 'The platform explained: SDK vs runtime, IL and the JIT, and what actually ships with an app.' },
+    { type: 'article', title: '.NET CLI command reference', url: 'https://learn.microsoft.com/en-us/dotnet/core/tools/', note: 'Every `dotnet` verb — new, restore, build, run, add package, publish — with its flags.' },
+    { type: 'course', title: 'Debug C# console applications', url: 'https://learn.microsoft.com/en-us/training/paths/debug-c-sharp-console-applications/', note: 'Free Microsoft Learn path on exception handling and using a real debugger, the natural next step after reading stack traces by hand.' },
   ],
   'tool-shell': [
     { type: 'course', title: 'MIT — The Missing Semester of Your CS Education', url: 'https://missing.csail.mit.edu/', note: 'The shell/command-line lectures — the course that teaches exactly the tools no class covers.' },

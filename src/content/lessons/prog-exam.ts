@@ -7,7 +7,7 @@ export const progExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — think like the interpreter',
       body: [
-        'Twenty-two questions across the whole module — variables, loops, functions, arrays, recursion, debugging, pointers, bits and Python — all NEW, no repeats from the lesson quizzes. No code runner this time: trace every snippet in your head, the way the machine would.',
+        'Twenty-six questions across the whole module — variables, loops, functions, arrays, recursion, debugging, pointers, bits, Python and C#/.NET — all NEW, no repeats from the lesson quizzes. No code runner this time: trace every snippet in your head, the way the machine would.',
         'Score 80% and Programming Fundamentals is sealed. Below that costs nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -353,6 +353,73 @@ export const progExamLesson: Lesson = {
         'findall returns strings, not ints — regex works on text. You would have to call int() on each to get numbers.',
         'Each match is a separate maximal digit-run; findall keeps them as separate list items, it does not glue them together.',
         "'3' would be re.search(...).group() — the FIRST match. findall collects ALL of them into a list.",
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Trace this C# by hand. Every value involved is an `int`.\n\nint total = 0;\nforeach (int n in new[] { 5, 7, 9 })\n{\n    total = total + n / 2;\n}\nConsole.WriteLine(total);',
+      options: ['9', '10', '10.5', '21'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: int-divided-by-int truncates each term BEFORE it is added — 2, then 3, then 4 — so the total is 9.',
+        '10 comes from rounding each half to nearest (2.5→3 or 3.5→4). Integer division does not round; it discards the fractional part entirely.',
+        '10.5 is the true sum of 2.5 + 3.5 + 4.5 — what you would get if any operand were a double. With two ints, the fraction never exists to be added.',
+        '21 is 5 + 7 + 9 with the division ignored. The division does happen; it just throws away the halves.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Two C# programs fail. Program A does `int[] a = new int[3]; Console.WriteLine(a[5]);`. Program B does `int x = "5";`. Which fails at COMPILE time?',
+      options: [
+        'Only B — a type mismatch is visible in the source, while an out-of-range index is only knowable while running',
+        'Only A — indexing errors are caught by the compiler, type mismatches are not',
+        'Both — the compiler checks types and array bounds together',
+        'Neither — both are runtime exceptions in C#',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: B is `error CS0029` and never runs. A builds fine and throws `IndexOutOfRangeException` at run time — the index is an int, so there is nothing for the type checker to object to.',
+        'Backwards. Bounds are checked by the RUNTIME on every access (which is why it throws instead of reading stray memory), while types are checked by the compiler.',
+        'The compiler cannot check bounds in general — an index is usually a variable whose value is only known while the program runs.',
+        'B never reaches runtime at all; `dotnet run` reports "The build failed" and executes nothing.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A class declares only `static int Half(int n) => n / 2;`. Somewhere else the code calls `Half(7.0)`. What happens?',
+      options: [
+        'A compile error — `CS1503: Argument 1: cannot convert from \'double\' to \'int\'`; there is no overload taking a double',
+        'It runs and returns 3 — the double is narrowed to an int automatically',
+        'It runs and returns 3.5 — the return type widens to match the argument',
+        'A runtime exception when the division is attempted on a double',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: C# will widen an int to a double implicitly, but never narrow a double to an int implicitly, because that would silently lose data. You would need an explicit `(int)` cast or a second overload.',
+        'Narrowing conversions are exactly what C# refuses to do behind your back — the loss of the fractional part has to be something you asked for.',
+        'A method’s return type is fixed by its declaration; nothing about a call site changes it.',
+        'Nothing runs — this is caught by the compiler, and `CSxxxx` codes always mean the build failed.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'You build a .NET app on your laptop and copy `bin/Debug/net10.0/` to a robot that has only the .NET runtime installed — no SDK. What is the correct way to start it, and will it work?',
+      options: [
+        '`dotnet App.dll` — yes, the build output is portable IL that the runtime JIT-compiles on the robot',
+        '`dotnet run` — but only after installing the SDK, because a build is required on every machine',
+        '`dotnet build App.dll` first, then run it — the copy is only source until it is built locally',
+        'It cannot work — a build is tied to the CPU and operating system that produced it',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct, and this is the whole point of the SDK/runtime split: developer machines build, target machines only run. Nothing on the robot needs to compile.',
+        '`dotnet run` is a developer command that restores and builds — it needs the SDK. The already-built `.dll` needs none of that.',
+        'The `.dll` is compiled output, not source, and there is no `dotnet build <dll>` — building takes a project, not an assembly.',
+        'The output is CPU- and OS-independent Intermediate Language; the runtime turns it into native instructions on the target machine at run time.',
       ],
     },
   ],
