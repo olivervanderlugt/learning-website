@@ -1417,18 +1417,76 @@ export const nodes: KnowledgeNode[] = [
     // Git taught at usable depth: the everyday workflow plus branching and remotes.
     skills: ['git'],
   },
+  // Backend & APIs chain (Phase-5 Tier 2) — a SECOND column at x420, branching
+  // sideways off tool-shell rather than continuing the x120 column: a straight
+  // drop from tool-shell would have to pass through tool-git (120,3650). The two
+  // branches are honestly independent (Git and HTTP need the shell, not each
+  // other), so they sit as sibling columns and rejoin at the exam, which moved
+  // down to the cluster bottom (270,4250). The pocket right of the DB column
+  // below y3400 was empty; checker-confirmed zero crossings in both tiers.
+  {
+    id: 'web-http',
+    title: 'HTTP: How the Web Talks',
+    subject: 'cs',
+    domainId: 'applied-software',
+    description:
+      'The request/response conversation every networked app speaks: methods and what they promise, status-code classes, headers, and why the protocol remembers nothing between requests.',
+    whyItMatters:
+      'A robot fleet dashboard, a teleop button and a telemetry upload are all just HTTP requests — read one and you can debug any of them.',
+    prereqIds: ['tool-shell'],
+    x: 420,
+    y: 3650,
+    hasLesson: true,
+    // Methods, their safety/idempotence promises and status codes, driven with curl.
+    skills: ['http-methods'],
+  },
+  {
+    id: 'web-server',
+    title: 'Node & Express: Your First Server',
+    subject: 'cs',
+    domainId: 'applied-software',
+    description:
+      'JavaScript outside the browser: the event loop, a bare HTTP server in a dozen lines, then the same server rewritten with a routing framework — routes, params, and JSON responses.',
+    whyItMatters:
+      'The service that answers “where is robot 7?” is a program exactly like this one, sitting between the fleet and everything that asks about it.',
+    prereqIds: ['web-http'],
+    x: 420,
+    y: 3850,
+    hasLesson: true,
+    // Node's runtime model + a real Express app built route by route.
+    skills: ['nodejs', 'express'],
+  },
+  {
+    id: 'web-api',
+    title: 'REST, Middleware & Documents',
+    subject: 'cs',
+    domainId: 'applied-software',
+    description:
+      'Designing an API other people can guess: resources as nouns, CRUD mapped onto methods and status codes, the ordered middleware pipeline every request flows through, and the document data model.',
+    whyItMatters:
+      'A well-shaped API is the contract between your robot and every tool that will ever talk to it — get the nouns right once and clients write themselves.',
+    prereqIds: ['web-server'],
+    x: 420,
+    y: 4050,
+    hasLesson: true,
+    // REST resource design + the middleware pipeline, both built by hand.
+    skills: ['rest-api-design', 'middleware'],
+    // The document model is taught conceptually (documents vs rows, embed vs
+    // reference) — no database is installed or queried, so this is a touch.
+    skillsPartial: ['mongodb'],
+  },
   {
     id: 'tools-exam',
     title: 'Module Exam: Applied Software',
     subject: 'cs',
     domainId: 'applied-software',
     description:
-      'Ten fresh questions across the shell and the Git workflow — trace new commands and scenarios from memory. 80% to pass.',
+      'Fourteen fresh questions across the shell, the Git workflow, HTTP, servers and API design — trace new commands and scenarios from memory. 80% to pass.',
     whyItMatters:
-      'Shipping robot code means living in the shell and in Git — prove the everyday moves are second nature.',
-    prereqIds: ['tool-shell', 'tool-git'],
-    x: 120,
-    y: 3850,
+      'Shipping robot code means living in the shell, in Git, and behind an API — prove the everyday moves are second nature.',
+    prereqIds: ['tool-shell', 'tool-git', 'web-http', 'web-server', 'web-api'],
+    x: 270,
+    y: 4250,
     hasLesson: true,
     isExam: true,
   },

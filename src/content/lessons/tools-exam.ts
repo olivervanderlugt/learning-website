@@ -7,7 +7,7 @@ export const toolsExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — the tools of the trade',
       body: [
-        'Ten fresh questions across the whole Applied Software module — moving around the shell, pipes and redirection, and the Git workflow from `init` to `push`. Nothing recycled from the lesson quizzes; picture each command running, then answer.',
+        'Fourteen fresh questions across the whole Applied Software module — moving around the shell, pipes and redirection, the Git workflow from `init` to `push`, and the web half: HTTP methods and status codes, servers, middleware and API design. Nothing recycled from the lesson quizzes; picture each command or request running, then answer.',
         'Score 80% and the module is sealed. Below that you lose nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
