@@ -12,6 +12,8 @@ import { mathLinalg5Lesson } from './math-linalg-5'
 import { mathCalculusLesson } from './math-calculus'
 import { mathCalculus2Lesson } from './math-calculus-2'
 import { mathCalculus3Lesson } from './math-calculus-3'
+import { mathCalculus4Lesson } from './math-calculus-4'
+import { mathCalculus5Lesson } from './math-calculus-5'
 import { progVariablesLesson } from './prog-variables'
 import { mathProbLesson } from './math-prob'
 import { mathProb2Lesson } from './math-prob-2'
@@ -124,6 +126,9 @@ import { physStatics3Lesson } from './phys-statics-3'
 import { progPythonLesson } from './prog-python'
 import { progPython2Lesson } from './prog-python-2'
 import { progPython3Lesson } from './prog-python-3'
+import { toolShellLesson } from './tool-shell'
+import { toolGitLesson } from './tool-git'
+import { toolsExamLesson } from './tools-exam'
 
 export const lessons: Record<string, Lesson> = {
   bits: bitsLesson,
@@ -139,6 +144,8 @@ export const lessons: Record<string, Lesson> = {
   'math-calculus': mathCalculusLesson,
   'math-calculus-2': mathCalculus2Lesson,
   'math-calculus-3': mathCalculus3Lesson,
+  'math-calculus-4': mathCalculus4Lesson,
+  'math-calculus-5': mathCalculus5Lesson,
   'prog-variables': progVariablesLesson,
   'math-prob': mathProbLesson,
   'math-prob-2': mathProb2Lesson,
@@ -251,4 +258,7 @@ export const lessons: Record<string, Lesson> = {
   'prog-python': progPythonLesson,
   'prog-python-2': progPython2Lesson,
   'prog-python-3': progPython3Lesson,
+  'tool-shell': toolShellLesson,
+  'tool-git': toolGitLesson,
+  'tools-exam': toolsExamLesson,
 }

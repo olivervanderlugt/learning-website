@@ -17,6 +17,7 @@ export const domains: Domain[] = [
   { id: 'chemistry', title: 'Chemistry', prereqDomainIds: [] },
   { id: 'electronics', title: 'Electronics & Circuit Design', prereqDomainIds: ['physics'] },
   { id: 'mechanical-engineering', title: 'Mechanical Engineering', prereqDomainIds: ['physics'] },
+  { id: 'applied-software', title: 'Applied Software Engineering', prereqDomainIds: ['programming'] },
 ]
 
 // Layout (2026-07 refactor — "streets" edition, built for depth-chain growth):
@@ -559,6 +560,44 @@ export const nodes: KnowledgeNode[] = [
     y: 400,
     hasLesson: true,
   },
+  // Calculus depth continues (Stage 2 rigor, Phase-2 backlog): limits &
+  // continuity (-4) → integration techniques + Taylor series (-5). Both tier-1
+  // Depth, prereq = math-calculus-3 (chain-bottom convention). NOT straight
+  // down the calculus column — the ODE chain already occupies x2240 y580-940
+  // below calc-3. The math band is at packing capacity, so the chain forks
+  // LEFT of the ODE column into the one clean pocket between the probability
+  // column (x1960) and the calculus/ODE column (x2240): a near-vertical drop at
+  // x2100/2110, y480/680. Found by a margin-maximizing bezier search (34px min
+  // clearance both tiers); calc-5 cross-LINKS robo-estimation-3 (EKF = 1st-order
+  // Taylor) and robo-control-3 (linearization). math-exam repoints to calc-5.
+  {
+    id: 'math-calculus-4',
+    title: 'Limits & Continuity',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'The rigor the intro assumes but never states: what a limit really is (the value a function approaches, even through a 0/0 hole), one-sided limits, and continuity — no holes, jumps or blow-ups. The derivative itself is defined as a limit.',
+    whyItMatters:
+      'A derivative — velocity from position — IS a limit; and a discontinuity in a control signal is a jump no real motor can physically follow.',
+    prereqIds: ['math-calculus-3'],
+    x: 2100,
+    y: 480,
+    hasLesson: true,
+  },
+  {
+    id: 'math-calculus-5',
+    title: 'Integration Techniques & Taylor Series',
+    subject: 'math',
+    domainId: 'math',
+    description:
+      'How to actually evaluate an integral (u-substitution, integration by parts) and the payoff — Taylor series: approximate any smooth function by a polynomial. Linearization is just the first two terms.',
+    whyItMatters:
+      'Taylor series is how your calculator and an IMU’s firmware compute sin and cos, and the first-order term IS the linearization an EKF and every state-space controller run on.',
+    prereqIds: ['math-calculus-4'],
+    x: 2110,
+    y: 680,
+    hasLesson: true,
+  },
   {
     id: 'math-ode',
     title: 'Differential Equations: Change Itself',
@@ -730,6 +769,8 @@ export const nodes: KnowledgeNode[] = [
       'math-calculus',
       'math-calculus-2',
       'math-calculus-3',
+      'math-calculus-4',
+      'math-calculus-5',
       'math-ode',
       'math-ode-2',
       'math-ode-3',
@@ -1331,6 +1372,63 @@ export const nodes: KnowledgeNode[] = [
     prereqIds: ['db-relational', 'db-sql', 'db-transactions'],
     x: 300,
     y: 3300,
+    hasLesson: true,
+    isExam: true,
+  },
+
+  // ---- Applied Software Engineering (Phase-5 employability) — the developer
+  // tooling chain. NEW domain, subject `cs` (no new colour). Fresh cell in the
+  // open space BELOW the Security/DB clusters (x0-900, y≥3000). tool-shell hangs
+  // off the HONEST prereq prog-data (560,400) — a long southbound corridor that
+  // the bezier checker showed must thread the narrow lane between the Security
+  // column (x0-192) and the DB column (x300-492): a straight drop down the
+  // db↔algo gap only cleared algo-bigo by ~8px, so the chain routes down the
+  // sec↔db lane (edge centre ~216) and the nodes sit BELOW both columns
+  // (y≥3450, clear of sec-exam@3130 and db-exam@3380). Column x=120; exam bottom.
+  {
+    id: 'tool-shell',
+    title: 'The Shell: Talking to Your Computer',
+    subject: 'cs',
+    domainId: 'applied-software',
+    description:
+      'The text prompt behind every app: navigate with pwd/ls/cd, create and move files, compose tools with pipes and redirection, search with grep, and understand what a command even is.',
+    whyItMatters:
+      'Every robot deploy and debug session happens in a shell — over SSH into the robot, there are no windows to click, only the command line.',
+    prereqIds: ['prog-data'],
+    x: 120,
+    y: 3450,
+    hasLesson: true,
+    // The shell/command line taught at usable depth; this IS the Bash skill.
+    skills: ['bash'],
+  },
+  {
+    id: 'tool-git',
+    title: 'Git: A Time Machine for Code',
+    subject: 'cs',
+    domainId: 'applied-software',
+    description:
+      'Version control done right: snapshots not copies, init/add/commit, reading diffs and history, time-travel with checkout, branches as parallel universes, and pushing to GitHub.',
+    whyItMatters:
+      'Git is how robot code ships without bricking the robot — every change is reviewed, tracked, and revertible before it reaches real hardware.',
+    prereqIds: ['tool-shell'],
+    x: 120,
+    y: 3650,
+    hasLesson: true,
+    // Git taught at usable depth: the everyday workflow plus branching and remotes.
+    skills: ['git'],
+  },
+  {
+    id: 'tools-exam',
+    title: 'Module Exam: Applied Software',
+    subject: 'cs',
+    domainId: 'applied-software',
+    description:
+      'Ten fresh questions across the shell and the Git workflow — trace new commands and scenarios from memory. 80% to pass.',
+    whyItMatters:
+      'Shipping robot code means living in the shell and in Git — prove the everyday moves are second nature.',
+    prereqIds: ['tool-shell', 'tool-git'],
+    x: 120,
+    y: 3850,
     hasLesson: true,
     isExam: true,
   },
@@ -2131,6 +2229,16 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'video', title: '3Blue1Brown — Essence of Calculus', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr', note: 'Derivatives and integrals as pictures, not rules. Start here.' },
     { type: 'course', title: 'Khan Academy — Calculus', url: 'https://www.khanacademy.org/math/calculus-1', note: 'Unlimited practice problems with instant feedback for drilling.' },
   ],
+  'math-calculus-4': [
+    { type: 'article', title: 'Paul’s Online Math Notes — Limits (full worked solutions)', url: 'https://tutorial.math.lamar.edu/Classes/CalcI/limitsIntro.aspx', note: 'The jackpot: free, ungated, step-by-step solutions to every limit and continuity problem. Do the practice sets here.' },
+    { type: 'video', title: '3Blue1Brown — Limits, L’Hôpital’s rule, and epsilon delta', url: 'https://www.youtube.com/watch?v=kfF40MiS7zA', note: 'The formal limit and the 0/0 indeterminate form, animated.' },
+    { type: 'course', title: 'MIT 18.01SC — Limits & Continuity (exams + solutions)', url: 'https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/', note: 'The real single-variable course, free with problem sets and exam solutions.' },
+  ],
+  'math-calculus-5': [
+    { type: 'article', title: 'Paul’s Online Math Notes — Integration Techniques & Series', url: 'https://tutorial.math.lamar.edu/Classes/CalcII/IntTechIntro.aspx', note: 'Full worked solutions for u-substitution, integration by parts, partial fractions and Taylor series — the best free problem bank there is.' },
+    { type: 'video', title: '3Blue1Brown — Taylor series', url: 'https://www.youtube.com/watch?v=3d6DsjIBzJ4', note: 'Why polynomials approximate any function, and how linearization falls out of the first term.' },
+    { type: 'course', title: 'MIT 18.01SC — Techniques of Integration & Taylor Series', url: 'https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/', note: 'Units 4 and 5 cover exactly this lesson, free with solutions.' },
+  ],
   'prog-variables': [
     { type: 'course', title: 'Harvard CS50x (free)', url: 'https://cs50.harvard.edu/x/', note: 'The world-famous intro-to-programming course — pairs perfectly with this track.' },
   ],
@@ -2168,6 +2276,16 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'article', title: 'Regular Expression HOWTO', url: 'https://docs.python.org/3/howto/regex.html', note: 'Official `re` walkthrough — classes, quantifiers, groups, search vs findall.' },
     { type: 'interactive', title: 'regex101', url: 'https://regex101.com', note: 'Live regex tester with a match explainer — paste a pattern and watch it match.' },
     { type: 'article', title: 'pytest documentation', url: 'https://docs.pytest.org', note: 'Official docs — install, test discovery, assertions, and running the suite.' },
+  ],
+  'tool-shell': [
+    { type: 'course', title: 'MIT — The Missing Semester of Your CS Education', url: 'https://missing.csail.mit.edu/', note: 'The shell/command-line lectures — the course that teaches exactly the tools no class covers.' },
+    { type: 'interactive', title: 'explainshell.com', url: 'https://explainshell.com/', note: 'Paste any command and it breaks down every flag and pipe in plain English.' },
+    { type: 'book', title: 'The Linux Command Line (free)', url: 'https://linuxcommand.org/tlcl.php', note: 'William Shotts’ complete, friendly book on the shell — free PDF, works on macOS too.' },
+  ],
+  'tool-git': [
+    { type: 'book', title: 'Pro Git (free)', url: 'https://git-scm.com/book', note: 'The official Git book — the “Git Basics” and “Branching” chapters are the canonical explanation of everything here.' },
+    { type: 'interactive', title: 'Oh My Git!', url: 'https://ohmygit.org/', note: 'A free game that visualises commits and branches as you run real Git commands.' },
+    { type: 'interactive', title: 'Learn Git Branching', url: 'https://learngitbranching.js.org/', note: 'Interactive branch/merge visualiser — drill the parallel-universe model until it’s reflex.' },
   ],
   'os-processes': [
     { type: 'video', title: 'CS50 — Operating Systems concepts', url: 'https://cs50.harvard.edu/x/', note: 'Context for how the OS sits between your code and the hardware.' },
