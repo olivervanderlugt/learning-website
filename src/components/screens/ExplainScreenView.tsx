@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import RichText from './RichText'
 import type { ExplainScreen } from '../../types'
 
 export default function ExplainScreenView({
@@ -14,9 +15,7 @@ export default function ExplainScreenView({
       <h2 className="text-xl font-bold">{screen.title}</h2>
       <div className="mt-4 space-y-3">
         {screen.body.map((p, i) => (
-          <p key={i} className="text-[15px] leading-relaxed text-slate-300">
-            {p}
-          </p>
+          <RichText key={i} text={p} className="text-[15px] leading-relaxed text-slate-300" />
         ))}
       </div>
 
@@ -31,9 +30,7 @@ export default function ExplainScreenView({
           {deep && (
             <div className="mt-3 space-y-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4">
               {screen.deeper.map((p, i) => (
-                <p key={i} className="text-[15px] leading-relaxed text-slate-300">
-                  {p}
-                </p>
+                <RichText key={i} text={p} className="text-[15px] leading-relaxed text-slate-300" />
               ))}
             </div>
           )}

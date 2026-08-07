@@ -7,7 +7,7 @@ export const progExamLesson: Lesson = {
       kind: 'explain',
       title: 'Module exam — think like the interpreter',
       body: [
-        'Twenty-two questions across the whole module — variables, loops, functions, arrays, recursion, debugging, pointers, bits and Python — all NEW, no repeats from the lesson quizzes. No code runner this time: trace every snippet in your head, the way the machine would.',
+        'Twenty-six questions across the whole module — variables, loops, functions, arrays, recursion, debugging, pointers, bits, Python and C#/.NET — all NEW, no repeats from the lesson quizzes. No code runner this time: trace every snippet in your head, the way the machine would.',
         'Score 80% and Programming Fundamentals is sealed. Below that costs nothing — you’ll see exactly which idea slipped, review it, and retake.',
       ],
     },
@@ -354,6 +354,73 @@ export const progExamLesson: Lesson = {
         'Each match is a separate maximal digit-run; findall keeps them as separate list items, it does not glue them together.',
         "'3' would be re.search(...).group() — the FIRST match. findall collects ALL of them into a list.",
       ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Trace this C# by hand. Every value involved is an `int`.\n\n```\nint total = 0;\nforeach (int n in new[] { 5, 7, 9 })\n{\n    total = total + n / 2;\n}\nConsole.WriteLine(total);\n```',
+      options: ['9', '10', '10.5', '21'],
+      correctIndex: 0,
+      explanations: [
+        'Correct: int-divided-by-int truncates each term BEFORE it is added — 2, then 3, then 4 — so the total is 9.',
+        '10 comes from rounding each half to nearest (2.5→3 or 3.5→4). Integer division does not round; it discards the fractional part entirely.',
+        '10.5 is the true sum of 2.5 + 3.5 + 4.5 — what you would get if any operand were a double. With two ints, the fraction never exists to be added.',
+        '21 is 5 + 7 + 9 with the division ignored. The division does happen; it just throws away the halves.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'Two C# programs fail. Program A does `int[] a = new int[3]; Console.WriteLine(a[5]);`. Program B does `int x = "5";`. Which fails at COMPILE time?',
+      options: [
+        'Only B — a type mismatch is visible in the source, while an out-of-range index is only knowable while running',
+        'Only A — indexing errors are caught by the compiler, type mismatches are not',
+        'Both — the compiler checks types and array bounds together',
+        'Neither — both are runtime exceptions in C#',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: B is `error CS0029` and never runs. A builds fine and throws `IndexOutOfRangeException` at run time — the index is an int, so there is nothing for the type checker to object to.',
+        'Backwards. Bounds are checked by the RUNTIME on every access (which is why it throws instead of reading stray memory), while types are checked by the compiler.',
+        'The compiler cannot check bounds in general — an index is usually a variable whose value is only known while the program runs.',
+        'B never reaches runtime at all; `dotnet run` reports "The build failed" and executes nothing.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A class declares only `static int Half(int n) => n / 2;`. Somewhere else the code calls `Half(7.0)`. What happens?',
+      options: [
+        'A compile error — `CS1503: Argument 1: cannot convert from \'double\' to \'int\'`; there is no overload taking a double',
+        'It runs and returns 3 — the double is narrowed to an int automatically',
+        'It runs and returns 3.5 — the return type widens to match the argument',
+        'A runtime exception when the division is attempted on a double',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: C# will widen an int to a double implicitly, but never narrow a double to an int implicitly, because that would silently lose data. You would need an explicit `(int)` cast or a second overload.',
+        'Narrowing conversions are exactly what C# refuses to do behind your back — the loss of the fractional part has to be something you asked for.',
+        'A method’s return type is fixed by its declaration; nothing about a call site changes it.',
+        'Nothing runs — this is caught by the compiler, and `CSxxxx` codes always mean the build failed.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A deployed C# service crashes. Locally the trace ends `at Program.<Main>$(String[] args) in Program.cs:line 2`, but in production the very same crash prints only `at Program.<Main>$(String[] args)` — no file, no line. What explains the missing detail?',
+      options: [
+        'The `.pdb` symbol file was not deployed alongside the `.dll` — file names and line numbers come from those debug symbols, not from the compiled code',
+        'The production build stripped the method names, so the trace is incomplete',
+        'The exception type differs in production, and only some exception types carry line numbers',
+        'Production runs a newer .NET runtime, and newer runtimes no longer report line numbers',
+      ],
+      explanations: [
+        'Correct: `Rover.dll` holds the IL, and `Rover.pdb` holds the mapping back to source file and line. Delete the `.pdb` and the identical crash still names the method but loses `in Program.cs:line 2` — which is why shipping symbols is what makes a production trace actionable.',
+        'The method name is right there in both traces (`Program.<Main>$`) — names live in the assembly metadata. It is precisely the source mapping, which lives outside the assembly, that went missing.',
+        'The exception type is irrelevant to this: every stack frame is formatted the same way, and the same exception produced both traces.',
+        'Line numbers are still reported by current runtimes whenever the symbols are present; nothing about the version removed them.',
+      ],
+      correctIndex: 0,
     },
   ],
 }
