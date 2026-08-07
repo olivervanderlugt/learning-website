@@ -1384,7 +1384,9 @@ export const nodes: KnowledgeNode[] = [
   // column (x0-192) and the DB column (x300-492): a straight drop down the
   // db↔algo gap only cleared algo-bigo by ~8px, so the chain routes down the
   // sec↔db lane (edge centre ~216) and the nodes sit BELOW both columns
-  // (y≥3450, clear of sec-exam@3130 and db-exam@3380). Column x=120; exam bottom.
+  // (y≥3450, clear of sec-exam@3050 and db-exam@3300). The cell is now TWO
+  // columns — tooling x120 (shell → git) and the backend chain x420 (http →
+  // server → api) — rejoining at tools-exam (270,4250) at the cluster bottom.
   {
     id: 'tool-shell',
     title: 'The Shell: Talking to Your Computer',
@@ -2344,6 +2346,25 @@ const resourcesByNode: Record<string, Resource[]> = {
     { type: 'book', title: 'Pro Git (free)', url: 'https://git-scm.com/book', note: 'The official Git book — the “Git Basics” and “Branching” chapters are the canonical explanation of everything here.' },
     { type: 'interactive', title: 'Oh My Git!', url: 'https://ohmygit.org/', note: 'A free game that visualises commits and branches as you run real Git commands.' },
     { type: 'interactive', title: 'Learn Git Branching', url: 'https://learngitbranching.js.org/', note: 'Interactive branch/merge visualiser — drill the parallel-universe model until it’s reflex.' },
+  ],
+  'web-http': [
+    { type: 'article', title: 'MDN — HTTP request methods', url: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods', note: 'The reference for every verb, with its safe/idempotent/cacheable properties in a table.' },
+    { type: 'article', title: 'MDN — HTTP response status codes', url: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status', note: 'Every code by class, with the precise meaning — the page to keep open while debugging a client.' },
+    { type: 'video', title: 'Traversy Media — HTTP Crash Course & Exploration', url: 'https://www.youtube.com/watch?v=iYM2zFP3Zn0', note: 'Requests, responses, headers and methods demonstrated live in under an hour.' },
+    { type: 'article', title: 'RFC 9110 — HTTP Semantics', url: 'https://httpwg.org/specs/rfc9110.html', note: 'The actual standard. Dense, but §9 (methods) and §15 (status codes) settle any argument.' },
+  ],
+  'web-server': [
+    { type: 'course', title: 'Back End Development and APIs certification', url: 'https://www.freecodecamp.org/learn/back-end-development-and-apis/', note: 'The free hands-on track this chain maps onto — build and submit real Node/Express services.' },
+    { type: 'article', title: 'Introduction to Node.js', url: 'https://nodejs.org/learn/getting-started/introduction-to-nodejs', note: 'The official starting point: the runtime, the event loop, and running your first server.' },
+    { type: 'video', title: 'Web Dev Simplified — Learn Express JS In 35 Minutes', url: 'https://www.youtube.com/watch?v=SccSCuHhOw0', note: 'A fast, complete pass over routing, params and responses — exactly this lesson, typed out.' },
+    { type: 'article', title: 'Node.js — the `http` module', url: 'https://nodejs.org/api/http.html', note: 'Reference for the built-in server used in the twelve-line version, before any framework.' },
+  ],
+  'web-api': [
+    { type: 'article', title: 'Express — Using middleware', url: 'https://expressjs.com/en/guide/using-middleware.html', note: 'The official explanation of the ordered pipeline, `next()`, and error-handling middleware.' },
+    { type: 'article', title: 'Express — Routing', url: 'https://expressjs.com/en/guide/routing.html', note: 'Route paths, parameters and chaining — the reference behind the five-route resource.' },
+    { type: 'video', title: 'IBM Technology — What is a REST API?', url: 'https://www.youtube.com/watch?v=lsMQRaeKNDk', note: 'Eight minutes on the constraints and why resource-shaped URLs beat action-shaped ones.' },
+    { type: 'article', title: 'REST API Tutorial', url: 'https://restfulapi.net/', note: 'Resource naming, method semantics and status-code conventions, one short page per idea.' },
+    { type: 'article', title: 'Data modelling: embed vs reference', url: 'https://www.mongodb.com/docs/manual/data-modeling/', note: 'The document-store side of the trade-off, with the access-pattern rules of thumb spelled out.' },
   ],
   'os-processes': [
     { type: 'video', title: 'CS50 — Operating Systems concepts', url: 'https://cs50.harvard.edu/x/', note: 'Context for how the OS sits between your code and the hardware.' },

@@ -190,5 +190,77 @@ export const toolsExamLesson: Lesson = {
         '`git add` only stages local changes; it never talks to the remote.',
       ],
     },
+    {
+      kind: 'quiz',
+      question:
+        'A flaky link makes your fleet client send the identical `PUT /robots/7` three times, and all three arrive. What is the state of the server afterwards?',
+      options: [
+        'Exactly what one PUT would have left — PUT is idempotent, so repeats converge on the same result',
+        'Three robots numbered 7, 8 and 9, one per request',
+        'Undefined — repeating any write is always unsafe',
+        'Robot 7 is deleted, because conflicting writes cancel out',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: idempotence is a promise about the resulting STATE. PUT writes the resource at that URL to the value you sent, so doing it three times leaves the same thing as doing it once — which is precisely what makes automatic retries safe.',
+        'PUT targets the single resource its URL names and cannot invent neighbouring ids; that non-idempotent “each call makes another one” behaviour is POST.',
+        'Repeating a write is unsafe for POST, and deliberately safe for PUT and DELETE. That distinction is the whole reason the idempotence property is defined.',
+        'Nothing cancels anything — each request simply writes the same value again.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'A client POSTs a JSON body to your API but leaves out a required `name` field. Which status should your handler return?',
+      options: [
+        '400 Bad Request — the server understood fine and is telling the client its request was malformed',
+        '500 Internal Server Error — something went wrong while handling it',
+        '404 Not Found — the request was not valid, so the route does not apply',
+        '200 OK, with `{"success": false}` in the body',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: the fault is in the request, so it is a 4xx, and 400 is the general “your input is malformed” code. It tells the client that retrying identical bytes is pointless — fix the body first.',
+        '5xx claims the server broke. Here it worked perfectly and correctly rejected bad input; reporting your own validation as a server fault will send clients into retry loops.',
+        '404 is about the URL naming nothing. The route matched fine — the payload was the problem.',
+        'This is the classic mistake: caches, monitors and retry logic all read the STATUS, so a failure dressed as 200 is invisible to every layer except a human reading the body.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'In your server file, `app.get(\'/health\', ...)` is written ABOVE `app.use(requireAuth)`. A request with no credentials arrives for `/health`. What happens?',
+      options: [
+        'It is answered normally — the chain runs in registration order, so `/health` responds before the request ever reaches `requireAuth`',
+        'It is rejected with 401, because `app.use` applies to every route no matter where it appears',
+        'It hangs, because the auth middleware never gets to call `next()`',
+        'The server refuses to start, since middleware must be registered first',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: `app.use` appends to an ordered list rather than setting global configuration, and a handler that responds ends the journey there. Whether this is a bug or a deliberate public health-check depends entirely on what you intended.',
+        'Position is exactly what decides reach — middleware only sees requests that get past everything registered above it.',
+        'Nothing hangs: the route handler sent a complete response, so the request finished normally.',
+        'Both orders start fine. That is what makes this class of bug quiet — it is a behaviour difference, not an error.',
+      ],
+    },
+    {
+      kind: 'quiz',
+      question:
+        'You are adding an endpoint for “the logs belonging to robot 7”. Which URL follows the resource-naming convention?',
+      options: [
+        'GET /robots/7/logs — a sub-collection hanging off the robot it belongs to',
+        'GET /getLogsForRobot?id=7',
+        'POST /logs/fetch with `{"robot": 7}` in the body',
+        'GET /logs7',
+      ],
+      correctIndex: 0,
+      explanations: [
+        'Correct: nouns nest to express ownership, and the method still supplies the verb. A client that has seen one resource can guess this one.',
+        'This puts the action in the path, so every operation becomes a new name to look up rather than a predictable pattern.',
+        'Reading is a safe, cacheable operation and belongs on GET; turning it into a POST discards both properties for no gain.',
+        'Gluing the id onto the collection name gives you an unparseable one-off — the id belongs in its own path segment.',
+      ],
+    },
   ],
 }

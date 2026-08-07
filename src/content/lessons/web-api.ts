@@ -28,15 +28,17 @@ export const webApiLesson: Lesson = {
       ],
       correctIndex: 0,
       reveal:
-        '**201 Created** is the precise answer, and the created object comes back in the body so the client learns the id the server assigned — running this against the lesson’s server returns `HTTP/1.1 201 Created` with `{"id":3,"name":"drone","battery":100}`. 200 is not wrong so much as vague: it says “fine” where 201 says “fine, and something new exists now”. 204 No Content is the right choice for a successful DELETE, where there genuinely is nothing to send back.',
+        '**201 Created** is the precise answer, and the created object comes back in the body so the client learns the id the server assigned. You will add exactly this route on the next screen and see `HTTP/1.1 201 Created` with `{"id":3,"name":"drone","battery":100}` come back. 200 is not wrong so much as vague: it says “fine” where 201 says “fine, and something new exists now”. 204 No Content is the right choice for a successful DELETE, where there genuinely is nothing to send back.',
     },
     {
       kind: 'explain',
       title: 'The five routes, and what each one answers',
       body: [
         'A complete resource is five routes, and each has a conventional success code: `GET /robots` → 200 with a list, `GET /robots/7` → 200 or 404, `POST /robots` → 201, `PUT /robots/7` → 200, `DELETE /robots/7` → 204.',
+        'Add the create route to last lesson’s `server.js` — two new pieces: a body parser (put it near the top, above your routes — you will see shortly why position matters) and the handler:',
+        '```\napp.use(express.json())\n\napp.post(\'/robots\', (req, res) => {\n  const robot = { id: robots.length + 1, name: req.body.name, battery: 100 }\n  robots.push(robot)\n  res.status(201).json(robot)\n})\n```',
+        'Restart it and call it: `curl -i -X POST http://localhost:3000/robots -H "Content-Type: application/json" -d \'{"name":"drone"}\'`. It answers `HTTP/1.1 201 Created` with `{"id":3,"name":"drone","battery":100}`.',
         'The failure codes matter just as much. Malformed body → 400 Bad Request. No or bad credentials → 401. Known caller, not permitted → 403. Nothing at that id → 404.',
-        'Choosing these deliberately is the difference between an API a client can automate against and one where every response has to be read by a human to find out what happened.',
       ],
       deeper: [
         'The commonest failure in the wild is a server that answers 200 with `{"success": false}` in the body. It forces every client to parse the body to discover an error, defeats every generic retry and monitoring layer (all of which watch status codes), and means a dashboard showing “100% success” can be entirely wrong. The status code IS the outcome; the body explains it.',

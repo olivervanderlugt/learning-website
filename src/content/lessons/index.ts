@@ -128,6 +128,9 @@ import { progPython2Lesson } from './prog-python-2'
 import { progPython3Lesson } from './prog-python-3'
 import { toolShellLesson } from './tool-shell'
 import { toolGitLesson } from './tool-git'
+import { webHttpLesson } from './web-http'
+import { webServerLesson } from './web-server'
+import { webApiLesson } from './web-api'
 import { toolsExamLesson } from './tools-exam'
 
 export const lessons: Record<string, Lesson> = {
@@ -260,5 +263,8 @@ export const lessons: Record<string, Lesson> = {
   'prog-python-3': progPython3Lesson,
   'tool-shell': toolShellLesson,
   'tool-git': toolGitLesson,
+  'web-http': webHttpLesson,
+  'web-server': webServerLesson,
+  'web-api': webApiLesson,
   'tools-exam': toolsExamLesson,
 }
