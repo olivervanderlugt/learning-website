@@ -358,7 +358,7 @@ export const progExamLesson: Lesson = {
     {
       kind: 'quiz',
       question:
-        'Trace this C# by hand. Every value involved is an `int`.\n\nint total = 0;\nforeach (int n in new[] { 5, 7, 9 })\n{\n    total = total + n / 2;\n}\nConsole.WriteLine(total);',
+        'Trace this C# by hand. Every value involved is an `int`.\n\n```\nint total = 0;\nforeach (int n in new[] { 5, 7, 9 })\n{\n    total = total + n / 2;\n}\nConsole.WriteLine(total);\n```',
       options: ['9', '10', '10.5', '21'],
       correctIndex: 0,
       explanations: [
@@ -407,20 +407,20 @@ export const progExamLesson: Lesson = {
     {
       kind: 'quiz',
       question:
-        'You build a .NET app on your laptop and copy `bin/Debug/net10.0/` to a robot that has only the .NET runtime installed — no SDK. What is the correct way to start it, and will it work?',
+        'A deployed C# service crashes. Locally the trace ends `at Program.<Main>$(String[] args) in Program.cs:line 2`, but in production the very same crash prints only `at Program.<Main>$(String[] args)` — no file, no line. What explains the missing detail?',
       options: [
-        '`dotnet App.dll` — yes, the build output is portable IL that the runtime JIT-compiles on the robot',
-        '`dotnet run` — but only after installing the SDK, because a build is required on every machine',
-        '`dotnet build App.dll` first, then run it — the copy is only source until it is built locally',
-        'It cannot work — a build is tied to the CPU and operating system that produced it',
+        'The `.pdb` symbol file was not deployed alongside the `.dll` — file names and line numbers come from those debug symbols, not from the compiled code',
+        'The production build stripped the method names, so the trace is incomplete',
+        'The exception type differs in production, and only some exception types carry line numbers',
+        'Production runs a newer .NET runtime, and newer runtimes no longer report line numbers',
+      ],
+      explanations: [
+        'Correct: `Rover.dll` holds the IL, and `Rover.pdb` holds the mapping back to source file and line. Delete the `.pdb` and the identical crash still names the method but loses `in Program.cs:line 2` — which is why shipping symbols is what makes a production trace actionable.',
+        'The method name is right there in both traces (`Program.<Main>$`) — names live in the assembly metadata. It is precisely the source mapping, which lives outside the assembly, that went missing.',
+        'The exception type is irrelevant to this: every stack frame is formatted the same way, and the same exception produced both traces.',
+        'Line numbers are still reported by current runtimes whenever the symbols are present; nothing about the version removed them.',
       ],
       correctIndex: 0,
-      explanations: [
-        'Correct, and this is the whole point of the SDK/runtime split: developer machines build, target machines only run. Nothing on the robot needs to compile.',
-        '`dotnet run` is a developer command that restores and builds — it needs the SDK. The already-built `.dll` needs none of that.',
-        'The `.dll` is compiled output, not source, and there is no `dotnet build <dll>` — building takes a project, not an assembly.',
-        'The output is CPU- and OS-independent Intermediate Language; the runtime turns it into native instructions on the target machine at run time.',
-      ],
     },
   ],
 }

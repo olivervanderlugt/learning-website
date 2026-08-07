@@ -82,7 +82,7 @@ export const progCsharp3Lesson: Lesson = {
       title: 'NuGet: someone already wrote it',
       body: [
         'NuGet is .NET’s package registry — npm or pip for C#. `dotnet add package <name>` records a dependency in your `.csproj` and downloads it.',
-        'Add a real one:\n\n```\n$ dotnet add package Humanizer --version 2.14.1\ninfo : PackageReference for package \'Humanizer\' version \'2.14.1\' added to file \'.../Rover.csproj\'.\nlog  : Restored .../Rover.csproj (in 699 ms).\n```\n\nYour `.csproj` grew a block:\n\n```\n  <ItemGroup>\n    <PackageReference Include="Humanizer" Version="2.14.1" />\n  </ItemGroup>\n```',
+        'Add a real one. It prints eleven lines — certificate-bundle notices and NuGet feed traffic — of which these are the two that matter (paths shortened):\n\n```\n$ dotnet add package Humanizer --version 2.14.1\ninfo : PackageReference for package \'Humanizer\' version \'2.14.1\' added to file \'./Rover.csproj\'.\nlog  : Restored ./Rover.csproj (in 82 ms).\n```\n\nYour `.csproj` grew a block:\n\n```\n  <ItemGroup>\n    <PackageReference Include="Humanizer" Version="2.14.1" />\n  </ItemGroup>\n```',
         'Now use it — `using Humanizer;` and run:\n\n```\nusing Humanizer;\n\nConsole.WriteLine("sensor_reading_count".Humanize());\nConsole.WriteLine(TimeSpan.FromMinutes(90).Humanize());\nConsole.WriteLine(3.ToWords());\n```\n\nVerified output:\n\n```\nsensor reading count\n1 hour\nthree\n```',
       ],
       deeper: [
@@ -126,7 +126,7 @@ export const progCsharp3Lesson: Lesson = {
         'Note `bad` is `0`, not null and not garbage: on failure the `out` parameter is set to the type’s default.',
       ],
       deeper: [
-        '`out int good` declares the variable inline AND marks it as an output the method must assign — the one place C# lets a method write back into your variable, in contrast to the pass-by-value rule from the last lesson. Its sibling `ref` passes an existing variable in and out; `out` is write-only from the method’s side.',
+        '`out int good` declares the variable inline AND marks it as an output the method is REQUIRED to assign before it returns. `out` and `ref` are the two modifiers that suspend the pass-by-value rule from the last lesson and let a method write straight into the caller’s variable; they differ in direction. `ref` passes an existing, already-initialised variable in AND out, so the method can read the current value first. `out` is one-way: the method may not read it, and the compiler insists it be written — which is exactly right for "here is the parsed number" alongside a success flag.',
         'The judgement call, stated plainly: use `TryParse` when bad input is a normal, expected case you have a plan for, and let the exception fly when the input being wrong means your assumptions are broken and continuing would corrupt something. "Catch everything and carry on" is the worst of both — it turns a loud, locatable failure into silent wrong behaviour, exactly the bare-`except` trap from the Python chain.',
       ],
     },

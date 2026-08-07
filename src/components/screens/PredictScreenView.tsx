@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { shuffledIndices } from '../../shuffle'
+import RichText, { RichHeading } from './RichText'
 import type { PredictScreen } from '../../types'
 
 export default function PredictScreenView({
@@ -17,7 +18,7 @@ export default function PredictScreenView({
       <div className="mb-3 inline-block rounded bg-violet-500/15 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-violet-300">
         🔮 Predict first
       </div>
-      <h2 className="text-xl font-bold leading-snug">{screen.question}</h2>
+      <RichHeading text={screen.question} className="text-xl font-bold leading-snug" />
 
       <div className="mt-5 space-y-2">
         {order.map((i) => {
@@ -53,7 +54,9 @@ export default function PredictScreenView({
           <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-300">
             {choice === screen.correctIndex ? '🎯 Called it!' : '👀 Here’s what actually happens'}
           </div>
-          <p className="mt-2 text-sm leading-relaxed text-slate-300">{screen.reveal}</p>
+          <div className="mt-2">
+            <RichText text={screen.reveal} className="text-sm leading-relaxed text-slate-300" />
+          </div>
           <button
             onClick={onDone}
             className="mt-4 rounded-lg bg-cyan-500 px-5 py-2 text-sm font-bold text-slate-950 hover:bg-cyan-400"

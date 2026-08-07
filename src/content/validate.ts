@@ -56,13 +56,25 @@ export function validateContent(): string[] {
   const normQ = (q: string) => q.replace(/\s+/g, ' ').trim().toLowerCase()
   for (const exam of nodes.filter((n) => n.isExam)) {
     const examQs = (lessons[exam.id]?.screens ?? []).flatMap((s) => (s.kind === 'quiz' ? [s.question] : []))
+    // Compare against every question the domain's lessons ASK anywhere — quiz
+    // screens, predict screens and extraPractice pools. (Added 2026-08-07 after
+    // an exam question turned out to duplicate a lesson PREDICT, which the
+    // quiz-only version could not see. Exact-match only, so it cannot catch a
+    // reworded duplicate — that still needs a human read.)
     const domainQs = new Set(
       nodes
         .filter((n) => n.domainId === exam.domainId && n.id !== exam.id)
-        .flatMap((n) => (lessons[n.id]?.screens ?? []).flatMap((s) => (s.kind === 'quiz' ? [normQ(s.question)] : []))),
+        .flatMap((n) => {
+          const lesson = lessons[n.id]
+          if (!lesson) return []
+          const screenQs = lesson.screens.flatMap((s) =>
+            s.kind === 'quiz' || s.kind === 'predict' ? [normQ(s.question)] : [],
+          )
+          return [...screenQs, ...(lesson.extraPractice ?? []).map((q) => normQ(q.question))]
+        }),
     )
     for (const q of examQs)
-      if (domainQs.has(normQ(q))) err(`Exam ${exam.id} reuses a lesson quiz question verbatim: "${q}"`)
+      if (domainQs.has(normQ(q))) err(`Exam ${exam.id} reuses a lesson question verbatim: "${q}"`)
   }
 
   // --- Module exams: every domain has exactly one, gated on ALL its other nodes ---

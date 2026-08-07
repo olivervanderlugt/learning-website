@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { shuffledIndices } from '../../shuffle'
+import { RichHeading } from './RichText'
 import type { QuizScreen } from '../../types'
 
 export default function QuizScreenView({
@@ -30,7 +31,7 @@ export default function QuizScreenView({
       <div className="mb-3 inline-block rounded bg-amber-500/15 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-amber-300">
         🧠 Quiz {questionNumber}/{totalQuestions} — from memory
       </div>
-      <h2 className="text-xl font-bold leading-snug">{screen.question}</h2>
+      <RichHeading text={screen.question} className="text-xl font-bold leading-snug" />
 
       <div className="mt-5 space-y-2">
         {order.map((i) => {

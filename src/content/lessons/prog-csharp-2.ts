@@ -34,7 +34,7 @@ export const progCsharp2Lesson: Lesson = {
       ],
       correctIndex: 0,
       reveal:
-        'The build fails, byte for byte:\n\n```\nProgram.cs(1,5): error CS0161: \'Clamp(int, int)\': not all code paths return a value\n\nThe build failed. Fix the build errors and run again.\n```\n\nThe signature promised an `int` for EVERY call, and there is a route through the method — the `if` being false — that falls off the end without one. A compiler that checks every path is the whole point: in JavaScript the same function silently returns `undefined` and the bug surfaces as `NaN` three functions later.',
+        'The build fails (the real error line is prefixed with the full path to `Program.cs` and suffixed with `[.../Rover.csproj]` — both shortened here):\n\n```\nProgram.cs(1,5): error CS0161: \'Clamp(int, int)\': not all code paths return a value\n\nThe build failed. Fix the build errors and run again.\n```\n\nThe signature promised an `int` for EVERY call, and there is a route through the method — the `if` being false — that falls off the end without one. A compiler that checks every path is the whole point: in JavaScript the same function silently returns `undefined` and the bug surfaces as `NaN` three functions later.',
     },
     {
       kind: 'explain',
