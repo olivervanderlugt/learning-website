@@ -8,6 +8,7 @@ import ProgressPanel from './components/ProgressPanel'
 import SkillsPanel from './components/SkillsPanel'
 import CumulativeReviewFlow from './components/CumulativeReviewFlow'
 import AchievementToasts from './components/AchievementToasts'
+import OnboardingFlow from './components/OnboardingFlow'
 import { cumulativeReviewEligible } from './components/cumulativeReview'
 import { useStore } from './store'
 
@@ -18,10 +19,24 @@ function App() {
   const backToMap = useStore((s) => s.backToMap)
   const masteredNodeIds = useStore((s) => s.masteredNodeIds)
   const startCumulativeReview = useStore((s) => s.startCumulativeReview)
+  const onboardingDone = useStore((s) => s.onboardingDone)
+  const onboardingReplay = useStore((s) => s.onboardingReplay)
+  const knownNodeIds = useStore((s) => s.knownNodeIds)
+  const completedScreens = useStore((s) => s.completedScreens)
+  const xp = useStore((s) => s.xp)
   const [roadmapOpen, setRoadmapOpen] = useState(false)
   const [skillsOpen, setSkillsOpen] = useState(false)
 
   const canCumulativeReview = cumulativeReviewEligible(masteredNodeIds)
+
+  // Derived, never migrated: a legacy blob with real progress simply never
+  // matches, so returning learners are not shown a first-run tour.
+  const progressIsEmpty =
+    masteredNodeIds.length === 0 &&
+    knownNodeIds.length === 0 &&
+    completedScreens.length === 0 &&
+    xp === 0
+  const showOnboarding = onboardingReplay || (!onboardingDone && progressIsEmpty)
 
   // Apply theme class to <html> so the light-mode CSS variables take effect.
   useEffect(() => {
@@ -103,6 +118,7 @@ function App() {
         )}
         {roadmapOpen && <RoadmapView onClose={() => setRoadmapOpen(false)} />}
         {skillsOpen && <SkillsPanel onClose={() => setSkillsOpen(false)} />}
+        {showOnboarding && <OnboardingFlow />}
         <AchievementToasts />
       </main>
     </div>

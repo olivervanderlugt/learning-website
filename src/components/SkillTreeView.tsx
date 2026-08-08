@@ -21,6 +21,7 @@ import {
 } from '../content/curriculum'
 import { useStore, nodeStatus, dueReviewIds, reviewDecay } from '../store'
 import { SkillNode, DomainLabelNode, subjectStyles, subjectNames } from './SkillNode'
+import GuideHints from './GuideHints'
 import type { SkillFlowNode, LabelFlowNode } from './SkillNode'
 import type { KnowledgeNode, Subject } from '../types'
 
@@ -170,6 +171,8 @@ function SkillTreeInner() {
   const theme = useStore((s) => s.theme)
   const viewTier = useStore((s) => s.viewTier)
   const setViewTier = useStore((s) => s.setViewTier)
+  const pendingFocusDomainId = useStore((s) => s.pendingFocusDomainId)
+  const clearPendingFocus = useStore((s) => s.clearPendingFocus)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   /** Empty = show every subject; otherwise only the chosen subjects are visible. */
   const [activeSubjects, setActiveSubjects] = useState<Set<Subject>>(new Set())
@@ -275,6 +278,18 @@ function SkillTreeInner() {
     const t = setTimeout(() => fitView({ padding: 0.2, duration: 400 }), 60)
     return () => clearTimeout(t)
   }, [activeSubjects, viewTier, fitView])
+
+  // Onboarding hand-off: fly to the domain the learner picked. Runs on mount too,
+  // so it works whether the map was already behind the overlay or mounts after it.
+  useEffect(() => {
+    if (!pendingFocusDomainId) return
+    const domainId = pendingFocusDomainId
+    const t = setTimeout(() => {
+      fitBounds(domainBounds(domainId), { padding: 0.15, duration: 500 })
+      clearPendingFocus()
+    }, 60)
+    return () => clearTimeout(t)
+  }, [pendingFocusDomainId, clearPendingFocus, fitBounds])
 
   const selected: KnowledgeNode | undefined = selectedId ? nodeById.get(selectedId) : undefined
 
@@ -413,6 +428,10 @@ function SkillTreeInner() {
           </button>
         )}
       </div>
+
+      {/* Guide tip shares this corner with the detail panel — yield it while a
+          node is open (the tip returns on close; guideSeen is untouched). */}
+      {!selected && <GuideHints />}
 
       {selected && (
         <DetailPanel node={selected} onStart={() => openLesson(selected.id)} onClose={() => setSelectedId(null)} />
