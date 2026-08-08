@@ -250,6 +250,12 @@ export interface Progress {
   /** nodeId → spaced-repetition schedule; seeded at mastery. */
   reviews: Record<string, ReviewState>
   theme: Theme
+  /** True once the learner finished OR skipped the first-run tour. */
+  onboardingDone: boolean
+  /** Master switch for the in-app guide tips (💡 cards on the map). */
+  guideEnabled: boolean
+  /** GuideHint ids already shown and dismissed — each tip appears once. */
+  guideSeen: string[]
   /**
    * Highest content layer shown on the map (cumulative): 0 = essentials only,
    * 1 = + depth chains; future stages add tiers (2 = rigor, 3 = labs…).

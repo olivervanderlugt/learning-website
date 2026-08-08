@@ -17,6 +17,10 @@ interface View {
 
 interface AppState extends Progress {
   view: View
+  /** Transient: the learner asked to replay the tour (not persisted). */
+  onboardingReplay: boolean
+  /** Transient: domain the map should fly to once it mounts (onboarding hand-off). */
+  pendingFocusDomainId: string | null
   /** Open a lesson from the map (resumes from lessonProgress). */
   openLesson: (nodeId: string) => void
   /** Full exit to the map, clearing any interlink detour stack. */
@@ -41,6 +45,15 @@ interface AppState extends Progress {
   /** Backfill review schedules for nodes mastered before this feature existed. */
   seedMissingReviews: () => void
   toggleTheme: () => void
+  /** Finish (or skip) the first-run tour; a chosen domain makes the map fly there. */
+  completeOnboarding: (focusDomainId?: string) => void
+  /** Show the tour again from step 1, and let every guide tip fire once more. */
+  replayOnboarding: () => void
+  setGuideEnabled: (on: boolean) => void
+  /** Mark a guide tip as seen so it never returns. */
+  dismissHint: (id: string) => void
+  /** Consume the queued map focus (called once the map has flown there). */
+  clearPendingFocus: () => void
   /** Pick the map's content layer (0 = essentials, up to MAX_TIER = everything). */
   setViewTier: (tier: number) => void
   resetProgress: () => void
@@ -58,6 +71,9 @@ const initialProgress: Progress = {
   navStack: [],
   reviews: {},
   theme: 'dark',
+  onboardingDone: false,
+  guideEnabled: true,
+  guideSeen: [],
   viewTier: MAX_TIER,
 }
 
@@ -66,6 +82,8 @@ export const useStore = create<AppState>()(
     (set) => ({
       ...initialProgress,
       view: { name: 'map' },
+      onboardingReplay: false,
+      pendingFocusDomainId: null,
 
       openLesson: (nodeId) => set({ view: { name: 'lesson', nodeId }, navStack: [] }),
 
@@ -154,6 +172,30 @@ export const useStore = create<AppState>()(
 
       toggleTheme: () => set((s) => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
 
+      completeOnboarding: (focusDomainId) =>
+        set(
+          focusDomainId === undefined
+            ? { onboardingDone: true, onboardingReplay: false }
+            : {
+                onboardingDone: true,
+                onboardingReplay: false,
+                pendingFocusDomainId: focusDomainId,
+                // A replay can be finished from inside a lesson — land on the map.
+                view: { name: 'map' },
+                navStack: [],
+              },
+        ),
+
+      // Clearing guideSeen replays the tips too: a replay is the full new-user run.
+      replayOnboarding: () => set({ onboardingReplay: true, guideSeen: [] }),
+
+      setGuideEnabled: (on) => set({ guideEnabled: on }),
+
+      dismissHint: (id) =>
+        set((s) => (s.guideSeen.includes(id) ? s : { guideSeen: [...s.guideSeen, id] })),
+
+      clearPendingFocus: () => set({ pendingFocusDomainId: null }),
+
       setViewTier: (tier) => set({ viewTier: Math.max(0, Math.min(MAX_TIER, tier)) }),
 
       resetProgress: () => set((s) => ({ ...initialProgress, theme: s.theme, viewTier: s.viewTier })),
@@ -184,6 +226,10 @@ export const useStore = create<AppState>()(
           navStack: [],
           reviews: record(data.reviews, isReview),
           theme: data.theme === 'light' || data.theme === 'dark' ? data.theme : s.theme,
+          onboardingDone: data.onboardingDone === true,
+          // Tips default ON — an export predating the guide shouldn't silence it.
+          guideEnabled: typeof data.guideEnabled === 'boolean' ? data.guideEnabled : true,
+          guideSeen: strings(data.guideSeen),
           // Accept both the current field and the short-lived boolean it replaced.
           viewTier: isNum(data.viewTier)
             ? Math.max(0, Math.min(MAX_TIER, data.viewTier))
@@ -206,6 +252,9 @@ export const useStore = create<AppState>()(
         navStack: s.navStack,
         reviews: s.reviews,
         theme: s.theme,
+        onboardingDone: s.onboardingDone,
+        guideEnabled: s.guideEnabled,
+        guideSeen: s.guideSeen,
         viewTier: s.viewTier,
       }),
     },
